@@ -1,11 +1,11 @@
 ezac:
   title: EZAC administratie
   route_name: ezac
-  description: DLO menu
+  description: EZAC menu
 
-ezac_start:
-  title: Startadministratie
-  route_name: ezac_start
-  description: EZAC startadministratie
+ezac_leden:
+  title: Leden administratie
+  route_name: ezac_leden
+  description: EZAC leden administratie
   weight: 00
   
