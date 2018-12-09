@@ -7,15 +7,6 @@ ezac:
   requirements:
     _permission: 'EZAC_read'
   
-ezac_data:
-  path: '/ezac/data'
-  defaults:
-    _title: 'EZAC status tabellen'
-    _permission: 'access content'
-    _controller: '\Drupal\ezac\Controller\EzacDataController::status'
-  requirements:
-    _permission: 'EZAC_read'
-
 ezac_leden:
   path: '/ezac/leden'
   defaults:
@@ -97,29 +88,3 @@ ezac_leden_export_code:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
 
-ezac_vloot_overzicht:
-  path: '/ezac/vloot/overzicht'
-  defaults:
-    _title: 'Vloot overzicht'
-    _controller: '\Drupal\ezac\Controller\EzacVlootController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot_update:
-  path: '/ezac/vloot/update/{id}'
-  defaults:
-    _title: 'Kist wijzigen'
-    _form: '\Drupal\ezac\Form\EzacVlootUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot_create:
-  path: '/ezac/vloot/update'
-  defaults:
-    _title: 'Kist aanmaken'
-    _form: '\Drupal\ezac\Form\EzacVlootUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
