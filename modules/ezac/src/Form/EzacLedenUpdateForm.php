@@ -554,7 +554,7 @@ class EzacLedenUpdateForm extends FormBase
         }
         //go back to leden overzicht
         $redirect = Url::fromRoute(
-            'ezac_leden',
+            'ezac_leden'
     );
         $form_state->setRedirectUrl($redirect);
     } //submitForm
