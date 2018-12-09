@@ -1,34 +1,26 @@
 ezac:
   path: '/ezac'
   defaults:
-    _title: 'DLO hoofdmenu'
+    _title: 'EZAC hoofdmenu'
     _permission: 'access content'
-    _form: '\Drupal\ezac\Form\DloHoofdMenuForm'
+    _form: '\Drupal\ezac\Form\EzacHoofdMenuForm'
   requirements:
     _permission: 'EZAC_read'
   
 ezac_data:
   path: '/ezac/data'
   defaults:
-    _title: 'DLO status tabellen'
+    _title: 'EZAC status tabellen'
     _permission: 'access content'
-    _controller: '\Drupal\ezac\Controller\DloDataController::status'
+    _controller: '\Drupal\ezac\Controller\EzacDataController::status'
   requirements:
     _permission: 'EZAC_read'
 
-ezac_polis:
-  path: '/polis'
-  defaults:
-    _title: 'DLO polis informatie'
-    _controller: '\Drupal\ezac\Controller\DloPolisController::polis'
-  requirements:
-    _permission: 'EZAC_polis'
-
 ezac_leden:
-  path: '/ezac/leden/{jaar}'
+  path: '/ezac/leden'
   defaults:
-    _title: 'DLO leden administratie'
-    _controller: '\Drupal\ezac\Controller\DloLedenController::status'
+    _title: 'EZAC leden administratie'
+    _controller: '\Drupal\ezac\Controller\EzacLedenController::status'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -37,25 +29,16 @@ ezac_leden_overzicht:
   path: '/ezac/leden/overzicht'
   defaults:
     _title: 'Ledenoverzicht'
-    _controller: '\Drupal\ezac\Controller\DloLedenController::overzicht'
+    _controller: '\Drupal\ezac\Controller\EzacLedenController::overzicht'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
 
-ezac_leden_overzicht_kat:
-  path: '/ezac/leden/overzicht/{kat}/{jaar}'
+ezac_leden_overzicht_code:
+  path: '/ezac/leden/overzicht/{code}'
   defaults:
     _title: 'Ledenoverzicht'
-    _controller: '\Drupal\ezac\Controller\DloLedenController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_leden_vloot:
-  path: 'dlo/leden/vloot/{id}/{jaar}'
-  defaults:
-    _title: 'Lid vloot overzicht'
-    _controller: '\Drupal\ezac\Controller\DloLedenController::vloot'
+    _controller: '\Drupal\ezac\Controller\EzacLedenController::overzicht'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -64,7 +47,7 @@ ezac_leden_update:
   path: '/ezac/leden/update/{id}'
   defaults:
     _title: 'Lid wijzigen'
-    _form: '\Drupal\ezac\Form\DloLedenUpdateForm'
+    _form: '\Drupal\ezac\Form\EzacLedenUpdateForm'
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
@@ -73,7 +56,7 @@ ezac_leden_create:
   path: '/ezac/leden/update'
   defaults:
     _title: 'Lid aanmaken'
-    _form: '\Drupal\ezac\Form\DloLedenUpdateForm'
+    _form: '\Drupal\ezac\Form\EzacLedenUpdateForm'
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
@@ -82,7 +65,7 @@ ezac_leden_user_create:
   path: '/ezac/leden/user'
   defaults:
     _title: 'user-id aanmaken voor leden'
-    _form: '\Drupal\ezac\Form\DloUserCreateForm'
+    _form: '\Drupal\ezac\Form\EzacUserCreateForm'
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
@@ -91,7 +74,7 @@ ezac_leden_export_form:
   path: '/ezac/leden/export/form'
   defaults:
     _title: 'Leden export'
-    _form: '\Drupal\ezac\Form\DloLedenExportForm'
+    _form: '\Drupal\ezac\Form\EzacLedenExportForm'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -100,42 +83,25 @@ ezac_leden_export:
   path: '/ezac/leden/export/{filename}'
   defaults:
     _title: 'EZAC_read'
-    _controller: '\Drupal\ezac\Controller\DloLedenController::export'
+    _controller: '\Drupal\ezac\Controller\EzacLedenController::export'
   requirements:
     _permission: 'access content'
     _user: ^[a-zA-Z0-9_]+
 
-ezac_leden_export_kat:
-  path: '/ezac/leden/export/{filename}/{kat}'
+ezac_leden_export_code:
+  path: '/ezac/leden/export/{filename}/{code}'
   defaults:
     _title: 'Leden export'
-    _controller: '\Drupal\ezac\Controller\DloLedenController::export'
+    _controller: '\Drupal\ezac\Controller\EzacLedenController::export'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot:
-  path: '/ezac/vloot/{jaar}'
-  defaults:
-    _title: 'DLO vloot administratie'
-    _controller: '\Drupal\ezac\Controller\DloVlootController::status'
-  requirements:
-    _permission: 'EZAC_read'
 
 ezac_vloot_overzicht:
-  path: '/ezac/vloot/overzicht/{jaar}'
+  path: '/ezac/vloot/overzicht'
   defaults:
     _title: 'Vloot overzicht'
-    _controller: '\Drupal\ezac\Controller\DloVlootController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot_overzicht_kat:
-  path: '/ezac/vloot/overzicht/{k}/{jaar}'
-  defaults:
-    _title: 'DLO vloot overzicht'
-    _controller: '\Drupal\ezac\Controller\DloVlootController::overzicht'
+    _controller: '\Drupal\ezac\Controller\EzacVlootController::overzicht'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -144,7 +110,7 @@ ezac_vloot_update:
   path: '/ezac/vloot/update/{id}'
   defaults:
     _title: 'Kist wijzigen'
-    _form: '\Drupal\ezac\Form\DloVlootUpdateForm'
+    _form: '\Drupal\ezac\Form\EzacVlootUpdateForm'
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
@@ -153,434 +119,7 @@ ezac_vloot_create:
   path: '/ezac/vloot/update'
   defaults:
     _title: 'Kist aanmaken'
-    _form: '\Drupal\ezac\Form\DloVlootUpdateForm'
+    _form: '\Drupal\ezac\Form\EzacVlootUpdateForm'
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot_waarde:
-  path: '/ezac/vloot/waarde/{jaar}'
-  defaults:
-    _title: 'Overzicht vlootwaarde'
-    _controller: '\Drupal\ezac\Controller\DloVlootController::vlootWaarde'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot_export_form:
-  path: '/ezac/vloot/export/form'
-  defaults:
-    _title: 'Vloot export'
-    _form: '\Drupal\ezac\Form\DloVlootExportForm'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot_export:
-  path: '/ezac/vloot/export/{filename}'
-  defaults:
-    _title: 'Vloot export'
-    _controller: '\Drupal\ezac\Controller\DloVlootController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vloot_export_kat:
-  path: '/ezac/vloot/export/{filename}/{k}'
-  defaults:
-    _title: 'Vloot export'
-    _controller: '\Drupal\ezac\Controller\DloVlootController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade:
-  path: '/ezac/schade'
-  defaults:
-    _title: 'DLO schade administratie'
-    _controller: '\Drupal\ezac\Controller\DloSchadeController::status'
-  requirements:
-    _permission: 'EZAC_read'
-
-ezac_schade_overzicht:
-  path: '/ezac/schade/overzicht'
-  defaults:
-    _title: 'Schade overzicht'
-    _controller: '\Drupal\ezac\Controller\DloSchadeController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade_overzicht_ph:
-  path: '/ezac/schade/overzicht/ph/{ph}'
-  defaults:
-    _title: 'Schade overzicht per kist'
-    _controller: '\Drupal\ezac\Controller\DloSchadeController::overzichtKist'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade_overzicht_jaar:
-  path: '/ezac/schade/overzicht/jaar/{jaar}'
-  defaults:
-    _title: 'DLO schade overzicht'
-    _controller: '\Drupal\ezac\Controller\DloSchadeController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade_update:
-  path: '/ezac/schade/update/{id}'
-  defaults:
-    _title: 'Schade opgave wijzigen'
-    _form: '\Drupal\ezac\Form\DloSchadeUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade_create:
-  path: '/ezac/schade/create/{id}/{ph}/{jaar}'
-  defaults:
-    _title: 'Schade opgave aanmaken'
-    _form: '\Drupal\ezac\Form\DloSchadeUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade_export_form:
-  path: '/ezac/schade/export/form'
-  defaults:
-    _title: 'Schade export'
-    _form: '\Drupal\ezac\Form\DloSchadeExportForm'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade_export:
-  path: '/ezac/schade/export/{filename}'
-  defaults:
-    _title: 'Schade export'
-    _controller: '\Drupal\ezac\Controller\DloSchadeController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_schade_export_jaar:
-  path: '/ezac/schade/export/{filename}/{jaar}'
-  defaults:
-    _title: 'Schade export'
-    _controller: '\Drupal\ezac\Controller\DloSchadeController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_percent:
-  path: '/ezac/percent'
-  defaults:
-    _title: 'DLO percentages administratie'
-    _controller: '\Drupal\ezac\Controller\DloPercentController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-
-ezac_percent_overzicht:
-  path: '/ezac/percent/overzicht'
-  defaults:
-    _title: 'Schade overzicht'
-    _controller: '\Drupal\ezac\Controller\DloPercentController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_percent_update:
-  path: '/ezac/percent/update/{id}'
-  defaults:
-    _title: 'Percentages voor jaar wijzigen'
-    _form: '\Drupal\ezac\Form\DloPercentUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_percent_create:
-  path: '/ezac/percent/create'
-  defaults:
-    _title: 'Percentages voor jaar aanmaken'
-    _form: '\Drupal\ezac\Form\DloPercentUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_percent_export:
-  path: '/ezac/percent/export/{filename}'
-  defaults:
-    _title: 'Percentages per jaar export'
-    _controller: '\Drupal\ezac\Controller\DloPercentController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_nota:
-  path: '/ezac/nota'
-  defaults:
-    _title: 'DLO nota administratie'
-    _controller: '\Drupal\ezac\Controller\DloNotaController::status'
-  requirements:
-    _permission: 'EZAC_read'
-
-ezac_nota_overzicht:
-  path: '/ezac/nota/overzicht'
-  defaults:
-    _title: 'Nota overzicht'
-    _controller: '\Drupal\ezac\Controller\DloNotaController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_nota_overzicht_jaar:
-  path: '/ezac/nota/overzicht/{jaar}'
-  defaults:
-    _title: 'Nota overzicht'
-    _controller: '\Drupal\ezac\Controller\DloNotaController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_nota_update:
-  path: '/ezac/nota/update/{id}'
-  defaults:
-    _title: 'Nota wijzigen'
-    _form: '\Drupal\ezac\Form\DloNotaUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_nota_print:
-  path: '/ezac/nota/print/{soort}/{jaar}'
-  defaults:
-    _title: 'Notas afdrukken'
-    _form: '\Drupal\ezac\Form\DloNotaPrintForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_nota_output:
-  path: '/ezac/nota/output/{filename}'
-  defaults:
-    _title: 'Nota output'
-    _controller: '\Drupal\ezac\Util\DloUtil::output'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-    
-ezac_nota_ledenrek:
-  path: '/ezac/nota/ledenrek'
-  defaults:
-    _title: 'Vul ledenrekening in notas en premies'
-    _controller: '\Drupal\ezac\Calc\Conversion::ledenrek'
-  requirements:
-    _permission: 'EZAC_update'
-    
-ezac_nota_export:
-  path: '/ezac/nota/export/{filename}'
-  defaults:
-    _title: 'Notas export'
-    _controller: '\Drupal\ezac\Controller\DloNotaController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_nota_export_jaar:
-  path: '/ezac/nota/export/{filename}/{jaar}'
-  defaults:
-    _title: 'Notas export per jaar'
-    _controller: '\Drupal\ezac\Controller\DloNotaController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_audit:
-  path: '/ezac/audit'
-  defaults:
-    _title: 'DLO audit trail'
-    _controller: '\Drupal\ezac\Controller\DloAuditController::status'
-  requirements:
-    _permission: 'EZAC_read'
-
-ezac_audit_overzicht:
-  path: '/ezac/audit/overzicht/{tablename}'
-  defaults:
-    _title: 'Audit trail overzicht'
-    _controller: '\Drupal\ezac\Controller\DloAuditController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_audit_overzicht_user:
-  path: '/ezac/audit/overzicht/{tablename}/{user}'
-  defaults:
-    _title: 'Audit trail overzicht'
-    _controller: '\Drupal\ezac\Controller\DloAuditController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_audit_update:
-  path: '/ezac/audit/update/{id}'
-  defaults:
-    _title: 'Wijziging terugdraaien'
-    _form: '\Drupal\ezac\Form\DloAuditUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_audit_export:
-  path: '/ezac/audit/export/{filename}'
-  defaults:
-    _title: 'Audits export'
-    _controller: '\Drupal\ezac\Controller\DloAuditController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_audit_export_table:
-  path: '/ezac/audit/export/table/{filename}/{tablename}'
-  defaults:
-    _title: 'Audits export per tabel'
-    _controller: '\Drupal\ezac\Controller\DloAuditController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_audit_export_user:
-  path: '/ezac/audit/export/table/{filename}/{tablename}/{user}'
-  defaults:
-    _title: 'Audits export per tabel'
-    _controller: '\Drupal\ezac\Controller\DloAuditController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_premie:
-  path: '/ezac/premie'
-  defaults:
-    _title: 'DLO premie berekening'
-    _controller: '\Drupal\ezac\Controller\DloPremieController::status'
-  requirements:
-    _permission: 'EZAC_read'
-
-ezac_premie_overzicht:
-  path: '/ezac/premie/overzicht'
-  defaults:
-    _title: 'Premie overzicht'
-    _controller: '\Drupal\ezac\Controller\DloPremieController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_premie_overzicht_jaar:
-  path: '/ezac/premie/overzicht/{jaar}'
-  defaults:
-    _title: 'Premie overzicht per jaar'
-    _controller: '\Drupal\ezac\Controller\DloPremieController::overzicht'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_premie_export:
-  path: '/ezac/premie/export/{filename}'
-  defaults:
-    _title: 'Premies export'
-    _controller: '\Drupal\ezac\Controller\DloPremieController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-    
-ezac_premie_export_jaar:
-  path: '/ezac/premie/export/{filename}/{jaar}'
-  defaults:
-    _title: 'Premies export voor jaar'
-    _controller: '\Drupal\ezac\Controller\DloPremieController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-    
-ezac_premie_calc:
-  path: '/ezac/premie/calc'
-  defaults:
-    _title: 'Bonus Malus en Premie berekening'
-    _form: '\Drupal\ezac\Form\DloPremieForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_premie_update:
-  path: '/ezac/audit/update/{id}'
-  defaults:
-    _title: 'Premie record wijzigen'
-    _form: '\Drupal\ezac\Form\DloPremieUpdateForm'
-  requirements:
-    _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_rapport:
-  path: '/ezac/rapport'
-  defaults:
-    _title: 'DLO rapportages'
-    _form: '\Drupal\ezac\Form\DloReportForm'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_rapport_jaar:
-  path: '/ezac/rapport/{jaar}'
-  defaults:
-    _title: 'DLO rapporten'
-    _controller: '\Drupal\ezac\Controller\DloReportController::menu'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_rapport_eindpremie:
-  path: '/ezac/rapport/eindpremie/{jaar}'
-  defaults:
-    _title: 'Rapport DLO eindpremie'
-    _controller: '\Drupal\ezac\Controller\DloReportController::eindpremie'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_rapport_bmperc:
-  path: '/ezac/rapport/bmperc/{jaar}'
-  defaults:
-    _title: 'Rapport DLO BM percentages'
-    _controller: '\Drupal\ezac\Controller\DloReportController::bmperc'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_rapport_percentages:
-  path: '/ezac/rapport/percentages'
-  defaults:
-    _title: 'Rapport DLO percentages'
-    _controller: '\Drupal\ezac\Controller\DloReportController::percentages'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_rapport_vloot:
-  path: '/ezac/rapport/vloot/{jaar}'
-  defaults:
-    _title: 'Rapport DLO verzekerd bestand'
-    _controller: '\Drupal\ezac\Controller\DloReportController::vloot'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_rapport_contact:
-  path: '/ezac/rapport/contact/{kat}'
-  defaults:
-    _title: 'Rapport DLO contactpersonen'
-    _controller: '\Drupal\ezac\Controller\DloReportController::contacts'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-  
