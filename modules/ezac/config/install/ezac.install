@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the ezac module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * @see hook_install()
+ *
+ * @ingroup ezac
+ */
+
+/**
+ * @file
+ * Install, update and uninstall functions for the ezac module.
+ */
+
+function ezac_install()
+{
+    \Drupal\Core\Database\Database::setActiveConnection('ezac');
+    $connection = \Drupal\Core\Database\Database::getConnection();
+
+    $schema = ezac_schema();
+    foreach ($schema as $name => $table) {
+        $connection->schema()->createTable($name, $table);
+    }
+
+    // @todo import table data
+
+    \Drupal\Core\Database\Database::setActiveConnection();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ezac_uninstall()
+{
+    \Drupal\Core\Database\Database::setActiveConnection('ezac');
+    $connection = \Drupal\Core\Database\Database::getConnection();
+
+    // @todo export table data
+
+    $schema = ezac_schema();
+    foreach ($schema as $name => $table) {
+        $connection->schema()->dropTable($name);
+    }
+
+    \Drupal\Core\Database\Database::setActiveConnection();
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ *
+ * @see hook_schema()
+ *
+ * @ingroup ezac
+ */
+function ezac_schema()
+{
+    /**
+     * @todo make .inc files for separate tables
+     */
+
+    $schema = [];
+    require "ezacLedenSchema.inc";
+
+    return $schema;
+}
+

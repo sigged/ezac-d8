@@ -1,0 +1,10 @@
+name: EZAC administratie
+description: Operationele administratie EZAC zweefvliegclub
+package: Custom
+type: module
+core: 8.x
+
+dependencies:
+  - user
+  
+#configure: dlo_adm.settings

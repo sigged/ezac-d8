@@ -1,0 +1,129 @@
+<?php
+
+/**
+ * @file
+ * This is the main module for EZAC - gliding club system
+ *
+ */
+ 
+ /**
+  * @defgroup ezac
+  * @{
+  *
+  * @todo Insert usage examples
+  */
+  
+/**
+ * @} End of "defgroup ezac".
+ */
+
+/**
+ * Example theme hook
+ * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_theme/8
+ * @see http://drupal.stackexchange.com/questions/159154/drupal-8-theme-a-contact-form
+ * @see https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Styling_HTML_forms
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ * @return array
+ */
+function ezac_theme($existing, $type, $theme, $path) {
+  return array(
+    /*'ezac' => array(
+      'variables' => array('test_var' => NULL),
+    ),*/
+    // render leden_update_form
+    'ezac_leden_update_form' => array(
+      'template' => 'custom-leden-update-form',
+    'render element' => 'form',
+    ),
+    // ezac_form_table - for ajax callbacks
+    'ezac_form_table' => array(
+      // The renderable element is the form.
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+ * Theme callback for the form table. (Drupal 7)
+ * Code snippet from ezacvba
+ * @param $variables
+ * @return
+ */
+function theme_ezac_form_table(&$variables) {
+    // Get the useful values.
+    $form = $variables['form'];
+    $rows = $form['rows'];
+    $header = $form['#header'];
+
+    // Setup the structure to be rendered and returned.
+    $content = array(
+        '#theme' => 'table',
+        '#header' => $header,
+        '#rows' => array(),
+    );
+
+    // Traverse each row.  @see element_chidren().
+    foreach (element_children($rows) as $row_index) {
+        $row = array();
+        // Traverse each column in the row.  @see element_children().
+        foreach (element_children($rows[$row_index]) as $col_index) {
+            // Render the column form element.
+            $row[] = drupal_render($rows[$row_index][$col_index]);
+        }
+    // Add the row to the table.
+    $content['#rows'][] = $row;
+    }
+
+    // Render the table and return.
+    return drupal_render($content);
+}
+
+
+/**
+ * ajax form update - example snippet
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function dlo_adm_status_callback($form, $form_state) {
+    return $form['status'];
+}
+
+/**
+ * model code snippet for form definition
+ *
+     $form['periode'] = array(
+    '#type' => 'select',
+    '#title' => 'Periode',
+    '#options' => $periode_list,
+    '#weight' => 2,
+    '#ajax' => array(
+        'callback' => 'ezacvba_status_callback', 
+        'wrapper' => 'status-div',
+        'effect' => 'fade',
+        'progress' => array('type' => 'throbber'),
+        ),
+    );
+            
+    $periode = (isset($form_state['values']['periode']) && $form_state['values']['periode'])
+        ? $form_state['values']['periode']
+        : key($periode_list);
+
+    $form['status'] = array(
+        '#type' => 'container',
+        '#prefix' => '<div id="status-div">',
+        '#suffix' => '</div>',
+        '#weight' => 3,
+    );
+    
+    $form['status']['tabel'] = array(
+        '#theme' => 'table',
+        '#header' => $header,
+        '#rows' => $rows,
+        '#attributes' => $attributes,
+    );
+
+    */

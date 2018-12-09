@@ -1,0 +1,11 @@
+ezac:
+  title: EZAC administratie
+  route_name: ezac
+  description: DLO menu
+
+ezac_start:
+  title: Startadministratie
+  route_name: ezac_start
+  description: EZAC startadministratie
+  weight: 00
+  
