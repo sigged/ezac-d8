@@ -76,7 +76,7 @@ class EzacStorage
      * @param array $condition
      * @return mixed
      */
-    public static function EZACCount($table, $condition = array())
+    public static function ezacCount($table, $condition = array())
     {
 
         // Read all fields from a ezac table.

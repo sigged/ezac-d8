@@ -17,10 +17,9 @@ class EzacLedenController extends ControllerBase {
 
     /**
      * Display the status of the EZAC leden table
-     * @param string jaar
      * @return array
      */
-  public function status($jaar = NULL) {
+  public function status() {
     $content = array();
 
     // show record count for each Code value
@@ -30,17 +29,14 @@ class EzacLedenController extends ControllerBase {
       t("Uitvoer"),
     );
     
-    if ($jaar == NULL) $jaar = date('Y');
-    
     $total = 0;
     foreach (EzacLid::$lidCode as $code => $description) {
       $count = EzacLid::counter(['code' => $code]);
       $total = $total+$count;
       $url = Url::fromRoute(
-        'ezac_leden_overzicht_kat',
+        'ezac_leden_overzicht_code',
         array(
-          'kat' => $code,
-          'jaar' => $jaar,
+          'code' => $code
         )
       );
       $urlKat = $url->toString();
@@ -78,7 +74,7 @@ class EzacLedenController extends ControllerBase {
     //build table
     $content['table'] = array(
       '#type' => 'table',
-      '#caption' => t("Categorie overzicht van het EZAC LEDEN bestand $jaar"),
+      '#caption' => t("Categorie overzicht van het EZAC LEDEN bestand"),
       '#header' => $headers,
       '#rows' => $rows,
       '#empty' => t('Geen gegevens beschikbaar.'),

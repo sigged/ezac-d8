@@ -5,6 +5,8 @@
  * Install, update and uninstall functions for the ezac module.
  */
 
+use Drupal\Core\Database\Database;
+
 /**
  * Implements hook_install().
  *
@@ -20,17 +22,17 @@
 
 function ezac_install()
 {
-    \Drupal\Core\Database\Database::setActiveConnection('ezac');
-    $connection = \Drupal\Core\Database\Database::getConnection();
+    Database::setActiveConnection('ezac');
+    $connection = Database::getConnection();
 
-    $schema = ezac_schema();
+    $schema = ezac_schema_extraDb();
     foreach ($schema as $name => $table) {
         $connection->schema()->createTable($name, $table);
     }
 
     // @todo import table data
 
-    \Drupal\Core\Database\Database::setActiveConnection();
+    Database::setActiveConnection();
 }
 
 /**
@@ -38,17 +40,17 @@ function ezac_install()
  */
 function ezac_uninstall()
 {
-    \Drupal\Core\Database\Database::setActiveConnection('ezac');
-    $connection = \Drupal\Core\Database\Database::getConnection();
+    Database::setActiveConnection('ezac');
+    $connection = Database::getConnection();
 
     // @todo export table data
 
-    $schema = ezac_schema();
+    $schema = ezac_schema_extraDb();
     foreach ($schema as $name => $table) {
         $connection->schema()->dropTable($name);
     }
 
-    \Drupal\Core\Database\Database::setActiveConnection();
+    Database::setActiveConnection();
 }
 
 /**
@@ -60,7 +62,7 @@ function ezac_uninstall()
  *
  * @ingroup ezac
  */
-function ezac_schema()
+function ezac_schema_extraDb()
 {
     /**
      * @todo make .inc files for separate tables
