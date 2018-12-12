@@ -28,6 +28,7 @@ function ezac_install()
     $schema = ezac_schema_extraDb();
     foreach ($schema as $name => $table) {
         $connection->schema()->createTable($name, $table);
+        dpm($name,'table name'); //debug
     }
 
     // @todo import table data
