@@ -196,7 +196,6 @@ class EzacLid extends EzacStorage
         return EzacStorage::ezacIndex('leden', $condition, $field, $sortkey, $sortdir, $from, $range);
     }
 
-
     /***
      * getId - search id for record with afkorting
      * @param string afkorting
