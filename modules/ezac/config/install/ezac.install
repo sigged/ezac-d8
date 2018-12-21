@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the ezac module.
  */
 
+
 use Drupal\Core\Database\Database;
 
 /**
@@ -74,8 +75,209 @@ function ezac_schema()
      * @todo make .inc files for separate tables
      */
 
-    $schema = [];
-    require "ezacLedenSchema.inc";
+    //$schema = [];
+    //require "ezacLedenSchema.inc";
+
+    $schema['ezac_leden'] = array(
+        'description' => 'Leden tabel',
+        'fields' => array(
+            'id' => array(
+                'description' => 'unique id',
+                'type' => 'serial',
+                'not null' => TRUE,
+            ),
+            'voorletter' => array(
+                'description' => 'voorletters',
+                'type' => 'varchar',
+                'length' => '21',
+                'not null' => FALSE,
+            ),
+            'voornaam' => array(
+                'description' => 'voornaam',
+                'type' => 'varchar',
+                'length' => '13',
+                'not null' => FALSE,
+            ),
+            'voorvoeg' => array(
+                'description' => 'voorvoegsel',
+                'type' => 'varchar',
+                'length' => '11',
+                'not null' => FALSE,
+            ),
+            'achternaam' => array(
+                'description' => 'achternaam',
+                'type' => 'varchar',
+                'length' => '35',
+                'not null' => FALSE,
+            ),
+            'afkorting' => array(
+                'description' => 'afkorting (uniek)',
+                'type' => 'varchar',
+                'length' => '9',
+                'not null' => FALSE,
+            ),
+            'straat' => array(
+                'description' => 'straat',
+                'type' => 'varchar',
+                'length' => '26',
+                'not null' => FALSE,
+            ),
+            'postcode' => array(
+                'description' => 'postcode',
+                'type' => 'varchar',
+                'length' => '9',
+                'not null' => FALSE,
+            ),
+            'plaats' => array(
+                'description' => 'plaats',
+                'type' => 'varchar',
+                'length' => '24',
+                'not null' => FALSE,
+            ),
+            'land' => array(
+                'description' => 'land',
+                'type' => 'varchar',
+                'length' => '10',
+                'not null' => FALSE,
+            ),
+            'telefoon' => array(
+                'description' => 'telefoon nummer',
+                'type' => 'varchar',
+                'length' => '14',
+                'not null' => FALSE,
+            ),
+            'mobiel' => array(
+                'description' => 'mobiel telefoon nummer',
+                'type' => 'varchar',
+                'length' => '20',
+                'not null' => FALSE,
+            ),
+            'e_mail' => array(
+                'description' => 'e-mail adres',
+                'type' => 'varchar',
+                'length' => '50',
+                'not null' => FALSE,
+            ),
+            'code' => array(
+                'description' => 'code lid soort',
+                'type' => 'varchar',
+                'length' => '5',
+                'not null' => FALSE,
+            ),
+            'tienrittenkaart' => array(
+                'description' => 'tienrittenkaart vlag',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => FALSE,
+            ),
+            'geboortedatum' => array(
+                'description' => 'geboortedatum',
+                'type' => 'date',
+                'not null' => FALSE,
+            ),
+            'opmerking' => array(
+                'description' => 'opmerking',
+                'type' => 'varchar',
+                'length' => '27',
+                'not null' => FALSE,
+            ),
+            'actief' => array(
+                'description' => 'actief lid vlag',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => FALSE,
+            ),
+            'lid_eind' => array(
+                'description' => 'einde lidmaatschap datum',
+                'type' => 'date',
+                'not null' => FALSE,
+            ),
+            'lid_van' => array(
+                'description' => 'start lidmaatschap datum',
+                'type' => 'date',
+                'not null' => FALSE,
+            ),
+            'leerling' => array(
+                'description' => 'leerling vlag',
+                'type' => 'int',
+                'not null' => FALSE,
+                'default' => 0,
+            ),
+            'instructie' => array(
+                'description' => 'instructeur vlag',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => FALSE,
+            ),
+            'bevoegdheid' => array(
+                'description' => 'bevoegdheid nummer',
+                'type' => 'int',
+                'size' => 'small',
+                'not null' => FALSE,
+            ),
+            'babyvriend' => array(
+                'description' => 'Babyvriend vlag',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => FALSE,
+            ),
+            'seniorlid' => array(
+                'description' => 'senior lid vlag',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => FALSE,
+            ),
+            'jeugdlid' => array(
+                'description' => 'jeugd lid vlag',
+                'type' => 'varchar',
+                'length' => '1',
+                'not null' => FALSE,
+            ),
+            'peonderhoud' => array(
+                'description' => 'Piloot Eigenaar Onderhoud vlag',
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => FALSE,
+            ),
+            'kenezacvan' => array(
+                'description' => 'Ken EZAC van',
+                'type' => 'text',
+                'not null' => FALSE,
+            ),
+            'user' => array(
+                'description' => 'user-id drupal',
+                'type' => 'varchar',
+                'length' => '8',
+                'not null' => FALSE,
+            ),
+            'slotcode' => array(
+                'description' => 'slot code',
+                'type' => 'varchar',
+                'length' => '8',
+                'not null' => FALSE,
+            ),
+            'mutatie' => array(
+                'description' => 'mutatie datum',
+                'type' => 'timestamp',
+                'not null' => FALSE,
+                'default' => 'CURRENT_TIMESTAMP',
+            ),
+            'wijzigingsoort' => array(
+                'description' => 'mutatie soort',
+                'type' => 'text',
+                'not null' => FALSE,
+            ),
+            'lastaccess' => array(
+                'description' => 'laatste toegang datum',
+                'type' => 'timestamp',
+                'not null' => FALSE,
+            ),
+        ),
+        'primary key' => array('id'),
+        'unique keys' => array(
+            'Id' => array('id')
+        ),
+    );
 
     return $schema;
 }
