@@ -22,6 +22,7 @@ use Drupal\Core\Database\Database;
 
 function ezac_install()
 {
+    /* de-activate external DB
     Database::setActiveConnection('ezac');
     $connection = Database::getConnection();
 
@@ -34,6 +35,7 @@ function ezac_install()
     // @todo import table data
 
     Database::setActiveConnection();
+    */
 }
 
 /**
@@ -41,6 +43,7 @@ function ezac_install()
  */
 function ezac_uninstall()
 {
+    /* de-activate external DB
     Database::setActiveConnection('ezac');
     $connection = Database::getConnection();
 
@@ -52,6 +55,7 @@ function ezac_uninstall()
     }
 
     Database::setActiveConnection();
+    */
 }
 
 /**
@@ -63,7 +67,8 @@ function ezac_uninstall()
  *
  * @ingroup ezac
  */
-function ezac_schema_extraDb()
+//function ezac_schema_extraDb()
+function ezac_schema()
 {
     /**
      * @todo make .inc files for separate tables

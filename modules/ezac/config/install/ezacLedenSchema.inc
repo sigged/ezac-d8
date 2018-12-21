@@ -1,5 +1,5 @@
 <?php
-$schema['leden'] = array(
+$schema['ezac_leden'] = array(
     'description' => 'Leden tabel',
     'fields' => array(
         'id' => array(
