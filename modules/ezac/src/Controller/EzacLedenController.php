@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\Core\Database\Database;
 
 use Drupal\ezac\Model\EzacLid;
 
@@ -23,9 +22,7 @@ class EzacLedenController extends ControllerBase {
   public function status() {
     $content = array();
 
-      Database::setActiveConnection('ezac');
-      $schema = Database::getConnection()->schema();
-      Database::setActiveConnection();
+      $schema = drupal_get_module_schema('ezac');
       dpm($schema); //debug
 
     // show record count for each Code value
