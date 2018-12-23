@@ -23,55 +23,13 @@ class EzacStorage
     // define id property
     public $id = 0;
 
-/**
-     * Delete multiple entries from the database
-     * This function does not use the audit trail
-     * @param string $table
-     * @param array $condition
-     * @return int records deleted
-     */
-    public static function ezacDeleteMultiple($table, $condition)
-    {
-        $messenger = \Drupal::messenger();
+    //$config = \Drupal::config('ezac.database');
+    //Database::setActiveConnection($config->get('name');
 
-        // EZAC database is outside the Drupal structure
-        Database::setActiveConnection('ezac');
-        $db = Database::getConnection();
+    protected const dbName = 'ezac';
 
-        // @todo verify admitted tables
-        $admitted_tables = array(
-            'bmbasis',
-            'notas',
-            'audittrail'
-        );
-        if (!in_array($table, $admitted_tables)) {
-        $messenger->addMessage("Tabel $table mag niet worden gewist", $messenger::TYPE_ERROR);
-        $records_deleted = 0; // no records deleted
-    } else {
-            // prepare delete
-            $select = $db->delete($table);
-            // Add each field and value as a condition to this query.
-            if (isset($condition)) {
-                foreach ($condition as $field => $test) {
-                    if (is_array($test)) {
-                        $value = $test['value'];
-                        $operator = $test['operator'];
-                        $select->condition($field, $value, $operator);
-                    } else $select->condition($field, $test);
-                }
-            }
-            /** @var int $records_deleted */
-            $records_deleted = $select->execute();
-        }
-
-        // return to standard Drupal database
-        Database::setActiveConnection();
-
-        return $records_deleted;
-
-    }
-
-/**
+    /**
+     *
      * @param $table
      * @param array $condition
      * @return mixed
@@ -81,7 +39,7 @@ class EzacStorage
 
         // Read all fields from a ezac table.
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection("ezac");
+        Database::setActiveConnection(self::dbName);
         $db = Database::getConnection();
 
         $select = $db->select($table); // geen alias gebruikt
@@ -128,7 +86,7 @@ class EzacStorage
 
         // Read unique index from a ezac table.
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection("ezac");
+        Database::setActiveConnection(self::dbName);
         $db = Database::getConnection();
 
         $select = $db->select($table, 't');
@@ -177,7 +135,7 @@ class EzacStorage
 
         // EZAC database is outside the Drupal structure
         // select EZAC database outside Drupal structure
-        Database::setActiveConnection('ezac');
+        Database::setActiveConnection(self::dbName);
         $db = Database::getConnection();
 
         // create record
@@ -190,9 +148,9 @@ class EzacStorage
                 ->execute();
         } catch (\Exception $e) {
             $messenger = \Drupal::messenger();
-            $message = "db_insert failed. Message = " .$e->getMessage();
-        $messenger->addMessage($message, $messenger::TYPE_ERROR);
-    }
+            $message = "db_insert failed. Message = " . $e->getMessage();
+            $messenger->addMessage($message, $messenger::TYPE_ERROR);
+        }
         // set id value
         $entry['id'] = $return_value;
 
@@ -221,7 +179,7 @@ class EzacStorage
 
         // Read all fields from a ezac table.
         // select EZAC database outside Drupal structure
-        Database::setActiveConnection("ezac");
+        Database::setActiveConnection(self::dbName);
         $db = Database::getConnection();
 
         $select = $db->select($table); // geen alias gebruikt
@@ -238,7 +196,7 @@ class EzacStorage
 
     } //ezacDeleteMultiple
 
-        /**
+    /**
      * Update an entry in the database.
      *
      * @param string $table
@@ -254,7 +212,7 @@ class EzacStorage
         $messenger = \Drupal::messenger();
 
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection('ezac');
+        Database::setActiveConnection(self::dbName);
         $db = Database::getConnection();
 
         // build array from object fields
@@ -267,9 +225,9 @@ class EzacStorage
             $update->condition('id', $entry['id']);
             $count = $update->execute();
         } catch (\Exception $e) {
-            $message = "db_insert failed. Message = " .$e->getMessage();
-        $messenger->addMessage($message, $messenger::TYPE_ERROR);
-    }
+            $message = 'db_update failed. Message = ' . $e->getMessage();
+            $messenger->addMessage($message, $messenger::TYPE_ERROR);
+        }
 
         // return to standard Drupal database
         Database::setActiveConnection();
@@ -279,7 +237,7 @@ class EzacStorage
 
     }  // EZACCount
 
-        /**
+    /**
      * Delete an entry from the database.
      *
      * @param string $table
@@ -292,7 +250,7 @@ class EzacStorage
     {
 
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection('ezac');
+        Database::setActiveConnection(self::dbName);
         $db = Database::getConnection();
 
         // prepare delete
