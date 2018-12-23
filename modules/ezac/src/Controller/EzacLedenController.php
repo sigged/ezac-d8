@@ -22,7 +22,7 @@ class EzacLedenController extends ControllerBase {
   public function status() {
     $content = array();
 
-      $schema = drupal_get_module_schema('ezac');
+      $schema = drupal_get_module_schema('ezac', 'leden');
       dpm($schema); //debug
 
     // show record count for each Code value

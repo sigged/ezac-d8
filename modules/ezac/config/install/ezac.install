@@ -79,3 +79,24 @@ function ezac_schema_extraDb()
     return $schema;
 }
 
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ *
+ * @see hook_schema()
+ *
+ * @ingroup ezac
+ */
+//function ezac_schema_extraDb()
+function ezac_schema()
+{
+    /**
+     * @todo make .inc files for separate tables
+     */
+
+    $schema = [];
+    require "ezacLedenSchema.inc";
+
+    return $schema;
+}
