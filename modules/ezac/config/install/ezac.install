@@ -96,7 +96,7 @@ function ezac_schema()
      */
 
     $schema = [];
-    require "ezacLedenSchema.inc";
+    require "ezacLedenSchemaXXX.inc";
 
     return $schema;
 }
