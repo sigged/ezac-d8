@@ -106,11 +106,9 @@ class EzacLedenController extends ControllerBase {
      * Render a list of entries in the database.
      * @param string
      *  $code - categorie (optional)
-     * @param string
-     *  $jaar
      * @return array
      */
-  public function overzicht($code = NULL, $jaar = NULL) {
+  public function overzicht($code = NULL) {
     $content = array();
 
     $rows = array();
@@ -141,7 +139,7 @@ class EzacLedenController extends ControllerBase {
     foreach ($ledenIndex as $id) {
       $lid = (new EzacLid)->read($id);
       $url = Url::fromRoute(
-        'ezac_leden_edit',  // edit leden record
+        'ezac_leden_update',  // edit leden record
         array(
           'id' => $lid->id,
         )
@@ -157,7 +155,7 @@ class EzacLedenController extends ControllerBase {
         t("$lid->opmerking"),
       );
     }
-    $caption = "Overzicht EZAC Leden bestand $jaar";
+    $caption = "Overzicht EZAC Leden bestand";
     if (isset($code)) $caption .= " - " . EzacLid::$lidCode[$code];
     $content['table'] = array(
         '#type' => 'table',
@@ -244,4 +242,4 @@ class EzacLedenController extends ControllerBase {
       return $response;
   } // export  
   
-} //class DLOLedenController
+} //class EzacLedenController
