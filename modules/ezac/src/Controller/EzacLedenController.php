@@ -34,7 +34,7 @@ class EzacLedenController extends ControllerBase {
     
     $total = 0;
     foreach (EzacLid::$lidCode as $code => $description) {
-      $count = EzacLid::counter(['code' => $code]);
+      $count = EzacLid::counter(['code' => $code, 'actief' => TRUE]);
       $total = $total+$count;
       $urlCode = Url::fromRoute(
         'ezac_leden_overzicht_code',
