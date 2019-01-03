@@ -194,7 +194,7 @@ class EzacStorage
 
         return $record;
 
-    } //ezacDeleteMultiple
+    } //ezacRead
 
     /**
      * Update an entry in the database.
