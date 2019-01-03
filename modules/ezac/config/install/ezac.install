@@ -23,10 +23,12 @@ use Drupal\Core\Database\Database;
 
 function ezac_install()
 {
+
     $config = \Drupal::config('ezac.database');
     Database::setActiveConnection($config->get('name'));
     $connection = Database::getConnection();
 
+    // if (!$connection->schema()->tableExists('leden'))
     $schema = ezac_schema_extraDb();
     foreach ($schema as $name => $table) {
         $connection->schema()->createTable($name, $table);
@@ -43,6 +45,7 @@ function ezac_install()
  */
 function ezac_uninstall()
 {
+    /* no uninstall active
     $config = \Drupal::config('ezac.database');
     Database::setActiveConnection($config->get('name'));
     $connection = Database::getConnection();
@@ -55,6 +58,7 @@ function ezac_uninstall()
     }
 
     Database::setActiveConnection();
+    */
 }
 
 /**
@@ -96,7 +100,7 @@ function ezac_schema()
      */
 
     $schema = [];
-    require "ezacLedenSchemaXXX.inc";
+    require "ezacLedenSchema.inc";
 
     return $schema;
 }

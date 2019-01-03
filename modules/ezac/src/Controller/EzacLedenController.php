@@ -124,7 +124,7 @@ class EzacLedenController extends ControllerBase {
     );
 
     if (isset($code)) {
-      $condition = ['kat' => $code];
+      $condition = ['code' => $code];
     }
     else $condition = array();
     
@@ -194,17 +194,17 @@ class EzacLedenController extends ControllerBase {
 
     if ($filename == '') $filename = 'ezac.txt';
 
-    // Determine KAT categorie from Leden for export
+    // Determine CODE categorie from Leden for export
     if (isset($code)) {
       $condition = array(
-        'kat' => $code,
+        'code' => $code,
       );
     }
     else $condition = NULL; //select all
 
     $records = EzacLid::index($condition); //read records index
     $count = count($records);
-      $messenger->addMessage("Export $count records van categorie [$code] naar bestand [$filename]"); //DEBUG
+      $messenger->addMessage("Export $count records met code [$code] naar bestand [$filename]"); //DEBUG
 
     $output = ""; // initialize output
     //build header line
