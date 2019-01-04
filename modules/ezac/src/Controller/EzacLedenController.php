@@ -129,7 +129,7 @@ class EzacLedenController extends ControllerBase {
     // prepare pager
     $total = EzacLid::counter($condition);
     $field = 'id';
-    $sortkey = 'code';
+    $sortkey = 'achternaam';
     $sortdir = 'ASC';
     $range = 50;
     $page = pager_default_initialize($total, $range);
