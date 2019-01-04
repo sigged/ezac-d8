@@ -2,7 +2,6 @@
 
 namespace Drupal\ezac\Form;
 
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -33,10 +32,10 @@ class EzacLedenUpdateForm extends FormBase
     public function buildForm(array $form, FormStateInterface $form_state, $id = NULL)
     {
         // Wrap the form in a div.
-        $form = array(
+        $form = [
             '#prefix' => '<div id="updateform">',
             '#suffix' => '</div>',
-        );
+        ];
         // Query for items to display.
         // if $id is set, perform UPDATE else CREATE
         if (isset($id)) {
@@ -49,16 +48,16 @@ class EzacLedenUpdateForm extends FormBase
         }
 
         //store indicator for new record for submit function
-        $form['new'] = array(
+        $form['new'] = [
             '#type' => 'value',
             '#value' => $newRecord, // TRUE or FALSE
-        );
+        ];
 
-        $options_yn = array(t('Nee'), t('Ja'));
+        $options_yn = [t('Nee'), t('Ja')];
 
         //Naam Type Omvang
         //VOORVOEG Tekst 11
-        $form['voorvoeg'] = array(
+        $form['voorvoeg'] = [
             '#title' => t('Voorvoeg'),
             '#type' => 'textfield',
             '#description' => t('Voorvoegsel'),
@@ -66,9 +65,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 11,
             '#required' => FALSE,
             '#size' => 11,
-            '#weight' => 1,);
+            '#weight' => 1,];
         //ACHTERNAAM Tekst 35
-        $form['achternaam'] = array(
+        $form['achternaam'] = [
             '#title' => t('Achternaam'),
             '#type' => 'textfield',
             '#description' => t('Achternaam'),
@@ -76,9 +75,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 35,
             '#required' => TRUE,
             '#size' => 35,
-            '#weight' => 2,);
+            '#weight' => 2,];
         //AFKORTING Tekst 9
-        $form['afkorting'] = array(
+        $form['afkorting'] = [
             '#title' => t('Afkorting'),
             '#type' => 'textfield',
             '#description' => t('UNIEKE afkorting voor startadministratie'),
@@ -86,9 +85,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 9,
             '#required' => FALSE,
             '#size' => 9,
-            '#weight' => 3,);
+            '#weight' => 3,];
         //VOORNAAM Tekst 13
-        $form['voornaam'] = array(
+        $form['voornaam'] = [
             '#title' => t('Voornaam'),
             '#type' => 'textfield',
             '#description' => t('Voornaam'),
@@ -96,9 +95,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 13,
             '#required' => TRUE,
             '#size' => 13,
-            '#weight' => 4,);
+            '#weight' => 4,];
         //VOORLETTER Tekst 21
-        $form['voorletter'] = array(
+        $form['voorletter'] = [
             '#title' => t('Voorletters'),
             '#type' => 'textfield',
             '#description' => t('Voorletters'),
@@ -106,9 +105,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 21,
             '#required' => TRUE,
             '#size' => 21,
-            '#weight' => 5,);
+            '#weight' => 5,];
         //ADRES Tekst 26
-        $form['adres'] = array(
+        $form['adres'] = [
             '#title' => t('Adres'),
             '#type' => 'textfield',
             '#description' => t('Adres'),
@@ -116,9 +115,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 26,
             '#required' => TRUE,
             '#size' => 26,
-            '#weight' => 6,);
+            '#weight' => 6,];
         //POSTCODE Tekst 9
-        $form['postcode'] = array(
+        $form['postcode'] = [
             '#title' => t('Postcode'),
             '#type' => 'textfield',
             '#description' => t('Postcode'),
@@ -126,9 +125,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 9,
             '#required' => TRUE,
             '#size' => 9,
-            '#weight' => 7,);
+            '#weight' => 7,];
         //PLAATS Tekst 24
-        $form['plaats'] = array(
+        $form['plaats'] = [
             '#title' => t('Plaats'),
             '#type' => 'textfield',
             '#description' => t('Plaats'),
@@ -136,9 +135,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 24,
             '#required' => TRUE,
             '#size' => 24,
-            '#weight' => 8,);
+            '#weight' => 8,];
         //TELEFOON Tekst 14
-        $form['telefoon'] = array(
+        $form['telefoon'] = [
             '#title' => t('Telefoon'),
             '#type' => 'textfield',
             '#description' => t('Telefoon'),
@@ -146,9 +145,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 14,
             '#required' => FALSE,
             '#size' => 14,
-            '#weight' => 9,);
+            '#weight' => 9,];
         //Mobiel Tekst 50
-        $form['mobiel'] = array(
+        $form['mobiel'] = [
             '#title' => t('Mobiel'),
             '#type' => 'textfield',
             '#description' => t('Mobiel nummer'),
@@ -156,9 +155,9 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 50,
             '#required' => false,
             '#size' => 50,
-            '#weight' => 10,);
+            '#weight' => 10,];
         //LAND Tekst 10
-        $form['land'] = array(
+        $form['land'] = [
             '#title' => t('Land'),
             '#type' => 'textfield',
             '#description' => t('Land'),
@@ -166,7 +165,7 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 10,
             '#required' => FALSE,
             '#size' => 10,
-            '#weight' => 11,);
+            '#weight' => 11,];
         //CODE Tekst 5
         $default_soort = array_search($lid->code, EzacLid::$lidCode);
         $form['code'] = [
@@ -177,7 +176,7 @@ class EzacLedenUpdateForm extends FormBase
             '#options' => EzacLid::$lidCode,
             '#weight' => 12
         ];
-        $form['tienrittenkaart'] = array(
+        $form['tienrittenkaart'] = [
             '#title' => t('Tienrittenkaart'),
             '#type' => 'select',
             '#options' => $options_yn,
@@ -186,14 +185,14 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 1,
             '#required' => TRUE,
             '#size' => 1,
-            '#weight' => 12);
+            '#weight' => 12];
         //GEBOORTEDA Datum/tijd 8
         $gd = substr($lid->geboorteda, 0, 10);
         if ($gd != NULL) {
             $lv = explode('-', $gd);
             $gebdat = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
         } else $gebdat = '';
-        $form['geboortedatum'] = array(
+        $form['geboortedatum'] = [
             '#title' => t('Geboortedatum'),
             '#type' => 'textfield',
             '#description' => t('Geboortedatum [dd-mm-jjjj]'),
@@ -202,9 +201,9 @@ class EzacLedenUpdateForm extends FormBase
             '#required' => FALSE,
             '#size' => 10,
             '#weight' => 13
-        );
+        ];
         //OPMERKING Tekst 27
-        $form['opmerking'] = array(
+        $form['opmerking'] = [
             '#title' => t('Opmerking'),
             '#type' => 'textfield',
             '#description' => t('Opmerking'),
@@ -212,10 +211,10 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 27,
             '#required' => FALSE,
             '#size' => 27,
-            '#weight' => 14);
+            '#weight' => 14];
         //INSTRUCTEU Tekst 9
         //Actief Ja/nee 1
-        $form['actief'] = array(
+        $form['actief'] = [
             '#title' => t('Actief'),
             '#type' => 'select',
             '#options' => $options_yn,
@@ -224,7 +223,7 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 1,
             '#required' => TRUE,
             '#size' => 1,
-            '#weight' => 15);
+            '#weight' => 15];
         //LID_VAN Datum/tijd 8
         $ls = substr($lid->lid_van, 0, 10);
         if ($ls != NULL) {
@@ -233,7 +232,7 @@ class EzacLedenUpdateForm extends FormBase
         } else $lid_van = '';
         //$lv = explode('-', $lid->lid_van);
         //$lid_van = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
-        $form['lidvan'] = array(
+        $form['lidvan'] = [
             '#title' => t('Lid vanaf'),
             '#type' => 'textfield', //DATE
             '#description' => t('Ingangsdatum lidmaatschap [dd-mm-jjjj]'),
@@ -241,14 +240,14 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 10,
             '#required' => FALSE,
             '#size' => 10,
-            '#weight' => 16);
+            '#weight' => 16];
         //LID_EIND Datum/tijd 8
         $le = substr($lid->lid_eind, 0, 10);
         if ($le != NULL) {
             $lv = explode('-', $le);
             $lid_eind = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
         } else $lid_eind = '';
-        $form['lideind'] = array(
+        $form['lideind'] = [
             '#title' => t('Lid einde'),
             '#type' => 'date', //DATE
             '#description' => t('Datum einde lidmaatschap [dd-mm-jjjj]'),
@@ -256,50 +255,29 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 10,
             '#required' => FALSE,
             '#size' => 10,
-            '#weight' => 17);
-
-        //RT license Ja/nee 1
-        $form['rt'] = array(
-            '#title' => t('RT'),
-            '#type' => 'select',
-            '#default_value' => $lid->rtlicense,
-            '#description' => t('RT aantekening (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 18
-        );
+            '#weight' => 17];
 
         //leerling Ja/nee 0
-        $form['leerling'] = array(
+        $form['leerling'] = [
             '#title' => t('Leerling'),
             '#type' => 'select',
             '#default_value' => $lid->leerling,
             '#description' => t('Leerling (Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 18
-        );
+        ];
         //Instructie Ja/nee 1
-        $form['instructie'] = array(
+        $form['instructie'] = [
             '#title' => t('Instructie'),
             '#type' => 'select',
             '#default_value' => $lid->instructie,
             '#description' => t('Instructeur (Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 19
-        );
-        //Instructeu Tekst 9
-        //@TODO remove this field, deprecated with LVS
-        $form['instructeur'] = array(
-            '#title' => t('Instructeur'),
-            '#type' => 'textfield',
-            '#description' => t('Instructie bevoegdheid'),
-            '#default_value' => $lid->instructeu,
-            '#maxlength' => 9,
-            '#required' => FALSE,
-            '#size' => 9,
-            '#weight' => 19);
+        ];
 
         //E_mail Tekst 50
-        $form['e-mail'] = array(
+        $form['e-mail'] = [
             '#title' => t('E-mail'),
             '#type' => 'textfield',
             '#description' => t('E-mail adres'),
@@ -307,39 +285,39 @@ class EzacLedenUpdateForm extends FormBase
             '#maxlength' => 50,
             '#required' => FALSE,
             '#size' => 50,
-            '#weight' => 20);
+            '#weight' => 20];
 
         //Babyvriend Ja/nee 1
-        $form['babyvriend'] = array(
+        $form['babyvriend'] = [
             '#title' => t('Babyvriend'),
             '#type' => 'select',
             '#default_value' => $lid->babyvriend,
             '#description' => t('Vriend van Nico Baby(Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 27
-        );
+        ];
         //Ledenlijstje Ja/nee 1
-        $form['ledenlijst'] = array(
+        $form['ledenlijst'] = [
             '#title' => t('Ledenlijst'),
             '#type' => 'select',
             '#default_value' => $lid->ledenlijstje,
             '#description' => t('Vermelding op ledenlijst (Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 28
-        );
+        ];
 
         //Etiketje Ja/nee 1
-        $form['etiket'] = array(
+        $form['etiket'] = [
             '#title' => t('Etiket'),
             '#type' => 'select',
             '#default_value' => $lid->etiketje,
             '#description' => t('Etiket afdrukken (Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 29
-        );
+        ];
 
         //User Tekst 50
-        $form['usercode'] = array(
+        $form['usercode'] = [
             '#title' => t('UserCode website'),
             '#type' => 'textfield',
             '#description' => t('Usercode website (VVAAAA)'),
@@ -348,40 +326,40 @@ class EzacLedenUpdateForm extends FormBase
             '#required' => FALSE,
             '#size' => 6,
             '#weight' => 31
-        );
+        ];
 
         //seniorlid Ja/nee 1
-        $form['seniorlid'] = array(
+        $form['seniorlid'] = [
             '#title' => t('Senior lid'),
             '#type' => 'select',
             '#default_value' => $lid->seniorlid,
             '#description' => t('Senior lid status (Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 32
-        );
+        ];
 
         //jeugdlid Ja/nee 1
-        $form['jeugdlid'] = array(
+        $form['jeugdlid'] = [
             '#title' => t('Jeugd / inwonend lid'),
             '#type' => 'select',
             '#default_value' => $lid->jeugdlid,
             '#description' => t('Jeugd- of inwonend lid (Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 33
-        );
+        ];
 
         //PEonderhoud Ja/nee 1
-        $form['peonderhoud'] = array(
+        $form['peonderhoud'] = [
             '#title' => t('Prive Eigenaar onderhoud (CAMO)'),
             '#type' => 'select',
             '#default_value' => $lid->peonderhoud,
             '#description' => t('Prive Eigenaar onderhoud (Ja/nee)'),
             '#options' => $options_yn,
             '#weight' => 34
-        );
+        ];
 
         //Slotcode varchar(8)
-        $form['slotcode'] = array(
+        $form['slotcode'] = [
             '#title' => t('Slotcode'),
             '#type' => 'textfield',
             '#description' => t('Slotcode (nnnnnn)'),
@@ -390,57 +368,57 @@ class EzacLedenUpdateForm extends FormBase
             '#required' => FALSE,
             '#size' => 8,
             '#weight' => 35
-        );
+        ];
 
         //Mutatie timestamp
         //maak tekstlabel met datum laatste wijziging (wordt automatisch bijgewerkt)
 
         //Id
         //Toon het het Id nummer van het record
-        $form['id'] = array(
+        $form['id'] = [
             '#type' => 'hidden',
             '#title' => t('Record nummer (Id)'),
             '#maxlength' => 8,
             '#size' => 8,
             '#value' => $lid->id,
             '#weight' => 36
-        );
+        ];
 
         //WijzigingSoort
         //Toon de soort mutatie NIEUW WIJZIGING VERVALLEN
-        $form['wijzigingsoort'] = array(
+        $form['wijzigingsoort'] = [
             '#type' => 'hidden',
             '#title' => t('Soort wijziging'),
             '#maxlength' => 15,
             '#size' => 15,
             '#value' => $lid->WijzigingSoort,
             '#weight' => 37
-        );
+        ];
 
         //KenEZACvan
         //Hoe is EZAC ontdekt
-        $form['kenezacvan'] = array(
+        $form['kenezacvan'] = [
             '#type' => 'textfield',
             '#title' => t('Ken EZAC van'),
             '#default_value' => $lid->kenezacvan,
             '#maxlength' => 20,
             '#size' => 20,
             '#weight' => 38
-        );
+        ];
 
-        $form['submit'] = array(
+        $form['submit'] = [
             '#type' => 'submit',
             '#value' => $newRecord ? t('Invoeren') : t('Update'),
             '#weight' => 39
-        );
+        ];
 
         //insert Delete button  gevaarlijk ivm dependencies
         if (\Drupal::currentUser()->hasPermission('EZAC_delete')) {
             if (!$newRecord) {
-                $form['delete'] = array(
+                $form['delete'] = [
                     '#type' => 'submit',
                     '#value' => t('Verwijderen'),
-                );
+                ];
             }
         }
 
@@ -555,7 +533,7 @@ class EzacLedenUpdateForm extends FormBase
         //go back to leden overzicht
         $redirect = Url::fromRoute(
             'ezac_leden'
-    );
+        );
         $form_state->setRedirectUrl($redirect);
     } //submitForm
 }
