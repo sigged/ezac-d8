@@ -144,9 +144,9 @@ class EzacLedenController extends ControllerBase {
       )->toString();
       $rows[] = [
         //link each record to edit route
-        t("<a href=$urlString>$lid->afkorting"),
+        t("$lid->afkorting"),
         t("$lid->code"),
-        t("$lid->voornaam $lid->voorvoeg $lid->achternaam<br>$lid->email"),
+        t("<a href=$urlString>$lid->voornaam $lid->voorvoeg $lid->achternaam<br>$lid->e_mail</a>"),
         t("$lid->adres<br>$lid->postcode $lid->plaats"),
         t("$lid->telefoon<br>$lid->mobiel"),
         t("$lid->opmerking"),
