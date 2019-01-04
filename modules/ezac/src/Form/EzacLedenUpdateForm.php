@@ -167,11 +167,11 @@ class EzacLedenUpdateForm extends FormBase
             '#size' => 10,
             '#weight' => 11,];
         //CODE Tekst 5
-        $default_soort = array_search($lid->code, EzacLid::$lidCode);
+        //$default_soort = array_search($lid->code, EzacLid::$lidCode);
         $form['code'] = [
             '#title' => t('Code'),
             '#type' => 'select',
-            '#default_value' => $default_soort,
+            '#default_value' => $lid->code,
             '#description' => t('Soort lidmaatschap (code)'),
             '#options' => EzacLid::$lidCode,
             '#weight' => 12
@@ -277,9 +277,9 @@ class EzacLedenUpdateForm extends FormBase
         ];
 
         //E_mail Tekst 50
-        $form['e-mail'] = [
+        $form['email'] = [
             '#title' => t('E-mail'),
-            '#type' => 'textfield',
+            '#type' => 'email',
             '#description' => t('E-mail adres'),
             '#default_value' => $lid->e_mail,
             '#maxlength' => 50,
