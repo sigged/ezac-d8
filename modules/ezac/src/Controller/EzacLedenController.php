@@ -22,8 +22,8 @@ class EzacLedenController extends ControllerBase {
   public function status() {
     $content = [];
 
-      $schema = drupal_get_module_schema('ezac', 'leden');
-      dpm($schema); //debug
+      //$schema = drupal_get_module_schema('ezac', 'leden');
+      //dpm($schema); //debug
 
     // show record count for each Code value
     $headers = [
@@ -136,6 +136,7 @@ class EzacLedenController extends ControllerBase {
     $from = $range * $page;
     
     $ledenIndex = EzacLid::index($condition, $field, $sortkey, $sortdir, $from, $range);
+    dpm($ledenIndex,'ledenIndex'); //debug
     foreach ($ledenIndex as $id) {
       $lid = (new EzacLid)->read($id);
       dpm($lid,'lid'); //debug
