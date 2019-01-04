@@ -2,7 +2,6 @@ ezac:
   path: '/ezac'
   defaults:
     _title: 'EZAC hoofdmenu'
-    _permission: 'access content'
     _form: '\Drupal\ezac\Form\EzacHoofdMenuForm'
   requirements:
     _permission: 'EZAC_read'
