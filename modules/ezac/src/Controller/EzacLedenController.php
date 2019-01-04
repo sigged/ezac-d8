@@ -185,7 +185,7 @@ class EzacLedenController extends ControllerBase {
      */
   public function export($filename = 'ezac.txt', $code = NULL) {
 
-      $messenger = \Drupal::messenger();
+    $messenger = \Drupal::messenger();
 
     if ($filename == '') $filename = 'ezac.txt';
 
@@ -193,13 +193,14 @@ class EzacLedenController extends ControllerBase {
     if (isset($code)) {
       $condition = [
         'code' => $code,
+        'actief' => TRUE
       ];
     }
-    else $condition = NULL; //select all
+    else $condition = ['actief' => TRUE]; //select all active records
 
     $records = EzacLid::index($condition); //read records index
     $count = count($records);
-      $messenger->addMessage("Export $count records met code [$code] naar bestand [$filename]"); //DEBUG
+    $messenger->addMessage("Export $count records met code [$code] naar bestand [$filename]"); //DEBUG
 
     $output = ""; // initialize output
     //build header line
