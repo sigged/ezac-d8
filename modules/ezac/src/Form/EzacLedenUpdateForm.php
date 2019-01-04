@@ -277,7 +277,7 @@ class EzacLedenUpdateForm extends FormBase
         ];
 
         //E_mail Tekst 50
-        $form['email'] = [
+        $form['e_mail'] = [
             '#title' => t('E-mail'),
             '#type' => 'email',
             '#description' => t('E-mail adres'),
@@ -317,7 +317,7 @@ class EzacLedenUpdateForm extends FormBase
         ];
 
         //User Tekst 50
-        $form['usercode'] = [
+        $form['user'] = [
             '#title' => t('UserCode website'),
             '#type' => 'textfield',
             '#description' => t('Usercode website (VVAAAA)'),
