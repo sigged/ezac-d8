@@ -187,9 +187,8 @@ class EzacStorage
         $select->condition('id', $this->id); // select this record
 
         // Return the result as an object
-        $select->execute()->setFetchMode(\PDO::FETCH_CLASS, $className); //instead of fetchObject();
+        $select->execute()->setFetchMode(\PDO::FETCH_CLASS, $className); //prepare class
         $record = $select->execute()->fetchObject();
-        //$record = $select->execute()->setFetchMode(\PDO::FETCH_CLASS, $className)->fetchObject(); //instead of fetchObject();
 
         // return to standard Drupal database
         Database::setActiveConnection();
