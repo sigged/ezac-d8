@@ -138,6 +138,7 @@ class EzacLedenController extends ControllerBase {
     $ledenIndex = EzacLid::index($condition, $field, $sortkey, $sortdir, $from, $range);
     foreach ($ledenIndex as $id) {
       $lid = (new EzacLid)->read($id);
+      dpm($lid,'lid'); //debug
       $urlString = Url::fromRoute(
         'ezac_leden_update',  // edit leden record
         ['id' => $lid->id]
