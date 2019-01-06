@@ -116,7 +116,7 @@ class EzacKistenController extends ControllerBase {
         t("$kist->type<br>$kist->bouwjaar"),
         t("$kist->inzittenden"),
         t("$kist->flarm<br>$kist->adsb"),
-        t("$kist->eigenaar"),
+        t("$kist->eigenaar<br>$kist->prive"),
         t("$kist->actief"),
         t("$kist->opmerking"),
       ];
