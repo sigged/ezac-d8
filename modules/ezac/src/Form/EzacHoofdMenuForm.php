@@ -109,11 +109,11 @@ class EzacHoofdMenuForm extends FormBase {
       t("Invoeren gegevens nieuw lid"),
     );
     $rows[] = array(
-      t("<a href= ezac/vloot/>Vloot administratie</a>"),
+      t("<a href= ezac/kisten/>Vloot administratie</a>"),
       t("Inzage en wijzigen vloot informatie"),
     );
     $rows[] = array(
-      t("<a href= ezac/vloot/update>Kist toevoegen</a>"),
+      t("<a href= ezac/kisten/update>Kist toevoegen</a>"),
       t("Invoeren gegevens nieuw vliegtuig"),
     );
     $rows[] = array(
