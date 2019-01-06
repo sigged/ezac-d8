@@ -59,7 +59,7 @@ class EzacKist extends EzacStorage
     }
 
     /**
-     * create - Create leden record
+     * create - Create kisten record
      *
      * @return EzacKist ID of record created
      *   ID of record created

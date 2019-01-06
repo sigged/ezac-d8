@@ -99,7 +99,7 @@ ezac_kisten:
 ezac_kisten_overzicht:
   path: '/ezac/kisten/overzicht'
   defaults:
-    _title: 'Ledenoverzicht'
+    _title: 'Kistenoverzicht'
     _controller: '\Drupal\ezac\Controller\EzacKistenController::overzicht'
   requirements:
     _permission: 'EZAC_read'

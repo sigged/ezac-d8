@@ -2,6 +2,11 @@
 $schema['kisten'] = array(
     'description' => 'Kisten',
     'fields' => array(
+        'id' => array(
+            'description' => 'unique id',
+            'type' => 'serial',
+            'not null' => TRUE,
+        ),
         'registratie' => array(
             'description' => 'Registratie',
             'type' => 'varchar',

@@ -27,6 +27,7 @@ class EzacKistenController extends ControllerBase {
 
     // show record count for each Code value
     $headers = [
+      t("Kisten"),
       t("Aantal"),
       t("Uitvoer"),
     ];
