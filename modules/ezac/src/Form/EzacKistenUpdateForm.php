@@ -94,7 +94,7 @@ class EzacKistenUpdateForm extends FormBase
             '#weight' => 4,];
         $form['inzittenden'] = [
             '#title' => t('Inzittenden'),
-            '#type' => 'int',
+            '#type' => 'number',
             '#description' => t('Aantal inzittenden'),
             '#default_value' => $kist->inzittenden,
             '#maxlength' => 21,
