@@ -108,10 +108,10 @@ class EzacLedenController extends ControllerBase {
 
     $rows = [];
     $headers = [
+      t('naam<br>email'),
       t('afkorting'),
       t('code'),
-      t('naam<br>email'),
-      t('adres<br>postcode<br>plaats'),
+      t('adres<br>postcode<br>plaats<br>land'),
       t('telefoon<br>mobiel'),
       t('opmerking'),
     ];
@@ -144,10 +144,10 @@ class EzacLedenController extends ControllerBase {
       )->toString();
       $rows[] = [
         //link each record to edit route
+        t("<a href=$urlString>$lid->voornaam $lid->voorvoeg $lid->achternaam</a><br>$lid->e_mail"),
         t("$lid->afkorting"),
         t("$lid->code"),
-        t("<a href=$urlString>$lid->voornaam $lid->voorvoeg $lid->achternaam</a><br>$lid->e_mail"),
-        t("$lid->adres<br>$lid->postcode $lid->plaats"),
+        t("$lid->adres<br>$lid->postcode $lid->plaats<br>$lid->land"),
         t("$lid->telefoon<br>$lid->mobiel"),
         t("$lid->opmerking"),
       ];

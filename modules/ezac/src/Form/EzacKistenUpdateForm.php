@@ -150,7 +150,7 @@ class EzacKistenUpdateForm extends FormBase
             '#title' => t('Actief'),
             '#type' => 'select',
             '#options' => $options_yn,
-            '#description' => t('Nog actief lid?'),
+            '#description' => t('Nog in gebruik?'),
             '#default_value' => $kist->actief,
             '#maxlength' => 1,
             '#required' => TRUE,
