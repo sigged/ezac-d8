@@ -7,7 +7,7 @@ ezac:
     _permission: 'EZAC_read'
   
 ezac_leden:
-  resource: "@ezac/config/routing/LedenRouting.yml"
+  resource: "ezac/config/routing/LedenRouting.yml"
 
 ezac_kisten:
   path: '/ezac/kisten'
