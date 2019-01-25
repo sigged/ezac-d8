@@ -6,7 +6,7 @@
  */
 
 
-use Drupal\Core\Database\Database;
+// use Drupal\Core\Database\Database;
 
 /**
  * Implements hook_install().
@@ -23,21 +23,7 @@ use Drupal\Core\Database\Database;
 
 function ezac_install()
 {
-
-    $config = \Drupal::config('ezac.database');
-    Database::setActiveConnection($config->get('name'));
-    $connection = Database::getConnection();
-
-    // if (!$connection->schema()->tableExists('leden'))
-    $schema = ezac_schema_extraDb();
-    foreach ($schema as $name => $table) {
-        $connection->schema()->createTable($name, $table);
-        dpm($name,'table name'); //debug
-    }
-
-    // @todo import table data
-
-    Database::setActiveConnection();
+    // @TODO provide installation
 }
 
 /**
@@ -68,41 +54,6 @@ function ezac_uninstall()
  *
  * @see hook_schema()
  *
- * @ingroup ezac
+ * @ingroup Ezac
  */
-//function ezac_schema_extraDb()
-function ezac_schema_extraDb()
-{
-    /**
-     * @todo make .inc files for separate tables
-     */
 
-    $schema = [];
-    require "ezacLedenSchema.inc";
-    require "ezacKistenSchema.inc";
-
-    return $schema;
-}
-
-/**
- * Implements hook_schema().
- *
- * Defines the database tables used by this module.
- *
- * @see hook_schema()
- *
- * @ingroup ezac
- */
-//function ezac_schema_extraDb()
-function ezac_schema()
-{
-    /**
-     * @todo make .inc files for separate tables
-     */
-
-    $schema = [];
-    require "ezacLedenSchema.inc";
-    require "ezacKistenSchema.inc";
-
-    return $schema;
-}
