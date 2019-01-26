@@ -2,7 +2,7 @@
 
 /**
  * @file
- * This is the main module for EZAC - gliding club system
+ * This is the main module for EZAC - Leden
  *
  */
  
@@ -17,32 +17,5 @@
  * @} End of "defgroup ezac".
  */
 
-/**
- * Example theme hook
- * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_theme/8
- * @see http://drupal.stackexchange.com/questions/159154/drupal-8-theme-a-contact-form
- * @see https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Styling_HTML_forms
- * @param $existing
- * @param $type
- * @param $theme
- * @param $path
- * @return array
- */
-function ezac_theme($existing, $type, $theme, $path) {
-  return array(
-    /*'ezac' => array(
-      'variables' => array('test_var' => NULL),
-    ),*/
-    // render leden_update_form
-    'ezac_leden_update_form' => array(
-      'template' => 'custom-leden-update-form',
-    'render element' => 'form',
-    ),
-    // ezac_form_table - for ajax callbacks
-    'ezac_form_table' => array(
-      // The renderable element is the form.
-      'render element' => 'form',
-    ),
-  );
-}
+
 
