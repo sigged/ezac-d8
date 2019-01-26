@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezac\Controller;
+namespace Drupal\ezacLeden\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;

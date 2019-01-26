@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezac\Controller;
+namespace Drupal\ezacKisten\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
-use Drupal\ezac\Model\EzacKist;
+use Drupal\ezacKisten\Model\EzacKist;
 
 /**
  * Controller for EZAC Kisten administration.
