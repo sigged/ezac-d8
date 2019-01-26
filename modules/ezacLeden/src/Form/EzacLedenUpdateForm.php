@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezac\Form;
+namespace Drupal\ezacLeden\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
