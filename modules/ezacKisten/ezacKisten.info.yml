@@ -1,0 +1,10 @@
+name: EZAC administratie - Kisten
+description: Operationele administratie EZAC zweefvliegclub
+package: Ezac
+type: module
+core: 8.x
+
+dependencies:
+  - ezac
+  
+#configure: ezacKisten.settings

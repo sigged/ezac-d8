@@ -1,0 +1,5 @@
+ezac_kisten:
+  title: Kisten administratie
+  route_name: ezac_kisten
+  description: EZAC kisten administratie
+  weight: 01

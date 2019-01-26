@@ -1,0 +1,106 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the ezac module.
+ */
+
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_install().
+ *
+ * @see hook_install()
+ *
+ * @ingroup ezac
+ */
+
+/**
+ * @file
+ * Install, update and uninstall functions for the ezac module.
+ */
+
+function ezac_install()
+{
+
+    $config = \Drupal::config('ezac.database');
+    Database::setActiveConnection($config->get('name'));
+    $connection = Database::getConnection();
+
+    // if (!$connection->schema()->tableExists('leden'))
+    $schema = ezac_schema_extraDb();
+    foreach ($schema as $name => $table) {
+        $connection->schema()->createTable($name, $table);
+        dpm($name,'table name'); //debug
+    }
+
+    // @todo import table data
+
+    Database::setActiveConnection();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ezac_uninstall()
+{
+    /* no uninstall active
+    $config = \Drupal::config('ezac.database');
+    Database::setActiveConnection($config->get('name'));
+    $connection = Database::getConnection();
+
+    // @todo export table data
+
+    $schema = ezac_schema_extraDb();
+    foreach ($schema as $name => $table) {
+        $connection->schema()->dropTable($name);
+    }
+
+    Database::setActiveConnection();
+    */
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ *
+ * @see hook_schema()
+ *
+ * @ingroup ezac
+ */
+//function ezac_schema_extraDb()
+function ezac_schema_extraDb()
+{
+    /**
+     * @todo make .inc files for separate tables
+     */
+
+    $schema = [];
+    require "ezacKistenSchema.inc";
+
+    return $schema;
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ *
+ * @see hook_schema()
+ *
+ * @ingroup ezac
+ */
+//function ezac_schema_extraDb()
+function ezac_schema()
+{
+    /**
+     * @todo make .inc files for separate tables
+     */
+
+    $schema = [];
+    require "ezacKistenSchema.inc";
+
+    return $schema;
+}

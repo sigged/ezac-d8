@@ -1,0 +1,10 @@
+name: EZAC administratie - Leden
+description: Operationele administratie EZAC zweefvliegclub
+package: Ezac
+type: module
+core: 8.x
+
+dependencies:
+  - ezac
+  
+#configure: ezacLeden.settings

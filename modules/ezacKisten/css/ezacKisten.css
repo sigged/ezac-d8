@@ -1,0 +1,6 @@
+/**
+ * Table design
+ */
+#content .ezac table {
+  table-layout: fixed;  
+}
