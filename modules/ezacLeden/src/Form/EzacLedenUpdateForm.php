@@ -36,6 +36,10 @@ class EzacLedenUpdateForm extends FormBase
             '#prefix' => '<div id="updateform">',
             '#suffix' => '</div>',
         ];
+
+        // apply the form theme
+        $form['#theme'] = 'ezac_leden_update_form';
+
         // Query for items to display.
         // if $id is set, perform UPDATE else CREATE
         if (isset($id)) {
