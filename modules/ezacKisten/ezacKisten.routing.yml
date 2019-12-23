@@ -47,7 +47,7 @@ ezac_kisten_export:
   path: '/ezac/kisten/export/{filename}'
   defaults:
     _title: 'EZAC_read'
-    _controller: '\Drupal\ezacKisten\Controller\EzacLedenController::export'
+    _controller: '\Drupal\ezacKisten\Controller\EzacKistenController::export'
   requirements:
     _permission: 'access content'
     _user: ^[a-zA-Z0-9_]+
