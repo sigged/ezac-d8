@@ -5,7 +5,7 @@ namespace Drupal\ezac\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\ezac\Model\EzacKist;
+use Drupal\ezacKisten\Model\EzacKist;
 
 /**
  * UI to update kisten record
