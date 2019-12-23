@@ -2,7 +2,10 @@
 
 namespace Drupal\ezac\Model;
 
+use Drupal;
 use Drupal\Core\Database\Database;
+use Exception;
+use PDO;
 
 // use Drupal\Core\Database\Connection;
 
@@ -61,7 +64,7 @@ class EzacStorage
 
         return $record_count;
 
-    }
+    } // ezacCount
 
     /**
      * Read index from the database using a filter array.
@@ -119,7 +122,7 @@ class EzacStorage
         //return array_unique($index);
         return (array)$index;
 
-    }
+    } // ezacIndex
 
     /**
      * Insert a record in the EZAC database
@@ -146,8 +149,8 @@ class EzacStorage
             $return_value = $db->insert($table)
                 ->fields($entry)
                 ->execute();
-        } catch (\Exception $e) {
-            $messenger = \Drupal::messenger();
+        } catch (Exception $e) {
+            $messenger = Drupal::messenger();
             $message = "db_insert failed. Message = " . $e->getMessage();
             $messenger->addMessage($message, $messenger::TYPE_ERROR);
         }
@@ -160,7 +163,7 @@ class EzacStorage
 
         return $return_value;
 
-    }
+    } // ezacCreate
 
     /**
      * Read from the database
@@ -187,7 +190,7 @@ class EzacStorage
         $select->condition('id', $this->id); // select this record
 
         // Return the result as an object
-        $select->execute()->setFetchMode(\PDO::FETCH_CLASS, $className); //prepare class
+        $select->execute()->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
         $record = $select->execute()->fetchObject();
 
         // return to standard Drupal database
@@ -210,7 +213,7 @@ class EzacStorage
      */
     public function ezacUpdate($table)
     {
-        $messenger = \Drupal::messenger();
+        $messenger = Drupal::messenger();
 
         // EZAC database is outside the Drupal structure
         Database::setActiveConnection(self::dbName);
@@ -225,7 +228,7 @@ class EzacStorage
                 ->fields($entry);
             $update->condition('id', $entry['id']);
             $count = $update->execute();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = 'db_update failed. Message = ' . $e->getMessage();
             $messenger->addMessage($message, $messenger::TYPE_ERROR);
         }
@@ -236,7 +239,7 @@ class EzacStorage
         /** @var int $count */
         return $count;
 
-    }  // EZACCount
+    }  // ezacUpdate
 
     /**
      * Delete an entry from the database.
@@ -264,6 +267,6 @@ class EzacStorage
 
         return $records_deleted;
 
-    }  // ezacIndex
+    }  // ezacDelete
 
 } // EzacStorage
