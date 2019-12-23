@@ -13,7 +13,7 @@
   * @todo Insert usage examples
   */
 
- function ezacLeden_UpdateForm_theme() {
+ function ezacLeden_theme() {
      return [
          'ezac_leden_update_form' => [
              'render element' => 'form',
