@@ -1,13 +1,8 @@
 
 <table style="width:100%">
     <tr>
-        <td>{{ form.voornaam }} </td>
-        <td>{{ form.voorletter }}</td>
-        <td><{{ form.voorvoeg}}/td>
-        <td>{{ form.achternaam }}</td>
-    </tr>
-    <tr>
-        <td>{{ form.afkorting}}</td>
+        <td>{{ form.voornaam }} <br>{{ form.voorletter }}< <br>{{ form.afkorting }}/td>
+        <td>{{ form.voorvoeg}} {{ form.achternaam }}</td>
     </tr>
     <tr>
         <td>{{  form.adres }}</td>
@@ -15,8 +10,6 @@
     <tr>
         <td>{{ form.postcode }}</td>
         <td>{{ form.plaats }}</td>
-    </tr>
-    <tr>
         <td>{{ form.land }}</td>
     </tr>
     <tr>
@@ -31,13 +24,8 @@
     </tr>
     <tr>
         <td>{{ form.code }}</td>
-    </tr>
-    <tr>
         <td>{{ form.actief }}</td>
-    </tr>
-    <tr>
-       <td>{{ form.lidvan }}</td>
-       <td>{{ form.lideind }}</td>
+       <td>{{ form.lidvan }} <br> {{ form.lideind }}</td>
     </tr>
     <tr>
         <td>{{ form.tienrittenkaart }}</td>
@@ -46,20 +34,14 @@
     </tr>
     <tr>
         <td>{{ form.opmerking }}</td>
-    </tr>
-    <tr>
         <td>{{ form.kenezacvan }}</td>
     </tr>
     <tr>
-        <td>{{ form.babyvriend }}</td>
-        <td>{{ form.ledenlijst }}</td>
-        <td>{{ form.etiket }}</td>
-        <td>{{ form.seniorlid }}</td>
-        <td>{{ form.jeugdlid }}</td>
-        <td>{{ form.peonderhoud }}</td>
+        <td>{{ form.babyvriend }} <br> {{ form.ledenlijst }} <br> {{ form.etiket }}</td>
+        <td>{{ form.seniorlid }} <br> {{ form.jeugdlid }} <br> {{ form.peonderhoud }}</td>
     </tr>
     <tr>
-        <td>{{ form.usercode }}</td>
+        <td>{{ form.user }}</td>
         <td> {{ form.slotcode }}</td>
     </tr>
 </table>
