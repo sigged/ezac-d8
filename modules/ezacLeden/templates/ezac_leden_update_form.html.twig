@@ -1,5 +1,9 @@
 <form>
-<table style="width:100%">
+    {{ form.form_build_id }}
+    {{ form.form_token }}
+    {{ form.form_id }}
+
+    <table style="width:100%">
     <tr>
         <td>{{ form.voornaam }} {{ form.voorletter }} </td>
         <td>{{ form.voorvoeg}} {{ form.achternaam }}</td>
@@ -60,19 +64,5 @@
     {{ form.submit }}
     {{ form.delete }}
 
-    {#
-    {{ form|without('voornaam', 'voorletter', 'voorvoeg','achternaam', 'afkorting',
-        'adres','postcode','plaats','land','telefoon','mobiel',
-        'geboortedatum','e_mail','code', 'actief','lidvan','lideind',
-        'tienrittenkaart','leerling','instructie','opmerking','kenezacvan',
-        'babyvriend','ledenlijst','etiket','seniorlid','jeugdlid','peonderhoud',
-        'user','slotcode','submit','delete') }}
-    #}
 
-    {{ form.form_build_id }}
-    {{ form.form_id }}
-    {{ dump() }}
-    {#
-    {{ form.form_token }}
-    #}
 </form>
