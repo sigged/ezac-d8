@@ -1,9 +1,9 @@
 
 <table style="width:100%">
     <tr>
-        <td>{{ form.voornaam }} <br>{{ form.voorletter }} <br>{{ form.afkorting }}</td>
+        <td>{{ form.voornaam }} {{ form.voorletter }} </td>
         <td>{{ form.voorvoeg}} {{ form.achternaam }}</td>
-        <td></td>
+        <td>{{ form.afkorting }}</td>
     </tr>
     <tr>
         <td>{{  form.adres }}</td>
@@ -28,7 +28,7 @@
     <tr>
         <td>{{ form.code }}</td>
         <td>{{ form.actief }}</td>
-       <td>{{ form.lidvan }} <br> {{ form.lideind }}</td>
+       <td>{{ form.lidvan }}  {{ form.lideind }}</td>
     </tr>
     <tr>
         <td>{{ form.tienrittenkaart }}</td>
@@ -41,8 +41,8 @@
         <td></td>
     </tr>
     <tr>
-        <td>{{ form.babyvriend }} <br> {{ form.ledenlijst }} <br> {{ form.etiket }}</td>
-        <td>{{ form.seniorlid }} <br> {{ form.jeugdlid }} <br> {{ form.peonderhoud }}</td>
+        <td>{{ form.babyvriend }}  {{ form.ledenlijst }}  {{ form.etiket }}</td>
+        <td>{{ form.seniorlid }}  {{ form.jeugdlid }}  {{ form.peonderhoud }}</td>
         <td></td>
     </tr>
     <tr>
