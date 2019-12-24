@@ -52,6 +52,11 @@
     </tr>
 </table>
 
+    {# hidden fields #}
+    {{ form.id }}
+    {{ form.wijzigingsoort }}
+
+    {# buttons #}
     {{ form.submit }}
     {{ form.delete }}
 
@@ -60,8 +65,7 @@
         'geboortedatum','e_mail','code', 'actief','lidvan','lideind',
         'tienrittenkaart','leerling','instructie','opmerking','kenezacvan',
         'babyvriend','ledenlijst','etiket','seniorlid','jeugdlid','peonderhoud',
-        'user','slotcode','submit','delete',
-        'id','wijzigingsoort') }}
+        'user','slotcode','submit','delete') }}
 
     {#
     {{ form.form_build_id }}
