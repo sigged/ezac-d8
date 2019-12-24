@@ -190,7 +190,7 @@ class EzacKistenUpdateForm extends FormBase
     /**
      * {@inheritdoc}
      */
-    public function validateForm( &$form, FormStateInterface $form_state) //removed array type
+    public function validateForm(array &$form, FormStateInterface $form_state)
     {
 
         // perform validate for edit of record
@@ -206,7 +206,7 @@ class EzacKistenUpdateForm extends FormBase
      * {@inheritdoc}
      * @throws \Exception
      */
-    public function submitForm( &$form, FormStateInterface $form_state) // removed array type
+    public function submitForm(array &$form, FormStateInterface $form_state)
     {
         $messenger = \Drupal::messenger();
 
