@@ -1,27 +1,30 @@
 
 <table style="width:100%">
     <tr>
-        <td>{{ form.voornaam }} <br>{{ form.voorletter }}< <br>{{ form.afkorting }}/td>
+        <td>{{ form.voornaam }} <br>{{ form.voorletter }} <br>{{ form.afkorting }}</td>
         <td>{{ form.voorvoeg}} {{ form.achternaam }}</td>
+        <td></td>
     </tr>
     <tr>
         <td>{{  form.adres }}</td>
+        <td>{{ form.postcode }}</td>
+        <td></td>
     </tr>
     <tr>
-        <td>{{ form.postcode }}</td>
         <td>{{ form.plaats }}</td>
         <td>{{ form.land }}</td>
+        <td></td>
     </tr>
     <tr>
         <td>{{ form.telefoon}}</td>
         <td>{{ form.mobiel }}</td>
+        <td></td>
     </tr>
      <tr>
+         <td>{{ form.geboortedatum }}</td>
          <td>{{ form.e_mail }}</td>
+         <td></td>
      </tr>
-    <tr>
-        <td>{{ form.geboortedatum }}</td>
-    </tr>
     <tr>
         <td>{{ form.code }}</td>
         <td>{{ form.actief }}</td>
@@ -30,19 +33,22 @@
     <tr>
         <td>{{ form.tienrittenkaart }}</td>
         <td>{{ form.leerling }}</td>
-        <td{{ form.instructie }}></td>
+        <td>{{ form.instructie }}</td>
     </tr>
     <tr>
         <td>{{ form.opmerking }}</td>
         <td>{{ form.kenezacvan }}</td>
+        <td></td>
     </tr>
     <tr>
         <td>{{ form.babyvriend }} <br> {{ form.ledenlijst }} <br> {{ form.etiket }}</td>
         <td>{{ form.seniorlid }} <br> {{ form.jeugdlid }} <br> {{ form.peonderhoud }}</td>
+        <td></td>
     </tr>
     <tr>
         <td>{{ form.user }}</td>
         <td> {{ form.slotcode }}</td>
+        <td></td>
     </tr>
 </table>
 {{ form.submit }} {{ form.delete }}

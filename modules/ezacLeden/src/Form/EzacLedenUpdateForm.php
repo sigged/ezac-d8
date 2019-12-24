@@ -157,9 +157,9 @@ class EzacLedenUpdateForm extends FormBase
             '#type' => 'textfield',
             '#description' => t('Mobiel nummer'),
             '#default_value' => $lid->mobiel,
-            '#maxlength' => 50,
+            '#maxlength' => 20,
             '#required' => false,
-            '#size' => 50,
+            '#size' => 14,
             '#weight' => 10,];
         //LAND Tekst 10
         $form['land'] = [
@@ -289,7 +289,7 @@ class EzacLedenUpdateForm extends FormBase
             '#default_value' => $lid->e_mail,
             '#maxlength' => 50,
             '#required' => FALSE,
-            '#size' => 50,
+            '#size' => 30,
             '#weight' => 20];
 
         //Babyvriend Ja/nee 1
