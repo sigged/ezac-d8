@@ -52,6 +52,9 @@
     </tr>
 </table>
 
+    {{ form.submit }}
+    {{ form.delete }}
+
     {{ form|without('voornaam', 'voorletter', 'voorvoeg','achternaam', 'afkorting',
         'adres','postcode','plaats','land','telefoon','mobiel',
         'geboortedatum','e_mail','code', 'actief','lidvan','lideind',
@@ -61,9 +64,6 @@
         'id','wijzigingsoort') }}
 
     {#
-    {{ form.submit }}
-    {{ form.delete }}
-
     {{ form.form_build_id }}
     {{ form.form_id }}
     {{ form.token }}
