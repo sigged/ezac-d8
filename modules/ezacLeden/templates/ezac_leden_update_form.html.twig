@@ -52,18 +52,20 @@
     </tr>
 </table>
 
-    {# form|without('voornaam', 'voorletter', 'voorvoeg','achternaam', 'afkorting',
+    {{ form|without('voornaam', 'voorletter', 'voorvoeg','achternaam', 'afkorting',
         'adres','postcode','plaats','land','telefoon','mobiel',
         'geboortedatum','e_mail','code', 'actief','lidvan','lideind',
         'tienrittenkaart','leerling','instructie','opmerking','kenezacvan',
         'babyvriend','ledenlijst','etiket','seniorlid','jeugdlid','peonderhoud',
-        'user','slotcode','id','wijzigingsoort') #}
+        'user','slotcode','submit','delete',
+        'id','wijzigingsoort') }}
 
+    {#
     {{ form.submit }}
     {{ form.delete }}
 
     {{ form.form_build_id }}
     {{ form.form_id }}
     {{ form.token }}
-
+    #}
 </form>
