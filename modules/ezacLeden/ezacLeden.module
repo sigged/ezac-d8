@@ -25,7 +25,6 @@ function ezacLeden_theme() {
      'ezac_leden_update_form' => [
          'render element'   => 'form',
          'template'         => 'ezac_leden_update_form',
-         'base hook'        => 'form',
     ],
  ];
 }
