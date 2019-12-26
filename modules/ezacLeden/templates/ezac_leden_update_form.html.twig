@@ -1,59 +1,12 @@
+    {#
     {{ form.form_build_id }}
     {{ form.form_id }}
-    {#
     {{ form.form_token }}
     #}
         {{ form.voornaam }} {{ form.voorletter }} 
         {{ form.voorvoeg}} {{ form.achternaam }}
         {{ form.afkorting }}
     
-    
-        {{  form.adres }}
-        {{ form.postcode }}
-        
-    
-    
-        {{ form.plaats }}
-        {{ form.land }}
-        
-    
-    
-        {{ form.telefoon}}
-        {{ form.mobiel }}
-        
-    
-     
-         {{ form.geboortedatum }}
-         {{ form.e_mail }}
-         
-     
-    
-        {{ form.code }} {{ form.actief }}
-        {{ form.lidvan }} 
-        {{ form.lideind }}
-    
-    
-        {{ form.tienrittenkaart }}
-        {{ form.leerling }}
-        {{ form.instructie }}
-    
-    
-        {{ form.opmerking }}
-        {{ form.kenezacvan }}
-        
-    
-    
-        {{ form.babyvriend }}  {{ form.ledenlijst }}  {{ form.etiket }}
-        {{ form.seniorlid }}  {{ form.jeugdlid }}  {{ form.peonderhoud }}
-        
-    
-    
-        {{ form.user }}
-        {{ form.slotcode }}
-        
-    
-
-
     {# hidden fields #}
     {{ form.id }}
     {{ form.wijzigingsoort }}
@@ -61,3 +14,6 @@
     {# buttons #}
     {{ form.submit }}
     {{ form.delete }}
+
+    {# render form #}
+    {{ form|without voornaam, voorletter, voorvoeg, achternaam, afkorting }}
