@@ -9,19 +9,18 @@
     #}
 
     {# visible form fields #}
+    {#
         {{ form.voornaam }} {{ form.voorletter }} 
         {{ form.voorvoeg}} {{ form.achternaam }}
         {{ form.afkorting }}
-    
-    {# hidden form fields #}
-    {{ form.id }}
-    {{ form.wijzigingsoort }}
-
-    {# buttons #}
+    #}
+    {# buttons (actions) #}
     {# form.submit #}
     {# form.delete #}
 
     {# render form #}
-    {{ form|without ('voornaam', 'voorletter', 'voorvoeg', 'achternaam', 'afkorting', 'id', 'wijzigingsoort') }}
+    {# form|without ('voornaam', 'voorletter', 'voorvoeg', 'achternaam', 'afkorting', 'id', 'wijzigingsoort') #}
+
+    {{ form }}
 </form>
 </div>
