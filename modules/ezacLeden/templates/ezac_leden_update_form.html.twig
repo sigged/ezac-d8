@@ -1,26 +1,5 @@
 <div class="ezacLeden-update-form">
 <form{{ attributes }}>
-    {#
-    {{ children }}
-    {{ form.form_build_id }}
-    {{ form.form_id }}
-    {{ form.form_token }}
-    {{ form.actions }}
-    #}
-
-    {# visible form fields #}
-    {#
-        {{ form.voornaam }} {{ form.voorletter }} 
-        {{ form.voorvoeg}} {{ form.achternaam }}
-        {{ form.afkorting }}
-    #}
-    {# buttons (actions) #}
-    {# form.submit #}
-    {# form.delete #}
-
-    {# render form #}
-    {# form|without ('voornaam', 'voorletter', 'voorvoeg', 'achternaam', 'afkorting', 'id', 'wijzigingsoort') #}
-
     {{ form }}
 </form>
 </div>
