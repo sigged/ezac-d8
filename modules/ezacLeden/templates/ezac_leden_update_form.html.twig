@@ -1,59 +1,57 @@
     {{ form.form_build_id }}
     {{ form.form_id }}
-    {# form.form_token #}
+    {{ form.form_token }}
 
-    <table style="width:100%">
-    <tr>
-        <td>{{ form.voornaam }} {{ form.voorletter }} </td>
-        <td>{{ form.voorvoeg}} {{ form.achternaam }}</td>
-        <td>{{ form.afkorting }}</td>
-    </tr>
-    <tr>
-        <td>{{  form.adres }}</td>
-        <td>{{ form.postcode }}</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>{{ form.plaats }}</td>
-        <td>{{ form.land }}</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>{{ form.telefoon}}</td>
-        <td>{{ form.mobiel }}</td>
-        <td></td>
-    </tr>
-     <tr>
-         <td>{{ form.geboortedatum }}</td>
-         <td>{{ form.e_mail }}</td>
-         <td></td>
-     </tr>
-    <tr>
-        <td>{{ form.code }} {{ form.actief }}</td>
-        <td>{{ form.lidvan }} </td>
-        <td>{{ form.lideind }}</td>
-    </tr>
-    <tr>
-        <td>{{ form.tienrittenkaart }}</td>
-        <td>{{ form.leerling }}</td>
-        <td>{{ form.instructie }}</td>
-    </tr>
-    <tr>
-        <td>{{ form.opmerking }}</td>
-        <td>{{ form.kenezacvan }}</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>{{ form.babyvriend }}  {{ form.ledenlijst }}  {{ form.etiket }}</td>
-        <td>{{ form.seniorlid }}  {{ form.jeugdlid }}  {{ form.peonderhoud }}</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>{{ form.user }}</td>
-        <td> {{ form.slotcode }}</td>
-        <td></td>
-    </tr>
-</table>
+        {{ form.voornaam }} {{ form.voorletter }} 
+        {{ form.voorvoeg}} {{ form.achternaam }}
+        {{ form.afkorting }}
+    
+    
+        {{  form.adres }}
+        {{ form.postcode }}
+        
+    
+    
+        {{ form.plaats }}
+        {{ form.land }}
+        
+    
+    
+        {{ form.telefoon}}
+        {{ form.mobiel }}
+        
+    
+     
+         {{ form.geboortedatum }}
+         {{ form.e_mail }}
+         
+     
+    
+        {{ form.code }} {{ form.actief }}
+        {{ form.lidvan }} 
+        {{ form.lideind }}
+    
+    
+        {{ form.tienrittenkaart }}
+        {{ form.leerling }}
+        {{ form.instructie }}
+    
+    
+        {{ form.opmerking }}
+        {{ form.kenezacvan }}
+        
+    
+    
+        {{ form.babyvriend }}  {{ form.ledenlijst }}  {{ form.etiket }}
+        {{ form.seniorlid }}  {{ form.jeugdlid }}  {{ form.peonderhoud }}
+        
+    
+    
+        {{ form.user }}
+        {{ form.slotcode }}
+        
+    
+
 
     {# hidden fields #}
     {{ form.id }}
