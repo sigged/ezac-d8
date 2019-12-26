@@ -6,24 +6,39 @@
  *
  */
  
- /**
-  * @defgroup ezac
-  * @{
-  *
-  * @todo Insert usage examples
-  */
+    /**
+    * @defgroup ezac
+    * @{
+    *
+    * @todo Insert usage examples
+    */
 
- function ezacLeden_theme() {
-     return [
-         'ezac_leden_update_form' => [
-             'render element'   => 'form',
-             'template'         => 'ezac_leden_update_form',
-        ],
-     ];
- }
+    /**
+     * @} End of "defgroup ezac".
+     */
+
 /**
- * @} End of "defgroup ezac".
- */
+* Implements hook_theme()
+*/
+function ezacLeden_theme() {
+ return [
+     'ezac_leden_update_form' => [
+         'render element'   => 'form',
+         'template'         => 'ezac_leden_update_form',
+         'base hook'        => 'form',
+    ],
+ ];
+}
 
+/**
+ * Implements hook_theme_suggestions_alter().
+ * taken from https://drupal.stackexchange.com/questions/216134/custom-form-using-custom-template-submit-the-form-dont-call-its-validate-and-s
+ */
+function ezacLeden_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+
+    if ($hook == 'form' & !empty($variables['element']['#theme'])) {
+        $suggestions[] = 'form__' . $variables['element']['#theme'][0];
+    }
+}
 
 
