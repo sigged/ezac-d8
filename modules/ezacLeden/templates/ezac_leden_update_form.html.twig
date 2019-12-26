@@ -53,7 +53,7 @@
   </tr>
 </table>
 
-{# hidden fields #}
+    {# hidden fields #}
     {{ form.id }}
     {{ form.wijzigingsoort }}
 
@@ -61,5 +61,7 @@
     {{ form.submit }}
     {{ form.delete }}
 
-    {{ form.actions }}
+    {# form internal fields #}
+    {{ form.form_id }}
+    {{ form.form_build_id }}
 </form>
