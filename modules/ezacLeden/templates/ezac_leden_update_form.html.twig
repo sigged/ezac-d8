@@ -18,10 +18,10 @@
     {{ form.wijzigingsoort }}
 
     {# buttons #}
-    {{ form.submit }}
+    {# form.submit #}
     {# form.delete #}
 
     {# render form #}
-    {{ form|without ('voornaam', 'voorletter', 'voorvoeg', 'achternaam', 'afkorting', 'id', 'wijzigingsoort', 'submit', 'delete') }}
+    {{ form|without ('voornaam', 'voorletter', 'voorvoeg', 'achternaam', 'afkorting', 'id', 'wijzigingsoort') }}
 </form>
 </div>
