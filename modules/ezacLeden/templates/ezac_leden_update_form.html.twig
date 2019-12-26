@@ -22,6 +22,6 @@
     {{ form.delete }}
 
     {# render form #}
-    {{ form|without voornaam, voorletter, voorvoeg, achternaam, afkorting }}
+    {{ form|without ('voornaam', 'voorletter', 'voorvoeg', 'achternaam', 'afkorting', 'id', 'wijzigingsoort', 'submit', 'delete') }}
 </form>
 </div>
