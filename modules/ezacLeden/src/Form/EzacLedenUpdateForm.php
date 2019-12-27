@@ -40,7 +40,7 @@ class formUtil
         if (isset($size)) $form[$label]['#size'] = $size;
         if (isset($required)) $form[$label]['#required'] = $required;
         if (isset($weight)) $form[$label]['#weight'] = $weight;
-        if (isset($options)) $form['$label']['#options'] = $options;
+        if (isset($options)) $form[$label]['#options'] = $options;
         return $form;
     }
 }
