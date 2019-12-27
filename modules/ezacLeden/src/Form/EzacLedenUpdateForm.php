@@ -31,14 +31,14 @@ class formUtil
      */
     public static function addField(array $form,string $label, string $type,string $title, string $description, string $default_value, int $maxlength, int $size, bool $required, int $weight )
     {
-        $form[$label] = ['#type' => $type];
-        if (isset($title)) $form[$label] = ['#title' => $title];
-        if (isset($description)) $form[$label] = ['#description' => $description];
-        if (isset($default_value)) $form[$label] = ['#default_value' => $default_value];
-        if (isset($maxlength)) $form[$label] = ['#maxlength' => $maxlength];
-        if (isset($size)) $form[$label] = ['#size' => $size];
-        if (isset($required)) $form[$label] = ['#required' => $required];
-        if (isset($weight)) $form[$label] = ['#weight' => $weight];
+        if (isset($type)) $form[$label]['#type'] = $type;
+        if (isset($title)) $form[$label]['#title'] = $title;
+        if (isset($description)) $form[$label]['#description'] = $description;
+        if (isset($default_value)) $form[$label]['#default_value'] = $default_value;
+        if (isset($maxlength)) $form[$label]['#maxlength'] = $maxlength;
+        if (isset($size)) $form[$label]['#size' = $size;
+        if (isset($required)) $form[$label]['#required'] = $required;
+        if (isset($weight)) $form[$label]['#weight'] = $weight;
         dpm($form); // debug
         return $form;
     }
