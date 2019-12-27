@@ -117,7 +117,7 @@ class EzacLedenUpdateForm extends FormBase
         //LAND Tekst 10
         $form = formUtil::addField($form,'land', 'textfield','Land', 'Land', $lid->land, 10, 10, FALSE, 11);
         //CODE Tekst 5
-        $form = formUtil::addField($form,'code', 'select','Code', 'Code', $lid->code, 5, 5, FALSE, 12, EzacLid::$lidCode);
+        $form = formUtil::addField($form,'code', 'select','Code', 'Code', $lid->code, 5, 1, FALSE, 12, EzacLid::$lidCode);
         // Tienrittenkaart
         $form = formUtil::addField($form,'tienrittenkaart', 'select','Tienrittenkaart', 'Tienrittenkaarthouder', $lid->tienrittenkaart, 1, 1, FALSE, 12, $options_yn);
         //GEBOORTEDA Datum/tijd 8
