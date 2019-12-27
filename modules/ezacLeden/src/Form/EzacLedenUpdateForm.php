@@ -41,7 +41,6 @@ class formUtil
         if (isset($required)) $form[$label]['#required'] = $required;
         if (isset($weight)) $form[$label]['#weight'] = $weight;
         if (isset($options)) $form['$label']['#options'] = $options;
-        dpm($form); // debug
         return $form;
     }
 }
