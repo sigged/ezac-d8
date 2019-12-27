@@ -11,6 +11,38 @@ use Drupal\ezacLeden\Model\EzacLid;
  * UI to update leden record
  * tijdelijke aanpassing
  */
+
+class formUtil
+{
+    /**
+     * @file
+     * adds a field to a form
+     * @param array $form
+     * @param string $label
+     * @param string $type
+     * @param string $title
+     * @param string $description
+     * @param string $default_value
+     * @param integer $maxlength
+     * @param integer $size
+     * @param boolean $required
+     * @param integer $weight
+     * @return array
+     */
+    public static function addField(array $form,string $label, string $type,string $title, string $description, string $default_value, integer $maxlength, integer $size, boolean $required, integer $weight )
+    {
+        $form[$label] = ['#type' => $type];
+        if (isset($title)) $form[$label] = ['#title' => $title];
+        if (isset($description)) $form[$label] = ['#description' => $description];
+        if (isset($default_value)) $form[$label] = ['#default_value' => $default_value];
+        if (isset($maxlength)) $form[$label] = ['#maxlength' => $maxlength];
+        if (isset($size)) $form[$label] = ['#size' => $size];
+        if (isset($required)) $form[$label] = ['#required' => $required];
+        if (isset($weight)) $form[$label] = ['#weight' => $weight];
+        dpm('form', $form); // debug
+        return $form;
+    }
+}
 class EzacLedenUpdateForm extends FormBase
 {
 
@@ -62,6 +94,7 @@ class EzacLedenUpdateForm extends FormBase
 
         //Naam Type Omvang
         //VOORVOEG Tekst 11
+        formUtil::addField($form,'voorvoeg', 'textfield','Voorvoeg', 'Voorvoegsel', $lid->voorvoeg, 11, 11, FALSE, 0);
         $form['voorvoeg'] = [
             '#title' => t('Voorvoeg'),
             '#type' => 'textfield',
@@ -411,7 +444,11 @@ class EzacLedenUpdateForm extends FormBase
             '#weight' => 38
         ];
 
-        $form['submit'] = [
+        $form['actions'] = [
+            '#type' => 'actions',
+        ];
+
+        $form['actions']['submit'] = [
             '#type' => 'submit',
             '#value' => $newRecord ? t('Invoeren') : t('Update'),
             '#weight' => 39
@@ -420,7 +457,7 @@ class EzacLedenUpdateForm extends FormBase
         //insert Delete button  gevaarlijk ivm dependencies
         if (\Drupal::currentUser()->hasPermission('EZAC_delete')) {
             if (!$newRecord) {
-                $form['delete'] = [
+                $form['actions']['delete'] = [
                     '#type' => 'submit',
                     '#value' => t('Verwijderen'),
                 ];
