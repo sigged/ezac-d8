@@ -53,7 +53,7 @@
   </tr>
 </table>
 
-  {# render the rest of the form #}
+  {# render the rest of the form
   {{ form|without ('voornaam', 'voorvoeg','voorletter','achternaam','afkorting',
     'adres','postcode','plaats','land',
     'telefoon','mobiel',
@@ -63,5 +63,5 @@
     'opmerking','kenezacvan',
     'babyvriend','ledenlijst','etiket','seniorlid','jeugdlid','peonderhoud',
     'user','slotcode') }}
-
+#}
 </form>
