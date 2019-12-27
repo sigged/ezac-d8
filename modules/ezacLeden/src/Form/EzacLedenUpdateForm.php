@@ -22,7 +22,7 @@ class formUtil
      * @param string $type
      * @param string $title
      * @param string $description
-     * @param string $default_value
+     * @param $default_value
      * @param integer $maxlength
      * @param integer $size
      * @param boolean $required
@@ -30,7 +30,7 @@ class formUtil
      * @param array $options
      * @return array
      */
-    public static function addField(array $form,string $label, string $type,string $title, string $description, string $default_value, int $maxlength, int $size, bool $required, int $weight, array $options = null)
+    public static function addField(array $form,string $label, string $type,string $title, string $description, $default_value, int $maxlength, int $size, bool $required, int $weight, array $options = null)
     {
         if (isset($type)) $form[$label]['#type'] = $type;
         if (isset($title)) $form[$label]['#title'] = $title;
@@ -129,7 +129,7 @@ class EzacLedenUpdateForm extends FormBase
         $form = formUtil::addField($form,'geboortedatum', 'textfield','Geboortedatum', 'Geboortedatum [dd-mm-jjjj]', $gebdat, 10, 10, FALSE, 13);
         //OPMERKING Tekst 27
         $form = formUtil::addField($form,'opmerking', 'textfield','Opmerking', 'Opmerking', $lid->opmerking, 27, 27, FALSE, 14);
-        //INSTRUCTEU Tekst 9
+        //INSTRUCTEU Tekst 9 ** foutief in database **
         //Actief Ja/nee 1
         $form = formUtil::addField($form,'actief', 'select','actief', 'Nog actief lid?', $lid->actief, 1, 1, TRUE, 15, $options_yn);
         //LID_VAN Datum/tijd 8
@@ -157,9 +157,9 @@ class EzacLedenUpdateForm extends FormBase
         //Babyvriend Ja/nee 1
         $form = formUtil::addField($form,'babyvriend', 'select','Babyvriend', 'Vriend van Nico Baby(Ja/nee)', $lid->babyvriend, 1, 1, FALSE, 21, $options_yn);
         //Ledenlijstje Ja/nee 1
-        $form = formUtil::addField($form,'ledenlijst', 'select','Ledenlijst', 'Vermelding op ledenlijst (Ja/nee)', $lid->ledenlijstje, 1, 1, FALSE, 21, $options_yn);
+        $form = formUtil::addField($form,'ledenlijstje', 'select','Ledenlijst', 'Vermelding op ledenlijst (Ja/nee)', $lid->ledenlijstje, 1, 1, FALSE, 21, $options_yn);
         //Etiketje Ja/nee 1
-        $form = formUtil::addField($form,'etiket', 'select','Etiket', 'Etiket afdrukken (Ja/nee)', $lid->etiketje, 1, 1, FALSE, 22, $options_yn);
+        $form = formUtil::addField($form,'etiketje', 'select','Etiket', 'Etiket afdrukken (Ja/nee)', $lid->etiketje, 1, 1, FALSE, 22, $options_yn);
         //User Tekst 50
         $form = formUtil::addField($form,'user', 'textfield','Usercode website', 'Usercode website (VVAAAA)', $lid->user, 6, 6, FALSE, 23);
         //seniorlid Ja/nee 1
