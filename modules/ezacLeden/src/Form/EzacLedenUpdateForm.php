@@ -27,9 +27,10 @@ class formUtil
      * @param integer $size
      * @param boolean $required
      * @param integer $weight
+     * @param array $options
      * @return array
      */
-    public static function addField(array $form,string $label, string $type,string $title, string $description, string $default_value, int $maxlength, int $size, bool $required, int $weight )
+    public static function addField(array $form,string $label, string $type,string $title, string $description, string $default_value, int $maxlength, int $size, bool $required, int $weight, array $options = [])
     {
         if (isset($type)) $form[$label]['#type'] = $type;
         if (isset($title)) $form[$label]['#title'] = $title;
@@ -39,6 +40,7 @@ class formUtil
         if (isset($size)) $form[$label]['#size'] = $size;
         if (isset($required)) $form[$label]['#required'] = $required;
         if (isset($weight)) $form[$label]['#weight'] = $weight;
+        if (isset($options)) $form['$label']['#options'] = $options;
         dpm($form); // debug
         return $form;
     }
@@ -95,356 +97,91 @@ class EzacLedenUpdateForm extends FormBase
         //Naam Type Omvang
         //VOORVOEG Tekst 11
         $form = formUtil::addField($form,'voorvoeg', 'textfield','Voorvoeg', 'Voorvoegsel', $lid->voorvoeg, 11, 11, FALSE, 1);
-        /*
-        $form['voorvoeg'] = [
-            '#title' => t('Voorvoeg'),
-            '#type' => 'textfield',
-            '#description' => t('Voorvoegsel'),
-            '#default_value' => $lid->voorvoeg,
-            '#maxlength' => 11,
-            '#required' => FALSE,
-            '#size' => 11,
-            '#weight' => 1,];
-        */
         //ACHTERNAAM Tekst 35
-        $form['achternaam'] = [
-            '#title' => t('Achternaam'),
-            '#type' => 'textfield',
-            '#description' => t('Achternaam'),
-            '#default_value' => $lid->achternaam,
-            '#maxlength' => 35,
-            '#required' => TRUE,
-            '#size' => 35,
-            '#weight' => 2,];
+        $form = formUtil::addField($form,'achternaam', 'textfield','Achternaam', 'Achternaam', $lid->achternaam, 35, 35, TRUE, 2);
         //AFKORTING Tekst 9
-        $form['afkorting'] = [
-            '#title' => t('Afkorting'),
-            '#type' => 'textfield',
-            '#description' => t('UNIEKE afkorting voor startadministratie'),
-            '#default_value' => $lid->afkorting,
-            '#maxlength' => 9,
-            '#required' => FALSE,
-            '#size' => 9,
-            '#weight' => 3,];
+        $form = formUtil::addField($form,'afkorting', 'textfield','Afkorting', 'UNIEKE afkorting voor startadministratie', $lid->afkorting, 9, 9, FALSE, 3);
         //VOORNAAM Tekst 13
-        $form['voornaam'] = [
-            '#title' => t('Voornaam'),
-            '#type' => 'textfield',
-            '#description' => t('Voornaam'),
-            '#default_value' => $lid->voornaam,
-            '#maxlength' => 13,
-            '#required' => TRUE,
-            '#size' => 13,
-            '#weight' => 4,];
+        $form = formUtil::addField($form,'voornaam', 'textfield','Voornaam', 'Voornaam', $lid->voornaam, 13, 13, FALSE, 4);
         //VOORLETTER Tekst 21
-        $form['voorletter'] = [
-            '#title' => t('Voorletters'),
-            '#type' => 'textfield',
-            '#description' => t('Voorletters'),
-            '#default_value' => $lid->voorletter,
-            '#maxlength' => 21,
-            '#required' => TRUE,
-            '#size' => 21,
-            '#weight' => 5,];
+        $form = formUtil::addField($form,'voorletter', 'textfield','Voorletters', 'Voorletters', $lid->voorletter, 21, 21, FALSE, 5);
         //ADRES Tekst 26
-        $form['adres'] = [
-            '#title' => t('Adres'),
-            '#type' => 'textfield',
-            '#description' => t('Adres'),
-            '#default_value' => $lid->adres,
-            '#maxlength' => 26,
-            '#required' => TRUE,
-            '#size' => 26,
-            '#weight' => 6,];
+        $form = formUtil::addField($form,'adres', 'textfield','Adres', 'Adres', $lid->adres, 26, 26, TRUE, 6);
         //POSTCODE Tekst 9
-        $form['postcode'] = [
-            '#title' => t('Postcode'),
-            '#type' => 'textfield',
-            '#description' => t('Postcode'),
-            '#default_value' => $lid->postcode,
-            '#maxlength' => 9,
-            '#required' => TRUE,
-            '#size' => 9,
-            '#weight' => 7,];
+        $form = formUtil::addField($form,'postcode', 'textfield','Postcode', 'Postcode', $lid->postcode, 9, 9, TRUE, 7);
         //PLAATS Tekst 24
-        $form['plaats'] = [
-            '#title' => t('Plaats'),
-            '#type' => 'textfield',
-            '#description' => t('Plaats'),
-            '#default_value' => $lid->plaats,
-            '#maxlength' => 24,
-            '#required' => TRUE,
-            '#size' => 24,
-            '#weight' => 8,];
+        $form = formUtil::addField($form,'plaats', 'textfield','Plaats', 'Plaats', $lid->plaats, 24, 24, TRUE, 8);
         //TELEFOON Tekst 14
-        $form['telefoon'] = [
-            '#title' => t('Telefoon'),
-            '#type' => 'textfield',
-            '#description' => t('Telefoon'),
-            '#default_value' => $lid->telefoon,
-            '#maxlength' => 14,
-            '#required' => FALSE,
-            '#size' => 14,
-            '#weight' => 9,];
+        $form = formUtil::addField($form,'telefoon', 'textfield','Telefoon', 'Telefoon', $lid->telefoon, 14, 14, FALSE, 9);
         //Mobiel Tekst 50
-        $form['mobiel'] = [
-            '#title' => t('Mobiel'),
-            '#type' => 'textfield',
-            '#description' => t('Mobiel nummer'),
-            '#default_value' => $lid->mobiel,
-            '#maxlength' => 20,
-            '#required' => false,
-            '#size' => 14,
-            '#weight' => 10,];
+        $form = formUtil::addField($form,'mobiel', 'textfield','Mobiel', 'Mobiel nummer', $lid->mobiel, 50, 14, FALSE, 10);
         //LAND Tekst 10
-        $form['land'] = [
-            '#title' => t('Land'),
-            '#type' => 'textfield',
-            '#description' => t('Land'),
-            '#default_value' => $lid->land,
-            '#maxlength' => 10,
-            '#required' => FALSE,
-            '#size' => 10,
-            '#weight' => 11,];
+        $form = formUtil::addField($form,'land', 'textfield','Land', 'Land', $lid->land, 10, 10, FALSE, 11);
         //CODE Tekst 5
-        //$default_soort = array_search($lid->code, EzacLid::$lidCode);
-        $form['code'] = [
-            '#title' => t('Code'),
-            '#type' => 'select',
-            '#default_value' => $lid->code,
-            '#description' => t('Soort lidmaatschap (code)'),
-            '#options' => EzacLid::$lidCode,
-            '#weight' => 12
-        ];
-        $form['tienrittenkaart'] = [
-            '#title' => t('Tienrittenkaart'),
-            '#type' => 'select',
-            '#options' => $options_yn,
-            '#description' => t('Tienrittenkaarthouder?'),
-            '#default_value' => $lid->tienrittenkaart,
-            '#maxlength' => 1,
-            '#required' => TRUE,
-            '#size' => 1,
-            '#weight' => 12];
+        $form = formUtil::addField($form,'code', 'select','Code', 'Code', $lid->code, 10, 10, FALSE, 12, EzacLid::$lidCode);
+        // Tienrittenkaart
+        $form = formUtil::addField($form,'tienrittenkaart', 'select','Tienrittenkaart', 'Tienrittenkaarthouder', $lid->tienrittenkaart, 1, 1, FALSE, 12, $options_yn);
         //GEBOORTEDA Datum/tijd 8
         $gd = substr($lid->geboorteda, 0, 10);
         if ($gd != NULL) {
             $lv = explode('-', $gd);
             $gebdat = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
         } else $gebdat = '';
-        $form['geboortedatum'] = [
-            '#title' => t('Geboortedatum'),
-            '#type' => 'textfield',
-            '#description' => t('Geboortedatum [dd-mm-jjjj]'),
-            '#default_value' => $gebdat,
-            '#maxlength' => 10,
-            '#required' => FALSE,
-            '#size' => 10,
-            '#weight' => 13
-        ];
+        $form = formUtil::addField($form,'geboortedatum', 'textfield','Geboortedatum', 'Geboortedatum [dd-mm-jjjj]', $gebdat, 10, 10, FALSE, 13);
         //OPMERKING Tekst 27
-        $form['opmerking'] = [
-            '#title' => t('Opmerking'),
-            '#type' => 'textfield',
-            '#description' => t('Opmerking'),
-            '#default_value' => $lid->opmerking,
-            '#maxlength' => 27,
-            '#required' => FALSE,
-            '#size' => 27,
-            '#weight' => 14];
+        $form = formUtil::addField($form,'opmerking', 'textfield','Opmerking', 'Opmerking', $lid->opmerking, 27, 27, FALSE, 14);
         //INSTRUCTEU Tekst 9
         //Actief Ja/nee 1
-        $form['actief'] = [
-            '#title' => t('Actief'),
-            '#type' => 'select',
-            '#options' => $options_yn,
-            '#description' => t('Nog actief lid?'),
-            '#default_value' => $lid->actief,
-            '#maxlength' => 1,
-            '#required' => TRUE,
-            '#size' => 1,
-            '#weight' => 15];
+        $form = formUtil::addField($form,'actief', 'select','actief', 'Nog actief lid?', $lid->actief, 1, 1, TRUE, 15, $options_yn);
         //LID_VAN Datum/tijd 8
         $ls = substr($lid->lid_van, 0, 10);
         if ($ls != NULL) {
             $lv = explode('-', $ls);
             $lid_van = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
         } else $lid_van = '';
-        //$lv = explode('-', $lid->lid_van);
-        //$lid_van = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
-        $form['lidvan'] = [
-            '#title' => t('Lid vanaf'),
-            '#type' => 'textfield', //DATE
-            '#description' => t('Ingangsdatum lidmaatschap [dd-mm-jjjj]'),
-            '#default_value' => $lid_van,
-            '#maxlength' => 10,
-            '#required' => FALSE,
-            '#size' => 10,
-            '#weight' => 16];
+        $form = formUtil::addField($form,'lidvan', 'textfield','Lid vanaf', 'Ingangsdatum lidmaatschap [dd-mm-jjjj]', $lid_van, 10, 10, FALSE, 16);
         //LID_EIND Datum/tijd 8
         $le = substr($lid->lid_eind, 0, 10);
         if ($le != NULL) {
             $lv = explode('-', $le);
             $lid_eind = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
         } else $lid_eind = '';
-        $form['lideind'] = [
-            '#title' => t('Lid einde'),
-            '#type' => 'date', //DATE
-            '#description' => t('Datum einde lidmaatschap [dd-mm-jjjj]'),
-            '#default_value' => $lid_eind,
-            '#maxlength' => 10,
-            '#required' => FALSE,
-            '#size' => 10,
-            '#weight' => 17];
-
+        $form = formUtil::addField($form,'lideind', 'textfield','Lid einde', 'Datum einde lidmaatschap [dd-mm-jjjj]', $lid_eind, 10, 10, FALSE, 17);
         //leerling Ja/nee 0
-        $form['leerling'] = [
-            '#title' => t('Leerling'),
-            '#type' => 'select',
-            '#default_value' => $lid->leerling,
-            '#description' => t('Leerling (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 18
-        ];
+        $form = formUtil::addField($form,'leerling', 'select','Leerling', 'Leerling (Ja/nee)', $lid->leerling, 1, 1, FALSE, 18, $options_yn);
         //Instructie Ja/nee 1
-        $form['instructie'] = [
-            '#title' => t('Instructie'),
-            '#type' => 'select',
-            '#default_value' => $lid->instructie,
-            '#description' => t('Instructeur (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 19
-        ];
-
+        $form = formUtil::addField($form,'instructie', 'select','Instructie', 'Instructeur (Ja/nee)', $lid->instructie, 1, 1, FALSE, 19, $options_yn);
         //E_mail Tekst 50
-        $form['e_mail'] = [
-            '#title' => t('E-mail'),
-            '#type' => 'email',
-            '#description' => t('E-mail adres'),
-            '#default_value' => $lid->e_mail,
-            '#maxlength' => 50,
-            '#required' => FALSE,
-            '#size' => 30,
-            '#weight' => 20];
-
+        $form = formUtil::addField($form,'e_mail', 'email','E-mail', 'E-mail adres', $lid->e_mail, 50, 50, FALSE, 20);
         //Babyvriend Ja/nee 1
-        $form['babyvriend'] = [
-            '#title' => t('Babyvriend'),
-            '#type' => 'select',
-            '#default_value' => $lid->babyvriend,
-            '#description' => t('Vriend van Nico Baby(Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 27
-        ];
+        $form = formUtil::addField($form,'babyvriend', 'select','Babyvriend', 'Vriend van Nico Baby(Ja/nee)', $lid->babyvriend, 1, 1, FALSE, 21, $options_yn);
         //Ledenlijstje Ja/nee 1
-        $form['ledenlijst'] = [
-            '#title' => t('Ledenlijst'),
-            '#type' => 'select',
-            '#default_value' => $lid->ledenlijstje,
-            '#description' => t('Vermelding op ledenlijst (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 28
-        ];
-
+        $form = formUtil::addField($form,'ledenlijst', 'select','Ledenlijst', 'Vermelding op ledenlijst (Ja/nee)', $lid->ledenlijstje, 1, 1, FALSE, 21, $options_yn);
         //Etiketje Ja/nee 1
-        $form['etiket'] = [
-            '#title' => t('Etiket'),
-            '#type' => 'select',
-            '#default_value' => $lid->etiketje,
-            '#description' => t('Etiket afdrukken (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 29
-        ];
-
+        $form = formUtil::addField($form,'etiket', 'select','Etiket', 'Etiket afdrukken (Ja/nee)', $lid->etiketje, 1, 1, FALSE, 22, $options_yn);
         //User Tekst 50
-        $form['user'] = [
-            '#title' => t('UserCode website'),
-            '#type' => 'textfield',
-            '#description' => t('Usercode website (VVAAAA)'),
-            '#default_value' => $lid->user,
-            '#maxlength' => 6,
-            '#required' => FALSE,
-            '#size' => 6,
-            '#weight' => 31
-        ];
-
+        $form = formUtil::addField($form,'user', 'textfield','Usercode website', 'Usercode website (VVAAAA)', $lid->user, 6, 6, FALSE, 23);
         //seniorlid Ja/nee 1
-        $form['seniorlid'] = [
-            '#title' => t('Senior lid'),
-            '#type' => 'select',
-            '#default_value' => $lid->seniorlid,
-            '#description' => t('Senior lid status (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 32
-        ];
-
+        $form = formUtil::addField($form,'seniorlid', 'select','Senior lid', 'Senior lid (Ja/nee)', $lid->seniorlid, 1, 1, FALSE, 24, $options_yn);
         //jeugdlid Ja/nee 1
-        $form['jeugdlid'] = [
-            '#title' => t('Jeugd / inwonend lid'),
-            '#type' => 'select',
-            '#default_value' => $lid->jeugdlid,
-            '#description' => t('Jeugd- of inwonend lid (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 33
-        ];
-
+        $form = formUtil::addField($form,'jeugdlid', 'select','Jeugd / inwonend lid', 'Jeugd / inwonend lid (Ja/nee)', $lid->jeugdlid, 1, 1, FALSE, 25, $options_yn);
         //PEonderhoud Ja/nee 1
-        $form['peonderhoud'] = [
-            '#title' => t('Prive Eigenaar onderhoud (CAMO)'),
-            '#type' => 'select',
-            '#default_value' => $lid->peonderhoud,
-            '#description' => t('Prive Eigenaar onderhoud (Ja/nee)'),
-            '#options' => $options_yn,
-            '#weight' => 34
-        ];
-
+        $form = formUtil::addField($form,'peonderhoud', 'select','Prive Eigenaar onderhoud (CAMO)', 'Prive Eigenaar onderhoud(Ja/nee)', $lid->peonderhoud, 1, 1, FALSE, 26, $options_yn);
         //Slotcode varchar(8)
-        $form['slotcode'] = [
-            '#title' => t('Slotcode'),
-            '#type' => 'textfield',
-            '#description' => t('Slotcode (nnnnnn)'),
-            '#default_value' => $lid->slotcode,
-            '#maxlength' => 8,
-            '#required' => FALSE,
-            '#size' => 8,
-            '#weight' => 35
-        ];
+        $form = formUtil::addField($form,'slotcode', 'textfield','Slot code', 'Slotcode (nnnnnn)', $lid->slotcode, 8, 8, FALSE, 27);
 
         //Mutatie timestamp
         //maak tekstlabel met datum laatste wijziging (wordt automatisch bijgewerkt)
 
         //Id
         //Toon het het Id nummer van het record
-        $form['id'] = [
-            '#type' => 'hidden',
-            '#title' => t('Record nummer (Id)'),
-            '#maxlength' => 8,
-            '#size' => 8,
-            '#value' => $lid->id,
-            '#weight' => 36
-        ];
-
+        $form = formUtil::addField($form,'id', 'hidden','Record nummer (Id)', '', $lid->id, 8, 8, FALSE, 28);
         //WijzigingSoort
         //Toon de soort mutatie NIEUW WIJZIGING VERVALLEN
-        $form['wijzigingsoort'] = [
-            '#type' => 'hidden',
-            '#title' => t('Soort wijziging'),
-            '#maxlength' => 15,
-            '#size' => 15,
-            '#value' => $lid->WijzigingSoort,
-            '#weight' => 37
-        ];
-
+        $form = formUtil::addField($form,'wijzigingsoort', 'hidden','Soort wijziging', '', $lid->wijzigingsoort, 15, 25, FALSE, 29);
         //KenEZACvan
         //Hoe is EZAC ontdekt
-        $form['kenezacvan'] = [
-            '#type' => 'textfield',
-            '#title' => t('Ken EZAC van'),
-            '#default_value' => $lid->kenezacvan,
-            '#maxlength' => 20,
-            '#size' => 20,
-            '#weight' => 38
-        ];
+        $form = formUtil::addField($form,'kenezacvan', 'textfield','Ken EZAC van', '', $lid->kenezacvan, 20, 20, FALSE, 30);
 
         $form['actions'] = [
             '#type' => 'actions',
@@ -453,7 +190,7 @@ class EzacLedenUpdateForm extends FormBase
         $form['actions']['submit'] = [
             '#type' => 'submit',
             '#value' => $newRecord ? t('Invoeren') : t('Update'),
-            '#weight' => 39
+            '#weight' => 31
         ];
 
         //insert Delete button  gevaarlijk ivm dependencies
@@ -462,6 +199,7 @@ class EzacLedenUpdateForm extends FormBase
                 $form['actions']['delete'] = [
                     '#type' => 'submit',
                     '#value' => t('Verwijderen'),
+                    '#weight' => 32
                 ];
             }
         }
