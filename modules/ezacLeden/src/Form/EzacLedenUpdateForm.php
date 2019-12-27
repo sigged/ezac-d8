@@ -235,7 +235,7 @@ class EzacLedenUpdateForm extends FormBase
         // Land
         // Code
         // Geboorteda
-        $dat = $form_state['values']['geboortedatum'];
+        $dat = $form_state->getValue('geboortedatum');
         if ($dat !== '') {
             $lv = explode('-', $dat);
             if (checkdate($lv[1], $lv[0], $lv[2]) == FALSE) {
@@ -246,7 +246,7 @@ class EzacLedenUpdateForm extends FormBase
         // Instructeu
         // Actief
         // Lid_van
-        $dat = $form_state['values']['lidvan'];
+        $dat = $form_state->getValue('lidvan');
         if ($dat !== '') {
             $lv = explode('-', $dat);
             if (checkdate($lv[1], $lv[0], $lv[2]) == FALSE) {
@@ -255,7 +255,7 @@ class EzacLedenUpdateForm extends FormBase
         }
 
         // Lid_eind
-        $dat = $form_state['values']['lideind'];
+        $dat = $form_state->getValue('lideind');
         if ($dat !== '') {
             $lv = explode('-', $dat);
             if (checkdate($lv[1], $lv[0], $lv[2]) == FALSE) {
