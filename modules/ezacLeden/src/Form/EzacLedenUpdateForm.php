@@ -146,6 +146,8 @@ class EzacLedenUpdateForm extends FormBase
             $lid_eind = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
         } else $lid_eind = '';
         $form = formUtil::addField($form,'lideind', 'textfield','Lid einde', 'Datum einde lidmaatschap [dd-mm-jjjj]', $lid_eind, 10, 10, FALSE, 17);
+        // RT license
+        $form = formUtil::addField($form,'rtlicense', 'select','RT licentie', 'RT bevoegdheid (Ja/nee)', $lid->rtlicense, 1, 1, FALSE, 18, $options_yn);
         //leerling Ja/nee 0
         $form = formUtil::addField($form,'leerling', 'select','Leerling', 'Leerling (Ja/nee)', $lid->leerling, 1, 1, FALSE, 18, $options_yn);
         //Instructie Ja/nee 1
@@ -262,6 +264,7 @@ class EzacLedenUpdateForm extends FormBase
                 $form_state->setErrorByName('lideind', 'Datum einde lidmaatschap is onjuist');
             }
         }
+        // RTlicense
         // E_mail
         // Babyvriend
         // Ledenlijst

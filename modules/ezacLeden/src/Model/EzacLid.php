@@ -46,10 +46,10 @@ class EzacLid extends EzacStorage
         'tienrittenkaart' => 'Opmerking 2',
         'geboorteda' => 'Geboortedatum',
         'opmerking' => 'Opmerking',
-        'instructeu' => 'Instructeur',
         'actief' => 'Actief lid',
         'lid_eind' => 'Einde lidmaatschap',
         'lid_van' => 'Start lidmaatschap',
+        'rtlicense' => 'RT licentie',
         'leerling' => 'Leerling vlieger',
         'instructie' => 'Instructie indicator',
         'e_mail' => 'E-mail adres',
@@ -87,6 +87,7 @@ class EzacLid extends EzacStorage
     public $actief = TRUE;
     public $lid_eind = '';
     public $lid_van = '';
+    public $rtlicense = FALSE;
     public $leerling = FALSE;
     public $instructie = FALSE;
     public $e_mail = '';
