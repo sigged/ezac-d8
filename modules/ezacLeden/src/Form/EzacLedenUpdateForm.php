@@ -29,7 +29,7 @@ class formUtil
      * @param integer $weight
      * @return array
      */
-    public static function addField(array $form,string $label, string $type,string $title, string $description, string $default_value, integer $maxlength, integer $size, boolean $required, integer $weight )
+    public static function addField(array $form,string $label, string $type,string $title, string $description, string $default_value, int $maxlength, int $size, bool $required, int $weight )
     {
         $form[$label] = ['#type' => $type];
         if (isset($title)) $form[$label] = ['#title' => $title];
