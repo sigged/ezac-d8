@@ -151,7 +151,7 @@ class EzacLedenUpdateForm extends FormBase
         //Instructie Ja/nee 1
         $form = formUtil::addField($form,'instructie', 'select','Instructie', 'Instructeur (Ja/nee)', $lid->instructie, 1, 1, FALSE, 19, $options_yn);
         //E_mail Tekst 50
-        $form = formUtil::addField($form,'e_mail', 'email','E-mail', 'E-mail adres', $lid->e_mail, 50, 50, FALSE, 20);
+        $form = formUtil::addField($form,'e_mail', 'email','E-mail', 'E-mail adres', $lid->e_mail, 50, 30, FALSE, 20);
         //Babyvriend Ja/nee 1
         $form = formUtil::addField($form,'babyvriend', 'select','Babyvriend', 'Vriend van Nico Baby(Ja/nee)', $lid->babyvriend, 1, 1, FALSE, 21, $options_yn);
         //Ledenlijstje Ja/nee 1
@@ -202,7 +202,7 @@ class EzacLedenUpdateForm extends FormBase
                 ];
             }
         }
-
+        dpm($form); // debug
         return $form;
     }
 
