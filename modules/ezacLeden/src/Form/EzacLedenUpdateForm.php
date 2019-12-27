@@ -39,7 +39,7 @@ class formUtil
         if (isset($size)) $form[$label] = ['#size' => $size];
         if (isset($required)) $form[$label] = ['#required' => $required];
         if (isset($weight)) $form[$label] = ['#weight' => $weight];
-        dpm('form', $form); // debug
+        dpm($form); // debug
         return $form;
     }
 }
