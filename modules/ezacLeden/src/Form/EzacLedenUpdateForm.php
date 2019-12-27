@@ -94,7 +94,8 @@ class EzacLedenUpdateForm extends FormBase
 
         //Naam Type Omvang
         //VOORVOEG Tekst 11
-        formUtil::addField($form,'voorvoeg', 'textfield','Voorvoeg', 'Voorvoegsel', $lid->voorvoeg, 11, 11, FALSE, 0);
+        formUtil::addField($form,'voorvoeg', 'textfield','Voorvoeg', 'Voorvoegsel', $lid->voorvoeg, 11, 11, FALSE, 1);
+        /*
         $form['voorvoeg'] = [
             '#title' => t('Voorvoeg'),
             '#type' => 'textfield',
@@ -104,6 +105,7 @@ class EzacLedenUpdateForm extends FormBase
             '#required' => FALSE,
             '#size' => 11,
             '#weight' => 1,];
+        */
         //ACHTERNAAM Tekst 35
         $form['achternaam'] = [
             '#title' => t('Achternaam'),
