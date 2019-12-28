@@ -38,7 +38,6 @@ class EzacStartsController extends ControllerBase {
       foreach ($datums as $datum) {
           $dp = date_parse($datum);
           $year = $dp['year'];
-          dpm($dp); //debug
           if (isset($jaren[$year])) $jaren[$year]++;
           else $jaren[$year] = 1;
       }
