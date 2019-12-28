@@ -61,8 +61,8 @@ ezac_starts_export:
     _permission: 'access content'
     _user: ^[a-zA-Z0-9_]+
 
-ezac_starts_export_registratie:
-  path: '/ezac/starts/export/{filename}/{registratie}'
+ezac_starts_export_jaar:
+  path: '/ezac/starts/export/{filename}/{jaar}'
   defaults:
     _title: 'Starts export'
     _controller: '\Drupal\ezacStarts\Controller\EzacStartsController::export'
