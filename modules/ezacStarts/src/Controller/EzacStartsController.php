@@ -207,7 +207,7 @@ class EzacStartsController extends ControllerBase {
             )->toString();
             $rows[] = [
                 //link each record to edit route
-                "<a href=$urlString>$start->datum</a>",
+                t("<a href=$urlString>$start->datum</a>"),
                 $start->registratie,
                 $start->gezagvoerder,
                 $start->tweede,
