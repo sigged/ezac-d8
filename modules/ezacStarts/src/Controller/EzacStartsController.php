@@ -33,7 +33,7 @@ class EzacStartsController extends ControllerBase {
     
     $total = 0;
       $condition = [];
-      $datums = array_unique(EzacStart::index($condition, 'datum'));
+      $datums = array_unique(EzacStart::index($condition, 'datum', 'datum','DESC'));
       $jaren = [];
       foreach ($datums as $datum) {
           $dp = date_parse($datum);
