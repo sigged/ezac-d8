@@ -35,6 +35,7 @@ class EzacStartsController extends ControllerBase {
     // @TODO overzicht per jaar maken
       $condition = [];
       $datums = EzacStart::index($condition, 'datum');
+      dpm($datums); //debug
       $jaren = [];
       foreach ($datums as $datum) {
           $year = date_parse($datum)['year'];
