@@ -130,8 +130,7 @@ class EzacStartsController extends ControllerBase {
     $page = pager_default_initialize($total, $range);
     $from = $range * $page;
     
-    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range);
-    //@todo make unique
+    $startsIndex = array_unique(EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range));
 
     foreach ($startsIndex as $datum) {
       $condition = ['datum' => $datum];
