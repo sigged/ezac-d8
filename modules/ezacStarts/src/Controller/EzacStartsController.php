@@ -127,12 +127,12 @@ class EzacStartsController extends ControllerBase {
       $field = 'datum';
       $sortkey = 'datum';
       $sortdir = 'ASC';
-      $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range);
-
-
-    foreach (array_unique($startsIndex) as $datum) {
-      $condition2 = ['datum' => $datum];
-      $count = EzacStart::counter($condition2);
+      $startsIndex = array_unique(EzacStart::index($condition, $field, $sortkey, $sortdir));
+      //pager werkt niet goed als array_unique nodig is
+      array_splice($startsIndex,$from,$range); //cut the selected piece from startsIndex
+    foreach ($startsIndex as $datum) {
+      $condition = ['datum' => $datum];
+      $count = EzacStart::counter($condition);
 
       $urlString = Url::fromRoute(
         'ezac_starts_overzicht',  // show starts for datum
