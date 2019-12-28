@@ -1,0 +1,31 @@
+<form {{ attributes }}>
+
+<table style="width:100%">
+  <tr>
+    <td>{{ form.datum }} </td>
+    <td>{{ form.registratie}} </td>
+    <td>{{ form.startmethode }}</td>
+  </tr>
+  <tr>
+    <td>{{  form.gezagvoerder }} {{ form.instructie }}</td>
+    <td>{{ form.tweede }}</td>
+    <td> {{ form.soort }} </td>
+  </tr>
+  <tr>
+    <td>{{ form.start }}</td>
+    <td>{{ form.landing }}</td>
+    <td>{{ form.duur }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.opmerking}}</td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+  {{ form.actions }}
+  {{ form.form_build_id }}
+  {{ form.form_id }}
+  {{ form.form_token }}
+
+</form>
