@@ -66,7 +66,8 @@ class EzacStartsController extends ControllerBase {
     }
     // add line for totals
     $urlCode = Url::fromRoute(
-      'ezac_starts_overzicht'
+      'ezac_starts_overzicht_jaar',
+        ['jaar' => '']
     )->toString();
     $urlExport = Url::fromRoute(
       'ezac_starts_export',
