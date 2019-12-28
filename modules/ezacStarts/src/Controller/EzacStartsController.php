@@ -197,7 +197,7 @@ class EzacStartsController extends ControllerBase {
         $total = EzacStart::counter($condition);
         $field = 'id';
         $sortkey = 'start';
-        $sortdir = 'DESC'; // newest first
+        $sortdir = 'ASC'; // newest first
         $range = 50;
         $page = pager_default_initialize($total, $range);
         $from = $range * $page;
