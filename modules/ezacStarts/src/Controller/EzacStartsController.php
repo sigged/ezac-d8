@@ -131,8 +131,8 @@ class EzacStartsController extends ControllerBase {
 
 
     foreach ($startsIndex as $datum) {
-      $condition = ['datum' => $datum];
-      $count = EzacStart::counter($condition);
+      $condition2 = ['datum' => $datum];
+      $count = EzacStart::counter($condition2);
 
       $urlString = Url::fromRoute(
         'ezac_starts_overzicht',  // show starts for datum
