@@ -117,17 +117,18 @@ class EzacStartsController extends ControllerBase {
           ],
       ];
 
-    // prepare pager
-    $total = EzacStart::counter($condition);
-    dpm($total); //debug
-    $field = 'datum';
-    $sortkey = 'datum';
-    $sortdir = 'ASC';
-    $range = 50;
-    $page = pager_default_initialize($total, $range);
-    $from = $range * $page;
-    
-    $startsIndex = array_unique(EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range));
+      // bepaal aantal dagen
+      $total = count(array_unique(EzacStart::index($condition, 'datum')));
+
+      // prepare pager
+      $range = 50;
+      $page = pager_default_initialize($total, $range);
+      $from = $range * $page;
+      $field = 'datum';
+      $sortkey = 'datum';
+      $sortdir = 'ASC';
+      $startsIndex = array_unique(EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range));
+
 
     foreach ($startsIndex as $datum) {
       $condition = ['datum' => $datum];
