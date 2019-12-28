@@ -111,13 +111,9 @@ class EzacStartsController extends ControllerBase {
 
     // select all start dates for selected year
       $condition = [
-        'datum' => [
-            'value' => "$jaar-01-01",
-            'operator' => '>='
-        ],
           'datum' => [
-              'value' => "$jaar-12-31",
-              'operator' => '<='
+              'value' => ["$jaar-01-01", "$jaar-12-31"],
+              'operator' => 'BETWEEN'
           ],
       ];
 
@@ -265,7 +261,7 @@ class EzacStartsController extends ControllerBase {
         $condition = [
             'datum' => [
                 'value' => ["$jaar-01-01", "$jaar-12-31"],
-                'condition' => 'BETWEEN'
+                'operator' => 'BETWEEN'
             ],
         ];
     }
