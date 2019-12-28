@@ -41,9 +41,8 @@ class EzacStartsController extends ControllerBase {
           if (isset($jaren[$year])) $jaren[$year]++;
           else $jaren[$year] = 1;
       }
-dpm($jaren); //debug
-    foreach ($jaren as $jaar) {
-      $count = $jaren[$jaar];
+    foreach ($jaren as $jaar => $aantal) {
+      $count = $aantal;
       $total = $total+$count;
       $urlJaar = Url::fromRoute(
         'ezac_starts_overzicht_jaar',
