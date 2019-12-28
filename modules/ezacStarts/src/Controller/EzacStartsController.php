@@ -119,6 +119,7 @@ class EzacStartsController extends ControllerBase {
 
       // bepaal aantal dagen
       $total = count(array_unique(EzacStart::index($condition, 'datum')));
+dpm($total,'count');
 
       // prepare pager
       $range = 50;
