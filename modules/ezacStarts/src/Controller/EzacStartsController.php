@@ -27,7 +27,7 @@ class EzacStartsController extends ControllerBase {
     // show record count for each Code value
     $headers = [
       t("Jaar"),
-      t("Aantal"), 
+      t("Aantal vliegdagen"),
       t("Uitvoer"),
     ];
     
@@ -41,7 +41,7 @@ class EzacStartsController extends ControllerBase {
           if (isset($jaren[$year])) $jaren[$year]++;
           else $jaren[$year] = 1;
       }
-
+dpm($jaren); //debug
     foreach ($jaren as $jaar) {
       $count = $jaren[$jaar];
       $total = $total+$count;
