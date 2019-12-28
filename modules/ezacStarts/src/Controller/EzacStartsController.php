@@ -112,9 +112,13 @@ class EzacStartsController extends ControllerBase {
     // select all start dates for selected year
       $condition = [
         'datum' => [
-            'value' => ["$jaar-01-01", "$jaar-12-31"],
-            'condition' => 'BETWEEN'
+            'value' => "$jaar-01-01",
+            'condition' => '>='
         ],
+          'datum' => [
+              'value' => "$jaar-12-31",
+              'condition' => '<='
+          ],
       ];
 
     // prepare pager
