@@ -65,10 +65,6 @@ class EzacStartsController extends ControllerBase {
       ];
     }
     // add line for totals
-    $urlCode = Url::fromRoute(
-      'ezac_starts_overzicht_jaar',
-        ['jaar' => null]
-    )->toString();
     $urlExport = Url::fromRoute(
       'ezac_starts_export',
       [
@@ -76,7 +72,7 @@ class EzacStartsController extends ControllerBase {
       ]
     )->toString();
     $rows[]= [
-      t("<a href=$urlCode>Totaal</a>"),
+      t('Totaal'),
       $total,
       t("<a href=$urlExport>Starts.csv</a>"),
     ];
