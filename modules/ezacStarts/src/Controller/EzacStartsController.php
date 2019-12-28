@@ -115,10 +115,6 @@ class EzacStartsController extends ControllerBase {
             'value' => "$jaar-01-01",
             'condition' => '>='
         ],
-          'datum' => [
-              'value' => "$jaar-12-31",
-              'condition' => '<='
-          ],
       ];
 
     // prepare pager
