@@ -113,8 +113,12 @@ class EzacStartsController extends ControllerBase {
       $condition = [
         'datum' => [
             'value' => "$jaar-01-01",
-            'condition' => '>='
+            'operator' => '>='
         ],
+          'datum' => [
+              'value' => "$jaar-12-31",
+              'operator' => '<='
+          ],
       ];
 
     // prepare pager
@@ -208,9 +212,10 @@ class EzacStartsController extends ControllerBase {
             )->toString();
             $rows[] = [
                 //link each record to edit route
-                "<a href=$urlString>$start->datum",
+                "<a href=$urlString>$start->datum</a>",
                 $start->registratie,
                 $start->gezagvoerder,
+                $start->tweede,
                 $start->soort,
                 $start->startmethode,
                 $start->start,
