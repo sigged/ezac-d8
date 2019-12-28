@@ -130,7 +130,7 @@ class EzacStartsController extends ControllerBase {
       $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range);
 
 
-    foreach ($startsIndex as $datum) {
+    foreach (array_unique($startsIndex) as $datum) {
       $condition2 = ['datum' => $datum];
       $count = EzacStart::counter($condition2);
 
