@@ -250,27 +250,30 @@ class EzacStartsController extends ControllerBase {
      * Output via html headers naar attachment
      *
      * @param string $filename
-     * @param null $code
+     * @param null $jaar
      * @return mixed Response output text in csv format
      *   output text in csv format
      */
-  public function export($filename = 'ezac.txt', $registratie = NULL) {
+  public function export($filename = 'ezac.txt', $jaar = NULL) {
 
     $messenger = \Drupal::messenger();
 
     if ($filename == '') $filename = 'ezac.txt';
 
-    // Determine CODE categorie from Starts for export
-    if (isset($registratie)) {
-      $condition = [
-        'registratie' => $registratie,
-      ];
+    // Determine Jaar  from Starts for export
+    if (isset($jaar)) {
+        $condition = [
+            'datum' => [
+                'value' => ["$jaar-01-01", "$jaar-12-31"],
+                'condition' => 'BETWEEN'
+            ],
+        ];
     }
     else $condition = []; //select all active records
 
     $records = EzacStart::index($condition); //read records index
     $count = count($records);
-    $messenger->addMessage("Export $count records met registratie [$registratie] naar bestand [$filename]"); //DEBUG
+    $messenger->addMessage("Export $count records voor jaar [$jaar] naar bestand [$filename]"); //DEBUG
 
     $output = ""; // initialize output
     //build header line
