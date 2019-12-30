@@ -66,6 +66,7 @@ class EzacStartsUpdateForm extends FormBase
 
         // format datum (use date_parse instead?
         $gd = substr($start->datum, 0, 10);
+        dpm($gd,'datum'); //debug
         if ($gd != NULL) {
             $lv = explode('-', $gd);
             $dat = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
