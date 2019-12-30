@@ -77,9 +77,9 @@ class EzacStartsUpdateForm extends FormBase
         $form = formUtil::addField($form,'tweede', 'textfield','tweede', 'tweede', $start->tweede, 20, 20, FALSE, 4);
         $form = formUtil::addField($form,'soort', 'textfield','soort', 'soort', $start->soort, 4, 4, FALSE, 5);
         $form = formUtil::addField($form,'startmethode', 'textfield','startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6);
-        $form = formUtil::addField($form,'start', 'time','start', 'start', $start->start, 10, 10, FALSE, 7);
-        $form = formUtil::addField($form,'landing', 'time','landing', 'landing', $start->landing, 10, 10, FALSE, 8);
-        $form = formUtil::addField($form,'duur', 'time','duur', 'duur', $start->duur, 10, 10, FALSE, 9);
+        $form = formUtil::addField($form,'start', 'textfield','start', 'start', $start->start, 10, 10, FALSE, 7);
+        $form = formUtil::addField($form,'landing', 'textfield','landing', 'landing', $start->landing, 10, 10, FALSE, 8);
+        $form = formUtil::addField($form,'duur', 'textfield','duur', 'duur', $start->duur, 10, 10, FALSE, 9);
         $form = formUtil::addField($form,'instructie', 'textfield','instructie', 'instructie', $start->instructie, 5, 5, FALSE, 10);
         $form = formUtil::addField($form,'opmerking', 'textfield','opmerking', 'opmerking', $start->opmerking, 30, 30, FALSE, 11);
 
