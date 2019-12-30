@@ -1,11 +1,6 @@
-ezac:
-  title: EZAC administratie
-  route_name: ezac
-  description: EZAC menu
-
 ezac_leden:
   title: Leden administratie
   route_name: ezac_leden
   description: EZAC leden administratie
-  weight: 00
+  weight: 01
 
