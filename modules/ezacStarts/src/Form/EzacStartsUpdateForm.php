@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\ezacStarts\Model\EzacStart;
-use Drupal\ezac\Util\formUtil;
+use Drupal\ezac\Util\EzacUtil\formUtil;
 
 /**
  * UI to update starts record
