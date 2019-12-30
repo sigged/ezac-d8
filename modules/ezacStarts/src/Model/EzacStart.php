@@ -140,17 +140,16 @@ class EzacStart extends EzacStorage
     /***
      * index - Gets the index of starts records
      *
-     * @param array
-     *   $condition for select
-     * @param string
-     *  $field to be returned as index
+     * @param null $condition
+     * @param string $field
      * @param string $sortkey
      * @param string $sortdir
      * @param $from
      * @param $range
+     * @param bool $unique
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL)
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
     {
         return EzacStorage::ezacIndex('starts', $condition, $field, $sortkey, $sortdir, $from, $range);
     }

@@ -64,14 +64,7 @@ class EzacStartsUpdateForm extends FormBase
 
         $options_yn = [t('Nee'), t('Ja')];
 
-        // format datum (use date_parse instead?
-        $gd = substr($start->datum, 0, 10);
-        dpm($gd,'datum'); //debug
-        if ($gd != NULL) {
-            $lv = explode('-', $gd);
-            $dat = sprintf('%s-%s-%s', $lv[2], $lv[1], $lv[0]);
-        } else $dat = '';
-        $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $gd, 10, 10, TRUE, 1);
+        $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
         $form = formUtil::addField($form,'registratie', 'textfield','registratie', 'registratie', $start->registratie, 10, 10, TRUE, 2);
  //@todo build select for gezagvoerder and tweede
         $form = formUtil::addField($form,'gezagvoerder', 'textfield','gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 20, TRUE, 3);

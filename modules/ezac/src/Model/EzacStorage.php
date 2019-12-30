@@ -80,11 +80,11 @@ class EzacStorage
      * @param $sortdir string default 'ASC' sort direction
      * @param int $from for range selection default NULL
      * @param int $range default NULL the range for the query
-     *
+     * @param bool $unique default FALSE, return DISTINCT results
      * @return array
      *   An array of objects containing the loaded entries if found.
      */
-    public static function ezacIndex($table, $condition = NULL, $field = 'id', $sortkey = NULL, $sortdir = 'ASC', $from = NULL, $range = NULL)
+    public static function ezacIndex($table, $condition = NULL, $field = 'id', $sortkey = NULL, $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
     {
 
         // Read unique index from a ezac table.
@@ -114,7 +114,8 @@ class EzacStorage
             $select->range($from, $range);
         }
         // Return the result in array format.
-        $index = $select->execute()->fetchCol();
+        if ($unique) $index = $select->distinct()->execute()->fetchCol();
+        else $index = $select->execute()->fetchCol();
 
         // return to standard Drupal database
         Database::setActiveConnection();
