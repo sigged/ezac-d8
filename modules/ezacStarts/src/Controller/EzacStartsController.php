@@ -116,9 +116,15 @@ class EzacStartsController extends ControllerBase {
               'operator' => 'BETWEEN'
           ],
       ];
+      $from = null;
+      $range = null;
+      $field = 'datum';
+      $sortkey = null;
+      $sortdir = null;
+      $unique = TRUE; // return unique results only
 
       // bepaal aantal dagen
-      $total = count(array_unique(EzacStart::index($condition, 'datum')));
+      $total = count(EzacStart::index($condition, 'datum', $sortkey, $sortdir, $from, $range, $unique));
 
       // prepare pager
       $range = 50;
@@ -130,8 +136,6 @@ class EzacStartsController extends ControllerBase {
       $unique = TRUE; // return unique results only
 
       $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
-      //pager werkt niet goed als array_unique nodig is
-      //$startDates = array_splice($startsIndex,$from,$range); //cut the selected piece from startsIndex
     foreach ($startsIndex as $datum) {
       $condition = ['datum' => $datum];
       $count = EzacStart::counter($condition);
