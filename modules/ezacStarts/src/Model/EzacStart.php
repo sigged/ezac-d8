@@ -151,7 +151,7 @@ class EzacStart extends EzacStorage
      */
     public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
     {
-        return EzacStorage::ezacIndex('starts', $condition, $field, $sortkey, $sortdir, $from, $range);
+        return EzacStorage::ezacIndex('starts', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
 
 }
