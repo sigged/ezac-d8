@@ -28,7 +28,7 @@ ezac_starts_overzicht_jaar:
 ezac_starts_update:
   path: '/ezac/starts/update/{id}'
   defaults:
-    _title: 'Lid wijzigen'
+    _title: 'Start wijzigen'
     _form: '\Drupal\ezacStarts\Form\EzacStartsUpdateForm'
   requirements:
     _permission: 'EZAC_update'
@@ -37,7 +37,7 @@ ezac_starts_update:
 ezac_starts_create:
   path: '/ezac/starts/update'
   defaults:
-    _title: 'Lid aanmaken'
+    _title: 'Start aanmaken'
     _form: '\Drupal\ezacStarts\Form\EzacStartsUpdateForm'
   requirements:
     _permission: 'EZAC_update'
