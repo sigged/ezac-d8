@@ -127,7 +127,7 @@ class EzacStartsController extends ControllerBase {
       $total = count(EzacStart::index($condition, 'datum', $sortkey, $sortdir, $from, $range, $unique));
 
       // prepare pager
-      $range = 50;
+      $range = 120;
       $page = pager_default_initialize($total, $range);
       $from = $range * $page;
       $field = 'datum';
