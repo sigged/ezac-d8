@@ -128,8 +128,8 @@ class EzacStartsUpdateForm extends FormBase
         $dat = $form_state->getValue('datum');
         if ($dat !== '') {
             $lv = explode('-', $dat);
-            if (checkdate($lv[2], $lv[1], $lv[0]) == FALSE) {
-                $form_state->setErrorByName('datum', t('Datum is onjuist'));
+            if (checkdate($lv[1], $lv[0], $lv[2]) == FALSE) {
+                $form_state->setErrorByName('datum', t("Datum [$dat] is onjuist"));
             }
         }
     }
