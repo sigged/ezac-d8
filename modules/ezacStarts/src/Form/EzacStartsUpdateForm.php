@@ -67,7 +67,6 @@ class EzacStartsUpdateForm extends FormBase
         $options_yn = [t('Nee'), t('Ja')];
         $leden = getLeden::getLeden();
         $kisten = getKisten::getKisten();
-//@todo als tweede leeg is wordt Brian van Acker getoond (1e entry)
         $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
         $form = formUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
         $form = formUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
@@ -129,7 +128,7 @@ class EzacStartsUpdateForm extends FormBase
         $dat = $form_state->getValue('datum');
         if ($dat !== '') {
             $lv = explode('-', $dat);
-            if (checkdate($lv[1], $lv[0], $lv[2]) == FALSE) {
+            if (checkdate($lv[2], $lv[1], $lv[0]) == FALSE) {
                 $form_state->setErrorByName('datum', t('Datum is onjuist'));
             }
         }
