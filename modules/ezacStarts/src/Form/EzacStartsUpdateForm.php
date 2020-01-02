@@ -72,7 +72,7 @@ class EzacStartsUpdateForm extends FormBase
         $leden = [];
         foreach ($ledenIndex as $id) {
             $lid = (new EzacLid)->read($id);
-            $leden[$id] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
+            $leden[$lid->afkorting] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
         }
         $leden[0] = "Onbekend";
         $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
