@@ -9,6 +9,7 @@ use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\ezacStarts\Model\EzacStart;
 use Drupal\ezac\Util\formUtil;
 use Drupal\ezac\Util\getLeden;
+use Drupal\ezac\Util\getKisten;
 
 /**
  * UI to update starts record
@@ -65,9 +66,10 @@ class EzacStartsUpdateForm extends FormBase
 
         $options_yn = [t('Nee'), t('Ja')];
         $leden = getLeden::getLeden();
+        $kisten = getKisten::getKisten();
 
         $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
-        $form = formUtil::addField($form,'registratie', 'textfield','registratie', 'registratie', $start->registratie, 10, 10, TRUE, 2);
+        $form = formUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
         $form = formUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
         $form = formUtil::addField($form,'tweede', 'select','tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
         $form = formUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
