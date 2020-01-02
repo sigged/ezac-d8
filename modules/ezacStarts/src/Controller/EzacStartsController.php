@@ -224,7 +224,6 @@ class EzacStartsController extends ControllerBase {
                 $start->landing,
                 $start->duur,
                 $start->registratie,
-                $leden[$start->gezagvoerder], // @todo check op niet bestaande waarde
                 (array_key_exists($start->gezagvoerder, $leden)) ? $leden[$start->gezagvoerder] : $start->gezagvoerder,
                 (array_key_exists($start->tweede, $leden)) ? $leden[$start->tweede] : $start->tweede,
                 EzacStart::$startSoort[$start->soort],
