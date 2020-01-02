@@ -73,7 +73,7 @@ class EzacStartsUpdateForm extends FormBase
         $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
         $form = formUtil::addField($form,'registratie', 'textfield','registratie', 'registratie', $start->registratie, 10, 10, TRUE, 2);
  //@todo build select for gezagvoerder and tweede
-        $form = formUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 20, TRUE, 3, $leden);
+        $form = formUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
         $form = formUtil::addField($form,'tweede', 'textfield','tweede', 'tweede', $start->tweede, 20, 20, FALSE, 4);
         $form = formUtil::addField($form,'soort', 'textfield','soort', 'soort', $start->soort, 4, 4, FALSE, 5);
         $form = formUtil::addField($form,'startmethode', 'textfield','startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6);
