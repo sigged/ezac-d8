@@ -11,7 +11,7 @@ class getKisten
      * @param array $condition
      * @return array
      */
-    public static function getLeden(array $condition = [])
+    public static function getKisten(array $condition = [])
     {
         if ($condition == []) {
             $condition = [
