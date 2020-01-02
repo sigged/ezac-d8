@@ -7,7 +7,7 @@ class getKisten
 {
     /**
      * @file
-     * return table with leden names
+     * return table with kisten names
      * @param array $condition
      * @return array
      */
@@ -20,11 +20,11 @@ class getKisten
         }
         $kistenIndex = EzacKist::index($condition,'id','registratie');
         $kisten = [];
+        $kisten[''] = "Onbekend";
         foreach ($kistenIndex as $id) {
             $kist = (new EzacKist)->read($id);
             $kisten[$kist->registratie] = "$kist->registratie $kist->callsign ($kist->inzittenden)";
         }
-        $kisten[0] = "Onbekend";
         return $kisten;
     }
 }

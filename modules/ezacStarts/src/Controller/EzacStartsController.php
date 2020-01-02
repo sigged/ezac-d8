@@ -9,6 +9,8 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
 use Drupal\ezacStarts\Model\EzacStart;
+use Drupal\ezac\Util\getLeden;
+use Drupal\ezac\Util\getKisten;
 
 /**
  * Controller for EZAC start administration.
@@ -193,6 +195,9 @@ class EzacStartsController extends ControllerBase {
             t('opmerking'),
         ];
 
+        $leden = getLeden::getLeden();
+        $kisten = getKisten::getKisten();
+
         // select all starts for selected date
         $condition = ['datum' => $datum];
 
@@ -218,11 +223,11 @@ class EzacStartsController extends ControllerBase {
                 t("<a href=$urlString>$start->start</a>"),
                 $start->landing,
                 $start->duur,
-                $start->registratie,
-                $start->gezagvoerder,
-                $start->tweede,
-                $start->soort,
-                $start->startmethode,
+                $kisten[$start->registratie],
+                $leden[$start->gezagvoerder], // @todo check op niet bestaande waarde
+                $leden[$start->tweede],
+                EzacStart::$startSoort[$start->soort],
+                EzacStart::$startMethode[$start->startmethode],
                 $start->instructie,
                 $start->opmerking,
             ];
