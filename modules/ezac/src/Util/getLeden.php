@@ -21,7 +21,7 @@ class getLeden
         }
         $ledenIndex = EzacLid::index($condition,'id','achternaam');
         $leden = [];
-        $leden[0] = "Onbekend";
+        $leden[''] = "Onbekend";
         foreach ($ledenIndex as $id) {
             $lid = (new EzacLid)->read($id);
             $leden[$lid->afkorting] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
