@@ -214,18 +214,30 @@ class EzacStartsController extends ControllerBase {
         $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
         foreach ($startsIndex as $id) {
             $start = (new EzacStart)->read($id);
+
             $urlString = Url::fromRoute(
                 'ezac_starts_update',  // edit starts record
                 ['id' => $start->id]
             )->toString();
+
+            if (isset($leden[$start->gezagvoerder]) && $start->gezagvoerder <> '') {
+                $gezagvoerder = $leden[$start->gezagvoerder];
+            }
+            else $gezagvoerder = $start->gezagvoerder; // un-edited record value
+
+            if (isset($leden[$start->tweede]) && $start->tweede <> '') {
+                $tweede = $leden[$start->tweede];
+            }
+            else $tweede = $start->tweede; // un-edited record value
+
             $rows[] = [
                 //link each record to edit route
                 t("<a href=$urlString>$start->start</a>"),
                 $start->landing,
                 $start->duur,
                 $start->registratie,
-                (array_key_exists($start->gezagvoerder, $leden)) ? $leden[$start->gezagvoerder] : $start->gezagvoerder,
-                (array_key_exists($start->tweede, $leden)) ? $leden[$start->tweede] : $start->tweede,
+                $gezagvoerder,
+                $tweede,
                 EzacStart::$startSoort[$start->soort],
                 EzacStart::$startMethode[$start->startmethode],
                 $start->instructie,
