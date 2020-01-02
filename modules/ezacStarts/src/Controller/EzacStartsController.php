@@ -223,9 +223,10 @@ class EzacStartsController extends ControllerBase {
                 t("<a href=$urlString>$start->start</a>"),
                 $start->landing,
                 $start->duur,
-                $kisten[$start->registratie],
+                $start->registratie,
                 $leden[$start->gezagvoerder], // @todo check op niet bestaande waarde
-                $leden[$start->tweede],
+                (array_key_exists($start->gezagvoerder, $leden)) ? $leden[$start->gezagvoerder] : $start->gezagvoerder,
+                (array_key_exists($start->tweede, $leden)) ? $leden[$start->tweede] : $start->tweede,
                 EzacStart::$startSoort[$start->soort],
                 EzacStart::$startMethode[$start->startmethode],
                 $start->instructie,
