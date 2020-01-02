@@ -180,7 +180,8 @@ class EzacStartsUpdateForm extends FormBase
         }
         //go back to starts overzicht
         $redirect = Url::fromRoute(
-            'ezac_starts'
+            'ezac_starts_overzicht',
+            ['datum' => $start->datum]
         );
         $form_state->setRedirectUrl($redirect);
     } //submitForm
