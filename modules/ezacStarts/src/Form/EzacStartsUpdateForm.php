@@ -63,9 +63,9 @@ class EzacStartsUpdateForm extends FormBase
         ];
 
         $options_yn = [t('Nee'), t('Ja')];
-        $leden = EzacLid::index(['actief' => TRUE],'id','achternaam');
+        $ledenIndex = EzacLid::index(['actief' => TRUE],'id','achternaam');
         $leden = [];
-        foreach ($leden as $id) {
+        foreach ($ledenIndex as $id) {
             $lid = (new EzacLid)->read($id);
             $leden[$id] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
         }
