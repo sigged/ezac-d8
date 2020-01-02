@@ -8,6 +8,7 @@ use Drupal\Core\Url;
 use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\ezacStarts\Model\EzacStart;
 use Drupal\ezac\Util\formUtil;
+use Drupal\ezac\Util\getLeden;
 
 /**
  * UI to update starts record
@@ -63,21 +64,10 @@ class EzacStartsUpdateForm extends FormBase
         ];
 
         $options_yn = [t('Nee'), t('Ja')];
+        $leden = getLeden::getLeden();
 
-        $condition = [
-            'actief' => TRUE,
-            'code' => 'VL',
-        ];
-        $ledenIndex = EzacLid::index($condition,'id','achternaam');
-        $leden = [];
-        foreach ($ledenIndex as $id) {
-            $lid = (new EzacLid)->read($id);
-            $leden[$lid->afkorting] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
-        }
-        $leden[0] = "Onbekend";
         $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
         $form = formUtil::addField($form,'registratie', 'textfield','registratie', 'registratie', $start->registratie, 10, 10, TRUE, 2);
- //@todo build select for gezagvoerder and tweede
         $form = formUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
         $form = formUtil::addField($form,'tweede', 'select','tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
         $form = formUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
@@ -118,7 +108,7 @@ class EzacStartsUpdateForm extends FormBase
     /**
      * {@inheritdoc}
      */
-    public function vastartateForm(array &$form, FormStateInterface $form_state)
+    public function validateForm(array &$form, FormStateInterface $form_state)
     {
 
         // perform validate for edit of record
