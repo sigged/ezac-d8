@@ -5,9 +5,11 @@ namespace Drupal\ezacStarts\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\ezacKisten\Model\EzacKist;
 use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\ezacStarts\Model\EzacStart;
 use Drupal\ezac\Util\EzacUtil;
+use False\MyClass;
 
 /**
  * UI to update starts record
@@ -62,13 +64,18 @@ class EzacStartsUpdateForm extends FormBase
             '#value' => $newRecord, // TRUE or FALSE
         ];
 
+        // Check op tweezitter
+        $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         $options_yn = [t('Nee'), t('Ja')];
         $leden = EzacUtil::getLeden();
         $kisten = EzacUtil::getKisten();
         $form = EzacUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
         $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
-        $form = EzacUtil::addField($form,'tweede', 'select','tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
+        if ($tweezitter) {
+            $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
+        }
+        else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4);
         $form = EzacUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
         $form = EzacUtil::addField($form,'startmethode', 'select','startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6, EzacStart::$startMethode);
         $form = EzacUtil::addField($form,'start', 'textfield','start', 'start', $start->start, 10, 10, FALSE, 7);
