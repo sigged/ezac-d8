@@ -144,7 +144,7 @@ class EzacStartsUpdateForm extends FormBase
         return $form;
     }
 
-    private function formTweedeCallback(array &$form, FormStateInterface $form_state)
+    function formTweedeCallback(array &$form, FormStateInterface $form_state)
     {
         // Check op tweezitter
         $form['tweezitter'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
