@@ -73,7 +73,7 @@ class EzacStartsUpdateForm extends FormBase
             $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         }
         $form['tweezitter'] = [
-            '#type' => 'hidden',
+            '#type' => 'textfield',
             '#value' => $tweezitter,
             '#attributes' => ['name' => 'tweezitter'],
         ];
