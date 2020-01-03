@@ -72,6 +72,7 @@ class EzacStartsUpdateForm extends FormBase
         $form = EzacUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
         $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
+        // @todo use ajax to dynamically add tweede field and show instructie field
         if ($tweezitter) {
             $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
         }
@@ -101,6 +102,7 @@ class EzacStartsUpdateForm extends FormBase
         //insert Delete button  gevaarlijk ivm dependencies
         if (\Drupal::currentUser()->hasPermission('EZAC_delete')) {
             if (!$newRecord) {
+                $form = EzacUtil::addField($form,'deletebox','checkbox', 'verwijder', 'verwijder record', FALSE,1,1,FALSE,29);
                 $form['actions']['delete'] = [
                     '#type' => 'submit',
                     '#value' => t('Verwijderen'),
@@ -151,6 +153,10 @@ class EzacStartsUpdateForm extends FormBase
         if ($form_state->getValue('op') == 'Verwijderen') {
             if (!\Drupal::currentUser()->hasPermission('DLO_delete')) {
                 $messenger->addMessage('Verwijderen niet toegestaan', $messenger::TYPE_ERROR);
+                return;
+            }
+            if ($form_state->getValue('deletebox') == FALSE) {
+                $messenger->addMessage('Verwijdering niet geselecteerd', $messenger::TYPE_ERROR);
                 return;
             }
             $start = new EzacStart; // initiate Start instance
