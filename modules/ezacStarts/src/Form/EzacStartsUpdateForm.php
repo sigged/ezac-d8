@@ -64,8 +64,23 @@ class EzacStartsUpdateForm extends FormBase
             '#value' => $newRecord, // TRUE or FALSE
         ];
 
-        // Check op tweezitter
-        $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
+        if ($form_state->getValue('registratie')) {
+            // Check op tweezitter via (changed) form element
+            $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
+            $form['tweezitter'] = [
+                '#type' => 'value',
+                '#value' => $tweezitter,
+            ];
+        }
+        else {
+            // Check op tweezitter via start record
+            $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
+            $form['tweezitter'] = [
+                '#type' => 'value',
+                '#value' => $tweezitter,
+            ];
+
+        }
         $options_yn = [t('Nee'), t('Ja')];
         $leden = EzacUtil::getLeden();
         $kisten = EzacUtil::getKisten();
@@ -80,7 +95,6 @@ class EzacStartsUpdateForm extends FormBase
         );
         $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
-
 
         if ($tweezitter) {
             $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
@@ -132,8 +146,8 @@ class EzacStartsUpdateForm extends FormBase
             $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $form_state->getValue('tweede'), 20, 1, FALSE, 4, $leden);
         }
         else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $form_state->getValue('tweede'), 20, 1, FALSE, 4);
-
-        return $form['tweede'];
+        $form['tweezitter'] = $tweezitter;
+        return $form;
     }
 
     /**
