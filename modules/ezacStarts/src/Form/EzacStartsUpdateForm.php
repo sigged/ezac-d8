@@ -73,11 +73,10 @@ class EzacStartsUpdateForm extends FormBase
             $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         }
         $form['tweezitter'] = [
-            '#type' => 'value',
+            '#type' => 'hidden',
             '#value' => $tweezitter,
             '#attributes' => ['name' => 'tweezitter'],
         ];
-        dpm($tweezitter,'tweezitter'); //debug
 
         $options_yn = [t('Nee'), t('Ja')];
         $leden = EzacUtil::getLeden();
@@ -104,7 +103,7 @@ class EzacStartsUpdateForm extends FormBase
         $form["tweede"]['#states'] = [
             // show this field only when tweezitter == TRUE
             'visible' => [
-                ':input[name="registratie"]' => ['value' => 'PH-713'],
+                ':input[name="tweezitter"]' => ['value' => TRUE],
             ],
         ];
         $form = EzacUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
