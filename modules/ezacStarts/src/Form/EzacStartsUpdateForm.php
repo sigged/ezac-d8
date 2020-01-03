@@ -77,6 +77,7 @@ class EzacStartsUpdateForm extends FormBase
             '#value' => $tweezitter,
             '#attributes' => ['name' => 'tweezitter'],
         ];
+        dpm($tweezitter,'tweezitter'); //debug
 
         $options_yn = [t('Nee'), t('Ja')];
         $leden = EzacUtil::getLeden();
