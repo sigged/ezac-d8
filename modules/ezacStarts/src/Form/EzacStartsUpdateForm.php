@@ -148,6 +148,7 @@ class EzacStartsUpdateForm extends FormBase
     {
         // Check op tweezitter
         $form['tweezitter'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
+        dpm($form['tweezitter'],'tweezitter'); //debug
         return $form['tweezitter'];
     }
 
