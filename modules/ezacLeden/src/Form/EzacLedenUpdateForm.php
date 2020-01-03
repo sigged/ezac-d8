@@ -129,7 +129,7 @@ class EzacLedenUpdateForm extends FormBase
         //CODE Tekst 5
         $form = formUtil::addField($form,'code', 'select','Code', 'Code', $lid->code, 5, 1, FALSE, 12, EzacLid::$lidCode);
         // Tienrittenkaart
-        $form = formUtil::addField($form,'tienrittenkaart', 'select','Tienrittenkaart', 'Tienrittenkaarthouder', $lid->tienrittenkaart, 1, 1, FALSE, 12, $options_yn);
+        $form = formUtil::addField($form,'tienrittenkaart', 'checkbox','Tienrittenkaart', 'Tienrittenkaarthouder', $lid->tienrittenkaart, 1, 1, FALSE, 12);
         //GEBOORTEDA Datum/tijd 8
         $gd = substr($lid->geboorteda, 0, 10);
         if ($gd != NULL) {
@@ -141,7 +141,7 @@ class EzacLedenUpdateForm extends FormBase
         $form = formUtil::addField($form,'opmerking', 'textfield','Opmerking', 'Opmerking', $lid->opmerking, 27, 27, FALSE, 14);
         //INSTRUCTEU Tekst 9 ** foutief in database **
         //Actief Ja/nee 1
-        $form = formUtil::addField($form,'actief', 'select','actief', 'Nog actief lid?', $lid->actief, 1, 1, TRUE, 15, $options_yn);
+        $form = formUtil::addField($form,'actief', 'checkbox','actief', 'Nog actief lid?', $lid->actief, 1, 1, TRUE, 15);
         //LID_VAN Datum/tijd 8
         $ls = substr($lid->lid_van, 0, 10);
         if ($ls != NULL) {
@@ -157,27 +157,27 @@ class EzacLedenUpdateForm extends FormBase
         } else $lid_eind = '';
         $form = formUtil::addField($form,'lideind', 'textfield','Lid einde', 'Datum einde lidmaatschap [dd-mm-jjjj]', $lid_eind, 10, 10, FALSE, 17);
         // RT license
-        $form = formUtil::addField($form,'rtlicense', 'select','RT licentie', 'RT bevoegdheid (Ja/nee)', $lid->rtlicense, 1, 1, FALSE, 18, $options_yn);
+        $form = formUtil::addField($form,'rtlicense', 'checkbox','RT licentie', 'RT bevoegdheid (Ja/nee)', $lid->rtlicense, 1, 1, FALSE, 18);
         //leerling Ja/nee 0
-        $form = formUtil::addField($form,'leerling', 'select','Leerling', 'Leerling (Ja/nee)', $lid->leerling, 1, 1, FALSE, 18, $options_yn);
+        $form = formUtil::addField($form,'leerling', 'checkbox','Leerling', 'Leerling (Ja/nee)', $lid->leerling, 1, 1, FALSE, 18);
         //Instructie Ja/nee 1
-        $form = formUtil::addField($form,'instructie', 'select','Instructie', 'Instructeur (Ja/nee)', $lid->instructie, 1, 1, FALSE, 19, $options_yn);
+        $form = formUtil::addField($form,'instructie', 'checkbox','Instructie', 'Instructeur (Ja/nee)', $lid->instructie, 1, 1, FALSE, 19);
         //E_mail Tekst 50
         $form = formUtil::addField($form,'e_mail', 'email','E-mail', 'E-mail adres', $lid->e_mail, 50, 30, FALSE, 20);
         //Babyvriend Ja/nee 1
-        $form = formUtil::addField($form,'babyvriend', 'select','Babyvriend', 'Vriend van Nico Baby(Ja/nee)', $lid->babyvriend, 1, 1, FALSE, 21, $options_yn);
+        $form = formUtil::addField($form,'babyvriend', 'checkbox','Babyvriend', 'Vriend van Nico Baby(Ja/nee)', $lid->babyvriend, 1, 1, FALSE, 21);
         //Ledenlijstje Ja/nee 1
-        $form = formUtil::addField($form,'ledenlijstje', 'select','Ledenlijst', 'Vermelding op ledenlijst (Ja/nee)', $lid->ledenlijstje, 1, 1, FALSE, 21, $options_yn);
+        $form = formUtil::addField($form,'ledenlijstje', 'checkbox','Ledenlijst', 'Vermelding op ledenlijst (Ja/nee)', $lid->ledenlijstje, 1, 1, FALSE, 21);
         //Etiketje Ja/nee 1
-        $form = formUtil::addField($form,'etiketje', 'select','Etiket', 'Etiket afdrukken (Ja/nee)', $lid->etiketje, 1, 1, FALSE, 22, $options_yn);
+        $form = formUtil::addField($form,'etiketje', 'checkbox','Etiket', 'Etiket afdrukken (Ja/nee)', $lid->etiketje, 1, 1, FALSE, 22);
         //User Tekst 50
         $form = formUtil::addField($form,'user', 'textfield','Usercode website', 'Usercode website (VVAAAA)', $lid->user, 6, 6, FALSE, 23);
         //seniorlid Ja/nee 1
-        $form = formUtil::addField($form,'seniorlid', 'select','Senior lid', 'Senior lid (Ja/nee)', $lid->seniorlid, 1, 1, FALSE, 24, $options_yn);
+        $form = formUtil::addField($form,'seniorlid', 'checkbox','Senior lid', 'Senior lid (Ja/nee)', $lid->seniorlid, 1, 1, FALSE, 24);
         //jeugdlid Ja/nee 1
-        $form = formUtil::addField($form,'jeugdlid', 'select','Jeugd / inwonend lid', 'Jeugd / inwonend lid (Ja/nee)', $lid->jeugdlid, 1, 1, FALSE, 25, $options_yn);
+        $form = formUtil::addField($form,'jeugdlid', 'checkbox','Jeugd / inwonend lid', 'Jeugd / inwonend lid (Ja/nee)', $lid->jeugdlid, 1, 1, FALSE, 25);
         //PEonderhoud Ja/nee 1
-        $form = formUtil::addField($form,'peonderhoud', 'select','Prive Eigenaar onderhoud (CAMO)', 'Prive Eigenaar onderhoud(Ja/nee)', $lid->peonderhoud, 1, 1, FALSE, 26, $options_yn);
+        $form = formUtil::addField($form,'peonderhoud', 'checkbox','Prive Eigenaar onderhoud (CAMO)', 'Prive Eigenaar onderhoud(Ja/nee)', $lid->peonderhoud, 1, 1, FALSE, 26);
         //Slotcode varchar(8)
         $form = formUtil::addField($form,'slotcode', 'textfield','Slot code', 'Slotcode (nnnnnn)', $lid->slotcode, 8, 8, FALSE, 27);
 

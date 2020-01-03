@@ -74,6 +74,7 @@ class EzacStartsUpdateForm extends FormBase
         }
         //$tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         $form['tweezitter'] = [
+            '#prefix' => '<div id="tweezitter">',
             '#type' => 'checkbox',
             '#title' => 'Tweezitter',
             '#value' => $tweezitter,
