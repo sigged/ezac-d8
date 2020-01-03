@@ -35,7 +35,7 @@ ezac_starts_update:
     _user: ^[a-zA-Z0-9_]+
 
 ezac_starts_create:
-  path: '/ezac/starts/update'
+  path: '/ezac/starts/create'
   defaults:
     _title: 'Start aanmaken'
     _form: '\Drupal\ezacStarts\Form\EzacStartsUpdateForm'
