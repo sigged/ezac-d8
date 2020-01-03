@@ -104,7 +104,7 @@ class EzacStartsUpdateForm extends FormBase
         $form["tweede"]['#states'] = [
             // show this field only when tweezitter == TRUE
             'visible' => [
-                ':input[name="tweezitter"]' => ['value' => '1'],
+                ':input[name="tweezitter"]' => ['checked' => TRUE],
             ],
         ];
         $form = EzacUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
