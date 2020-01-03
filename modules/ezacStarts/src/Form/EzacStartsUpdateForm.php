@@ -72,11 +72,12 @@ class EzacStartsUpdateForm extends FormBase
             // Check op tweezitter via start record
             $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         }
-        $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
+        //$tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         $form['tweezitter'] = [
             '#type' => 'checkbox',
+            '#title' => 'Tweezitter',
             '#value' => $tweezitter,
-            '#attributes' => ['name' => 'tweezitter'],
+            //'#attributes' => ['name' => 'tweezitter'],
         ];
 
         $options_yn = [t('Nee'), t('Ja')];
