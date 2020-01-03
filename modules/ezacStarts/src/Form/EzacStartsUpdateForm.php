@@ -2,6 +2,8 @@
 
 namespace Drupal\ezacStarts\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -145,11 +147,15 @@ class EzacStartsUpdateForm extends FormBase
         return $form;
     }
 
-    function formTweedeCallback(array &$form, FormStateInterface $form_state)
+    function formTweedeCallback(array $form, FormStateInterface $form_state)
     {
         // Check op tweezitter
-        $form['tweezitter']['#value'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
-        return $form['tweezitter'];
+        //$form['tweezitter']['#value'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
+        //return $form['tweezitter'];
+        $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
+        $response = new AjaxResponse();
+        $response->addCommand(new ReplaceCommand('< id="edit-tweezitter"', 'value=' ."$tweezitter"));
+        return $response;
     }
 
     /**
