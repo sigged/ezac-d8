@@ -154,7 +154,7 @@ class EzacStartsUpdateForm extends FormBase
         //return $form['tweezitter'];
         $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
         $response = new AjaxResponse();
-        $response->addCommand(new ReplaceCommand('#edit-tweezitter--value"', "$tweezitter"));
+        $response->addCommand(new HtmlCommand('#edit-tweezitter--value"', "$tweezitter"));
         return $response;
     }
 
