@@ -87,7 +87,7 @@ class EzacStartsUpdateForm extends FormBase
 
         // @todo use ajax to dynamically add tweede field and show instructie field
         $ajax = array(
-            'callback' => '::formTweedeCallback', // is NOT called??
+            'callback' => '::formTweedeCallback',
             'wrapper' => 'tweede-div',
             'effect' => 'fade',
             'progress' => array('type' => 'throbber'),
@@ -148,8 +148,7 @@ class EzacStartsUpdateForm extends FormBase
     {
         // Check op tweezitter
         $form['tweezitter'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
-        dpm($form['tweezitter'],'tweezitter'); //debug
-        return $form['tweezitter'];
+        return $form;
     }
 
     /**
