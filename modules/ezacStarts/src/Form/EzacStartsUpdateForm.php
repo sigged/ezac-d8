@@ -183,7 +183,7 @@ class EzacStartsUpdateForm extends FormBase
         //go back to starts overzicht
         $redirect = Url::fromRoute(
             'ezac_starts_overzicht',
-            ['datum' => $start->datum]
+            ['datum' => $form_state->getValue('datum')]
         );
         $form_state->setRedirectUrl($redirect);
     } //submitForm
