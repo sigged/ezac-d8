@@ -81,6 +81,9 @@ class EzacStartsUpdateForm extends FormBase
             ];
 
         }
+        dpm($form,'form'); //debug
+        dpm($tweezitter,'tweezitter');
+
         $options_yn = [t('Nee'), t('Ja')];
         $leden = EzacUtil::getLeden();
         $kisten = EzacUtil::getKisten();
