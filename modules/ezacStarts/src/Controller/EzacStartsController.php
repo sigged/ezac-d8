@@ -9,8 +9,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
 use Drupal\ezacStarts\Model\EzacStart;
-use Drupal\ezac\Util\getLeden;
-use Drupal\ezac\Util\getKisten;
+use Drupal\ezac\Util\EzacUtil;
 
 /**
  * Controller for EZAC start administration.
@@ -91,8 +90,6 @@ class EzacStartsController extends ControllerBase {
     // Don't cache this page.
     $content['#cache']['max-age'] = 0;
 
-    //apply css
-    //$content['#attached']['library'][] = 'ezac/dlotable'; // of met ['css']
     return $content;
   }
 
@@ -195,8 +192,8 @@ class EzacStartsController extends ControllerBase {
             t('opmerking'),
         ];
 
-        $leden = getLeden::getLeden();
-        $kisten = getKisten::getKisten();
+        $leden = EzacUtil::getLeden();
+        // $kisten = EzacUtil::getKisten();
 
         // select all starts for selected date
         $condition = ['datum' => $datum];

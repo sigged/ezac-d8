@@ -7,9 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\ezacStarts\Model\EzacStart;
-use Drupal\ezac\Util\formUtil;
-use Drupal\ezac\Util\getLeden;
-use Drupal\ezac\Util\getKisten;
+use Drupal\ezac\Util\EzacUtil;
 
 /**
  * UI to update starts record
@@ -30,7 +28,7 @@ class EzacStartsUpdateForm extends FormBase
 
     /**
      * buildForm for STARTS update with ID parameter
-     * This is also used to CREATE new starts record (no ID param)
+     * This is also used to CREATE new starts record (no ID param given as input)
      * @param array $form
      * @param FormStateInterface $form_state
      * @param null $id
@@ -65,23 +63,23 @@ class EzacStartsUpdateForm extends FormBase
         ];
 
         $options_yn = [t('Nee'), t('Ja')];
-        $leden = getLeden::getLeden();
-        $kisten = getKisten::getKisten();
-        $form = formUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
-        $form = formUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
-        $form = formUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
-        $form = formUtil::addField($form,'tweede', 'select','tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
-        $form = formUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
-        $form = formUtil::addField($form,'startmethode', 'select','startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6, EzacStart::$startMethode);
-        $form = formUtil::addField($form,'start', 'textfield','start', 'start', $start->start, 10, 10, FALSE, 7);
-        $form = formUtil::addField($form,'landing', 'textfield','landing', 'landing', $start->landing, 10, 10, FALSE, 8);
-        $form = formUtil::addField($form,'duur', 'textfield','duur', 'duur', $start->duur, 10, 10, FALSE, 9);
-        $form = formUtil::addField($form,'instructie', 'select','instructie', 'instructie', $start->instructie, 5, 1, FALSE, 10, $options_yn);
-        $form = formUtil::addField($form,'opmerking', 'textfield','opmerking', 'opmerking', $start->opmerking, 30, 30, FALSE, 11);
+        $leden = EzacUtil::getLeden();
+        $kisten = EzacUtil::getKisten();
+        $form = EzacUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
+        $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
+        $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
+        $form = EzacUtil::addField($form,'tweede', 'select','tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
+        $form = EzacUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
+        $form = EzacUtil::addField($form,'startmethode', 'select','startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6, EzacStart::$startMethode);
+        $form = EzacUtil::addField($form,'start', 'textfield','start', 'start', $start->start, 10, 10, FALSE, 7);
+        $form = EzacUtil::addField($form,'landing', 'textfield','landing', 'landing', $start->landing, 10, 10, FALSE, 8);
+        $form = EzacUtil::addField($form,'duur', 'textfield','duur', 'duur', $start->duur, 10, 10, FALSE, 9);
+        $form = EzacUtil::addField($form,'instructie', 'select','instructie', 'instructie', $start->instructie, 5, 1, FALSE, 10, $options_yn);
+        $form = EzacUtil::addField($form,'opmerking', 'textfield','opmerking', 'opmerking', $start->opmerking, 30, 30, FALSE, 11);
 
         //Id
         //Toon het het Id nummer van het record
-        $form = formUtil::addField($form,'id', 'hidden','Record nummer (Id)', '', $start->id, 8, 8, FALSE, 28);
+        $form = EzacUtil::addField($form,'id', 'hidden','Record nummer (Id)', '', $start->id, 8, 8, FALSE, 28);
 
         $form['actions'] = [
             '#type' => 'actions',
