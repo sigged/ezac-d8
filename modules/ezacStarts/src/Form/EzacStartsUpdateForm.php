@@ -99,10 +99,19 @@ class EzacStartsUpdateForm extends FormBase
         $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
 
+        /*
         if ($tweezitter) {
             $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
         }
         else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4);
+        */
+        $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
+        $form["tweede"]['#states'] = [
+            // show this field only when tweezitter == TRUE
+            'visible' => [
+                ':input[name="tweezitter"]' => ['value' => TRUE],
+            ],
+        ];
         $form = EzacUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
         $form = EzacUtil::addField($form,'startmethode', 'select','startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6, EzacStart::$startMethode);
         $form = EzacUtil::addField($form,'start', 'textfield','start', 'start', $start->start, 10, 10, FALSE, 7);
