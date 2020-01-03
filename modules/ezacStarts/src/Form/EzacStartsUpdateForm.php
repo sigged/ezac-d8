@@ -72,11 +72,19 @@ class EzacStartsUpdateForm extends FormBase
         $form = EzacUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
         $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
+
         // @todo use ajax to dynamically add tweede field and show instructie field
+        $ajax = array(
+            'callback' => 'form_tweede_callback',
+            'wrapper' => 'tweede-div',
+            'effect' => 'fade',
+            'progress' => array('type' => 'throbber'),
+        );
+
         if ($tweezitter) {
-            $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
+            $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden, $ajax);
         }
-        else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4);
+        else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, null, $ajax);
         $form = EzacUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
         $form = EzacUtil::addField($form,'startmethode', 'select','startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6, EzacStart::$startMethode);
         $form = EzacUtil::addField($form,'start', 'textfield','start', 'start', $start->start, 10, 10, FALSE, 7);
@@ -111,6 +119,20 @@ class EzacStartsUpdateForm extends FormBase
             }
         }
         return $form;
+    }
+
+    private function form_tweede_callback(array $form, FormStateInterface $form_state)
+    {
+        $leden = EzacUtil::getLeden();
+        // Check op tweezitter
+        $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
+        // toon of verberg tweezitter veld
+        if ($tweezitter) {
+            $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $form_state->getValue('tweede'), 20, 1, FALSE, 4, $leden);
+        }
+        else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $form_state->getValue('tweede'), 20, 1, FALSE, 4);
+
+        return $form['tweede'];
     }
 
     /**

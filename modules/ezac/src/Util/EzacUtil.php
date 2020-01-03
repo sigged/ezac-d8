@@ -22,6 +22,7 @@ class EzacUtil
      * @param boolean $required
      * @param integer $weight
      * @param array $options
+     * @param array|null $ajax
      * @return array
      */
     public static function addField(array $form,
@@ -34,7 +35,8 @@ class EzacUtil
                                     int $size,
                                     bool $required,
                                     int $weight,
-                                    array $options = null)
+                                    array $options = null,
+                                    array $ajax = null)
     {
         if (isset($type)) $form[$label]['#type'] = $type;
         if (isset($title)) $form[$label]['#title'] = $title;
@@ -45,6 +47,7 @@ class EzacUtil
         if (isset($required)) $form[$label]['#required'] = $required;
         if (isset($weight)) $form[$label]['#weight'] = $weight;
         if (isset($options)) $form[$label]['#options'] = $options;
+        if (isset($ajax)) $form[$label]['#ajax'] = $ajax;
         return $form;
     }
 
