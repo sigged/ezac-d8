@@ -94,7 +94,7 @@ class EzacStartsUpdateForm extends FormBase
             'effect' => 'fade',
             'progress' => array('type' => 'throbber'),
         );
-        $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
+        $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten); //removed ajax
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
 
         /*
