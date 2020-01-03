@@ -92,7 +92,7 @@ class EzacStartsUpdateForm extends FormBase
             'effect' => 'fade',
             'progress' => array('type' => 'throbber'),
         );
-        $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten); //removed ajax
+        $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
 
         /*
@@ -146,16 +146,9 @@ class EzacStartsUpdateForm extends FormBase
 
     private function form_tweede_callback(array $form, FormStateInterface $form_state)
     {
-        $leden = EzacUtil::getLeden();
         // Check op tweezitter
-        $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
-        // toon of verberg tweezitter veld
-        if ($tweezitter) {
-            $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $form_state->getValue('tweede'), 20, 1, FALSE, 4, $leden);
-        }
-        else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $form_state->getValue('tweede'), 20, 1, FALSE, 4);
-        $form['tweezitter'] = $tweezitter;
-        return $form;
+        $form['tweezitter'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
+        return $form['tweezitter'];
     }
 
     /**
