@@ -87,7 +87,7 @@ class EzacStartsUpdateForm extends FormBase
 
         // @todo use ajax to dynamically add tweede field and show instructie field
         $ajax = array(
-            'callback' => '::form_tweede_callback',
+            'callback' => '::form_tweede_callback_bestaatniet',
             'wrapper' => 'tweede-div',
             'effect' => 'fade',
             'progress' => array('type' => 'throbber'),
