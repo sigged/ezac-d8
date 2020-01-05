@@ -113,7 +113,7 @@ class EzacStartsUpdateForm extends FormBase
         $form['registratie2']['#states'] = [
           // show this field only when registratie not exists
           'visible' => [
-            ':input[name="registratie_bekend"]' => ['value' => 0],
+            ':input[name="registratie_bekend"]' => ['value' => 'Onbekend'],
           ],
         ];
 
