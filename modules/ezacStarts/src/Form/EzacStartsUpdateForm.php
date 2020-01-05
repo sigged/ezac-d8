@@ -163,6 +163,7 @@ class EzacStartsUpdateForm extends FormBase
           '#type' => 'checkbox',
           '#title' => 'Tweezitter',
           '#value' => $tweezitter,
+          '#checked' => $tweezitter,
           '#attributes' => ['name' => 'tweezitter'],
         ];
         return $form["tweezitter"];
