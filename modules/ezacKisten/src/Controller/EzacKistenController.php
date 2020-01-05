@@ -48,7 +48,7 @@ class EzacKistenController extends ControllerBase {
         ]
       )->toString();
       $rows[] = [
-        t("<a href=$urlCode>Overzicht</a>"),
+        t("<a href=$urlCode>Actieve kisten</a>"),
         $count,
         t("<a href=$urlExport>Kisten.csv</a>"),
       ];
@@ -63,14 +63,14 @@ class EzacKistenController extends ControllerBase {
     $urlExport = Url::fromRoute(
       'ezac_kisten_export_actief',
       [
-        'filename' => "Kisten.csv",
+        'filename' => "Kisten_vervallen.csv",
         'actief' => $actief,
       ]
     )->toString();
     $rows[] = [
-      t("<a href=$urlCode>Overzicht</a>"),
+      t("<a href=$urlCode>Vervallen kisten</a>"),
       $count,
-      t("<a href=$urlExport>Kisten.csv</a>"),
+      t("<a href=$urlExport>Kisten_vervallen.csv</a>"),
     ];
     //build table
     $content['table'] = [
