@@ -81,7 +81,7 @@ class EzacStartsUpdateForm extends FormBase
             '#title' => 'Tweezitter',
             '#value' => $tweezitter,
             '#checked' => $tweezitter,
-            //'#attributes' => ['name' => 'tweezitter'],
+            '#attributes' => ['name' => 'tweezitter'],
         ];
 
         $options_yn = [t('Nee'), t('Ja')];
@@ -109,7 +109,7 @@ class EzacStartsUpdateForm extends FormBase
         $form["tweede"]['#states'] = [
             // show this field only when tweezitter == TRUE
             'visible' => [
-                ':input[name="tweezitter"]' => ['checked' => TRUE],
+                ':input[title="tweezitter"]' => ['checked' => TRUE],
             ],
         ];
         $form = EzacUtil::addField($form,'soort', 'select','soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
@@ -165,7 +165,7 @@ class EzacStartsUpdateForm extends FormBase
           '#title' => 'Tweezitter',
           '#value' => $tweezitter,
           '#checked' => $tweezitter,
-          //'#attributes' => ['name' => 'tweezitter'],
+          '#attributes' => ['name' => 'tweezitter'],
         ];
         return $form["tweezitter"];
     }
