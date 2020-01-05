@@ -104,6 +104,7 @@ class EzacStartsUpdateForm extends FormBase
         $form['registratie_bekend'] = [
           '#type' => 'value',
           '#value' => $reg_bekend,
+          '#attributes' => ['name' => 'registratie_bekend'],
         ];
 
         $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
