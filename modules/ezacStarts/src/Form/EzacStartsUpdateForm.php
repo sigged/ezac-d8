@@ -91,7 +91,7 @@ class EzacStartsUpdateForm extends FormBase
         // @todo use ajax to dynamically add tweede field and show instructie field
         $ajax = array(
             'callback' => '::formTweedeCallback',
-            'wrapper' => 'tweede-div',
+            'wrapper' => 'tweezitter',
             'effect' => 'fade',
             'progress' => array('type' => 'throbber'),
         );
@@ -153,9 +153,19 @@ class EzacStartsUpdateForm extends FormBase
         //$form['tweezitter']['#value'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
         //return $form['tweezitter'];
         $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
+        /*
         $response = new AjaxResponse();
         $response->addCommand(new ReplaceCommand('#edit-tweezitter--value', "$tweezitter")); // @todo doesn't work either
         return $response;
+        */
+        $form['tweezitter'] = [
+          '#prefix' => '<div id="tweezitter">',
+          '#type' => 'checkbox',
+          '#title' => 'Tweezitter',
+          '#value' => $tweezitter,
+          //'#attributes' => ['name' => 'tweezitter'],
+        ];
+        return $form["tweezitter"];
     }
 
     /**
