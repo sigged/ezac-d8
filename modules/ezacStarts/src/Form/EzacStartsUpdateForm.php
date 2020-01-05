@@ -80,7 +80,7 @@ class EzacStartsUpdateForm extends FormBase
             '#type' => 'checkbox',
             '#title' => 'Tweezitter',
             '#value' => $tweezitter,
-            //'#attributes' => ['name' => 'tweezitter'],
+            '#attributes' => ['name' => 'tweezitter'],
         ];
 
         $options_yn = [t('Nee'), t('Ja')];
@@ -163,7 +163,7 @@ class EzacStartsUpdateForm extends FormBase
           '#type' => 'checkbox',
           '#title' => 'Tweezitter',
           '#value' => $tweezitter,
-          //'#attributes' => ['name' => 'tweezitter'],
+          '#attributes' => ['name' => 'tweezitter'],
         ];
         return $form["tweezitter"];
     }
