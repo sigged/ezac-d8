@@ -25,21 +25,26 @@ class EzacKistenController extends ControllerBase {
       //$schema = drupal_get_module_schema('ezac', 'kisten');
       //dpm($schema); //debug
 
-    // show record count for each Code value
+    // show record count for each Actief value
     $headers = [
       t("Kisten"),
       t("Aantal"),
       t("Uitvoer"),
     ];
-    
-      $count = EzacKist::counter(['actief' => TRUE]);
+
+      $actief = TRUE;
+      $count = EzacKist::counter(['actief' => $actief]);
       $urlCode = Url::fromRoute(
-        'ezac_kisten_overzicht'
+        'ezac_kisten_overzicht',
+        [
+          'actief' => $actief,
+        ]
       )->toString();
       $urlExport = Url::fromRoute(
-        'ezac_kisten_export',
+        'ezac_kisten_export_actief',
         [
           'filename' => "Kisten.csv",
+          'actief' => $actief,
         ]
       )->toString();
       $rows[] = [
@@ -47,6 +52,26 @@ class EzacKistenController extends ControllerBase {
         $count,
         t("<a href=$urlExport>Kisten.csv</a>"),
       ];
+    $actief = FALSE;
+    $count = EzacKist::counter(['actief' => $actief]);
+    $urlCode = Url::fromRoute(
+      'ezac_kisten_overzicht',
+      [
+        'actief' => $actief,
+      ]
+    )->toString();
+    $urlExport = Url::fromRoute(
+      'ezac_kisten_export_actief',
+      [
+        'filename' => "Kisten.csv",
+        'actief' => $actief,
+      ]
+    )->toString();
+    $rows[] = [
+      t("<a href=$urlCode>Overzicht</a>"),
+      $count,
+      t("<a href=$urlExport>Kisten.csv</a>"),
+    ];
     //build table
     $content['table'] = [
       '#type' => 'table',
@@ -84,15 +109,8 @@ class EzacKistenController extends ControllerBase {
       t('opmerking'),
     ];
 
-    // select only kisten records where actief == TRUE
-    if (isset($code)) {
-      $condition =
-        [
-          'code' => $code,
-          'actief' => $actief
-        ];
-    }
-    else $condition = ['actief' => $actief];
+    // select only kisten records for value of actief
+    $condition = ['actief' => $actief];
     
     // prepare pager
     $total = EzacKist::counter($condition);
@@ -151,24 +169,20 @@ class EzacKistenController extends ControllerBase {
      * @return mixed Response output text in csv format
      *   output text in csv format
      */
-  public function export($filename = 'ezac.txt', $code = NULL) {
+  public function export($filename = 'ezac.txt', $actief = null) {
 
     $messenger = \Drupal::messenger();
 
     if ($filename == '') $filename = 'ezac.txt';
 
-    // Determine CODE categorie from Kisten for export
-    if (isset($code)) {
-      $condition = [
-        'code' => $code,
-        'actief' => TRUE
-      ];
+    if (isset($actief)) {
+      $condition = ['actief' => $actief];
     }
-    else $condition = ['actief' => TRUE]; //select all active records
+    else $condition = []; // select all records
 
     $records = EzacKist::index($condition); //read records index
     $count = count($records);
-    $messenger->addMessage("Export $count records met code [$code] naar bestand [$filename]"); //DEBUG
+    $messenger->addMessage("Export $count records naar bestand [$filename]"); //DEBUG
 
     $output = ""; // initialize output
     //build header line

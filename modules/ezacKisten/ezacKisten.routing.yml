@@ -8,7 +8,7 @@ ezac_kisten:
     _user: ^[a-zA-Z0-9_]+
 
 ezac_kisten_overzicht:
-  path: '/ezac/kisten/overzicht'
+  path: '/ezac/kisten/overzicht/{actief}'
   defaults:
     _title: 'Kistenoverzicht'
     _controller: '\Drupal\ezacKisten\Controller\EzacKistenController::overzicht'
@@ -34,17 +34,17 @@ ezac_kisten_create:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
 
-ezac_kisten_export_form:
-  path: '/ezac/kisten/export/form'
-  defaults:
-    _title: 'Leden export'
-    _form: '\Drupal\ezacKisten\Form\EzacKistenExportForm'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
 ezac_kisten_export:
   path: '/ezac/kisten/export/{filename}'
+  defaults:
+    _title: 'EZAC_read'
+    _controller: '\Drupal\ezacKisten\Controller\EzacKistenController::export'
+  requirements:
+    _permission: 'access content'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_kisten_export_actief:
+  path: '/ezac/kisten/export/{filename}/{actief}'
   defaults:
     _title: 'EZAC_read'
     _controller: '\Drupal\ezacKisten\Controller\EzacKistenController::export'

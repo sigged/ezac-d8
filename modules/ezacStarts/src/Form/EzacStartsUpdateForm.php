@@ -148,17 +148,16 @@ class EzacStartsUpdateForm extends FormBase
         return $form;
     }
 
-    function formTweedeCallback(array $form, FormStateInterface $form_state)
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return array|mixed
+   */
+  function formTweedeCallback(array $form, FormStateInterface $form_state)
     {
         // Check op tweezitter
-        //$form['tweezitter']['#value'] = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
-        //return $form['tweezitter'];
         $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
-        /*
-        $response = new AjaxResponse();
-        $response->addCommand(new ReplaceCommand('#edit-tweezitter--value', "$tweezitter")); // @todo doesn't work either
-        return $response;
-        */
         $form['tweezitter'] = [
           '#prefix' => '<div id="tweezitter">',
           '#type' => 'checkbox',
