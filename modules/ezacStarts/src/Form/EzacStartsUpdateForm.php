@@ -74,7 +74,6 @@ class EzacStartsUpdateForm extends FormBase
             // Check op tweezitter via start record
             $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         }
-        //$tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
         $form['tweezitter'] = [
             '#prefix' => '<div id="tweezitter">',
             '#type' => 'checkbox',
@@ -84,27 +83,42 @@ class EzacStartsUpdateForm extends FormBase
             '#attributes' => ['name' => 'tweezitter'],
         ];
 
-        $options_yn = [t('Nee'), t('Ja')];
+        // get names of leden
         $leden = EzacUtil::getLeden();
+        // get kisten details
         $kisten = EzacUtil::getKisten();
+
         $form = EzacUtil::addField($form,'datum', 'date','Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
 
-        // @todo use ajax to dynamically add tweede field and show instructie field
+        // use ajax to set tweezitter value to dynamically show tweede field
         $ajax = array(
             'callback' => '::formTweedeCallback',
             'wrapper' => 'tweezitter',
-            'effect' => 'fade',
-            'progress' => array('type' => 'throbber'),
+            //'effect' => 'fade',
+            //'progress' => array('type' => 'throbber'),
         );
+        // @todo use checkbox to allow entry of unknown plane registration using textfield - or add textfield when value == 'Onbekend'/''
+        // test if registratie exists
+        $condition = ['registratie' => $start->registratie];
+        $reg_bekend = EzacKist::counter($condition);
+        $form['registratie_bekend'] = [
+          '#type' => 'value',
+          '#value' => $reg_bekend,
+        ];
+
         $form = EzacUtil::addField($form,'registratie', 'select','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
+        $form['registratie']['#attributes'] = ['name' => 'registratie'];
+        $form = EzacUtil::addField($form,'registratie2', 'textffield','registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
+        $form['registratie2']['#states'] = [
+          // show this field only when registratie not exists
+          'visible' => [
+            ':input[name="registratie_bekend"]' => ['value' => 0],
+          ],
+        ];
+
+        // @todo allow for unknown name using checkbox
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
 
-        /*
-        if ($tweezitter) {
-            $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
-        }
-        else $form = EzacUtil::addField($form, 'tweede', 'hidden', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4);
-        */
         $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
         $form["tweede"]['#states'] = [
             // show this field only when tweezitter == TRUE
@@ -117,7 +131,7 @@ class EzacStartsUpdateForm extends FormBase
         $form = EzacUtil::addField($form,'start', 'textfield','start', 'start', $start->start, 10, 10, FALSE, 7);
         $form = EzacUtil::addField($form,'landing', 'textfield','landing', 'landing', $start->landing, 10, 10, FALSE, 8);
         $form = EzacUtil::addField($form,'duur', 'textfield','duur', 'duur', $start->duur, 10, 10, FALSE, 9);
-        $form = EzacUtil::addField($form,'instructie', 'select','instructie', 'instructie', $start->instructie, 5, 1, FALSE, 10, $options_yn);
+        $form = EzacUtil::addField($form,'instructie', 'checkbox','instructie', 'instructie', $start->instructie, 5, 1, FALSE, 10);
         $form = EzacUtil::addField($form,'opmerking', 'textfield','opmerking', 'opmerking', $start->opmerking, 30, 30, FALSE, 11);
 
         //Id
