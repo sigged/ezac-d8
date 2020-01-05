@@ -32,7 +32,7 @@ class EzacKistenController extends ControllerBase {
       t("Uitvoer"),
     ];
 
-      $actief = TRUE;
+      $actief = 1;
       $count = EzacKist::counter(['actief' => $actief]);
       $urlCode = Url::fromRoute(
         'ezac_kisten_overzicht',
@@ -52,7 +52,7 @@ class EzacKistenController extends ControllerBase {
         $count,
         t("<a href=$urlExport>Kisten.csv</a>"),
       ];
-    $actief = FALSE;
+    $actief = 0;
     $count = EzacKist::counter(['actief' => $actief]);
     $urlCode = Url::fromRoute(
       'ezac_kisten_overzicht',
