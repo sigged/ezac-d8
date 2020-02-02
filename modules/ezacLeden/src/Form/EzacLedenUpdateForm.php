@@ -141,7 +141,7 @@ class EzacLedenUpdateForm extends FormBase
         $form = formUtil::addField($form,'opmerking', 'textfield','Opmerking', 'Opmerking', $lid->opmerking, 27, 27, FALSE, 14);
         //INSTRUCTEU Tekst 9 ** foutief in database **
         //Actief Ja/nee 1
-        $form = formUtil::addField($form,'actief', 'checkbox','actief', 'Nog actief lid?', $lid->actief, 1, 1, TRUE, 15);
+        $form = formUtil::addField($form,'actief', 'checkbox','actief', 'Nog actief lid?', $lid->actief, 1, 1, FALSE, 15);
         //LID_VAN Datum/tijd 8
         $ls = substr($lid->lid_van, 0, 10);
         if ($ls != NULL) {
