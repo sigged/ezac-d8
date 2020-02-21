@@ -30,6 +30,7 @@ class EzacKist extends EzacStorage
         'eigenaar' => 'Eigenaar',
         'prive' => 'Prive',
         'opmerking' => 'Opmerking',
+        'actief' => 'Actief',
     );
 
     // define the fields for the leden table
@@ -44,6 +45,7 @@ class EzacKist extends EzacStorage
     public $eigenaar = '';
     public $prive = 0;
     public $opmerking = '';
+    public $actief = 1;
 
     /**
      * constructor for EzacLid
