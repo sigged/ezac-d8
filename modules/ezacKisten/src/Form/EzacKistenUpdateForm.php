@@ -239,7 +239,7 @@ class EzacKistenUpdateForm extends FormBase
         }
         //go back to leden overzicht
         $redirect = Url::fromRoute(
-            'ezac_kisten_overzicht'
+            'ezac_kisten'
         );
         $form_state->setRedirectUrl($redirect);
     } //submitForm
