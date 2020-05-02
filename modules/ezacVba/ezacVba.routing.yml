@@ -2,7 +2,7 @@ ezac_vba:
   path: '/ezac/vba'
   defaults:
     _title: 'EZAC Voortgang en Bevoegdheid Administratie'
-    _controller: '\Drupal\ezacVba\Form\ezacVbaController'
+    _controller: '\Drupal\ezacVba\Form\ezacVbaStatusForm'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
