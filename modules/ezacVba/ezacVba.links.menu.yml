@@ -1,0 +1,6 @@
+ezac_vba:
+  title: Voortgang en Bevoegdheid Administratie
+  route_name: ezac_vba
+  description: EZAC Voortgang en Bevoegdheid Administratie
+  weight: 04
+

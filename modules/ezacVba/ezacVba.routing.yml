@@ -1,0 +1,89 @@
+ezac_vba:
+  path: '/ezac/vba'
+  defaults:
+    _title: 'EZAC Voortgang en Bevoegdheid Administratie'
+    _controller: '\Drupal\ezacVba\Form\ezacVbaController'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_status:
+  path: '/ezac/vba/status'
+  defaults:
+    _title: 'VBA status overzicht'
+    _form: '\Drupal\ezacVba\Form\ezacVbaStatusForm'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_dagverslagen:
+  path: '/ezac/vba/dagverslagen'
+  defaults:
+    _title: 'VBA dagerslagen overzicht'
+    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::dagverslag'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_dagverslag_lid:
+  path: '/ezac/vba/dagverslaglid'
+  defaults:
+    _title: 'VBA dagverslagen leden overzicht'
+    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::dagverslagLid'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_bevoegdheid_lid:
+  path: '/ezac/vba/bevoegdheidlid'
+  defaults:
+    _title: 'VBA bevoegdeden leden overzicht'
+    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::bevoegdheidLid'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_update:
+  path: '/ezac/vba/update/{id}'
+  defaults:
+    _title: 'Dagverslag wijzigen'
+    _form: '\Drupal\ezacVba\Form\ezacVbaUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_create:
+  path: '/ezac/vba/create'
+  defaults:
+    _title: 'Dagverslag aanmaken'
+    _form: '\Drupal\ezacVba\Form\ezacVbaUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_export_form:
+  path: '/ezac/vba/export/form'
+  defaults:
+    _title: 'vba export'
+    _form: '\Drupal\ezacVba\Form\ezacVbaExportForm'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_export:
+  path: '/ezac/vba/export/{filename}'
+  defaults:
+    _title: 'EZAC_read'
+    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::export'
+  requirements:
+    _permission: 'access content'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_export_jaar:
+  path: '/ezac/vba/export/{filename}/{jaar}'
+  defaults:
+    _title: 'vba export'
+    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::export'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
