@@ -100,7 +100,7 @@ class ezacVbaController extends ControllerBase {
      *  $jaar - categorie (optional)
      * @return array
      */
-  public function overzichtJaar($jaar = NULL) {
+  public function dagverslag() {
     $content = array();
 
     $rows = [];
@@ -109,48 +109,8 @@ class ezacVbaController extends ControllerBase {
         t('aantal vba'),
     ];
 
-    // select all start dates for selected year
-      $condition = [
-          'datum' => [
-              'value' => ["$jaar-01-01", "$jaar-12-31"],
-              'operator' => 'BETWEEN'
-          ],
-      ];
-      $from = null;
-      $range = null;
-      $field = 'datum';
-      $sortkey = null;
-      $sortdir = null;
-      $unique = TRUE; // return unique results only
 
-      // bepaal aantal dagen
-      $total = count(EzacStart::index($condition, 'datum', $sortkey, $sortdir, $from, $range, $unique));
-
-      // prepare pager
-      $range = 120;
-      $page = pager_default_initialize($total, $range);
-      $from = $range * $page;
-      $field = 'datum';
-      $sortkey = 'datum';
-      $sortdir = 'ASC';
-      $unique = TRUE; // return unique results only
-
-      $vbaIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
-    foreach ($vbaIndex as $datum) {
-      $condition = ['datum' => $datum];
-      $count = EzacStart::counter($condition);
-
-      $urlString = Url::fromRoute(
-        'ezac_vba_overzicht',  // show vba for datum
-        ['datum' => $datum]
-      )->toString();
-      $rows[] = [
-        //link each record to overzicht route
-        t("<a href=$urlString>$datum"),
-        $count,
-      ];
-    }
-    $caption = "Overzicht EZAC vba data voor $jaar";
+    $caption = "Overzicht EZAC vba data";
     $content['table'] = [
         '#type' => 'table',
         '#caption' => $caption,
@@ -176,73 +136,18 @@ class ezacVbaController extends ControllerBase {
      *  $jaar - categorie (optional)
      * @return array
      */
-    public function overzicht($datum = NULL) {
+    public function dagverslagLid() {
         $content = array();
 
         $rows = [];
         $headers = [
             t('start'),
-            t('landing'),
-            t('duur'),
-            t('registratie'),
-            t('gezagvoerder'),
-            t('tweede'),
-            t('soort'),
-            t('startmethode'),
-            t('instructie'),
-            t('opmerking'),
         ];
 
         $leden = EzacUtil::getLeden();
         // $kisten = EzacUtil::getKisten();
 
-        // select all vba for selected date
-        $condition = ['datum' => $datum];
-
-        // prepare pager
-        $total = EzacStart::counter($condition);
-        $field = 'id';
-        $sortkey = 'start';
-        $sortdir = 'ASC'; // newest first
-        $range = 50;
-        $page = pager_default_initialize($total, $range);
-        $from = $range * $page;
-        $unique = FALSE; // return all results
-
-        $vbaIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
-        foreach ($vbaIndex as $id) {
-            $start = (new EzacStart)->read($id);
-
-            $urlString = Url::fromRoute(
-                'ezac_vba_update',  // edit vba record
-                ['id' => $start->id]
-            )->toString();
-
-            if (isset($leden[$start->gezagvoerder]) && $start->gezagvoerder <> '') {
-                $gezagvoerder = $leden[$start->gezagvoerder];
-            }
-            else $gezagvoerder = $start->gezagvoerder; // un-edited record value
-
-            if (isset($leden[$start->tweede]) && $start->tweede <> '') {
-                $tweede = $leden[$start->tweede];
-            }
-            else $tweede = $start->tweede; // un-edited record value
-
-            $rows[] = [
-                //link each record to edit route
-                t("<a href=$urlString>$start->start</a>"),
-                $start->landing,
-                $start->duur,
-                $start->registratie,
-                $gezagvoerder,
-                $tweede,
-                EzacStart::$vbaoort[$start->soort],
-                EzacStart::$startMethode[$start->startmethode],
-                $start->instructie,
-                $start->opmerking,
-            ];
-        }
-        $caption = "Overzicht EZAC vba bestand $datum";
+        $caption = "Overzicht EZAC vba bestand";
         $content['table'] = [
             '#type' => 'table',
             '#caption' => $caption,
@@ -260,9 +165,46 @@ class ezacVbaController extends ControllerBase {
         $content['#cache']['max-age'] = 0;
 
         return $content;
-    } // overzicht
+    } // dagverslagLid
 
-    /**
+
+  /**
+   * Render a list of entries in the database.
+   * @param string
+   *  $jaar - categorie (optional)
+   * @return array
+   */
+  public function bevoegdheidLid() {
+    $content = array();
+
+    $rows = [];
+    $headers = [
+      t('start'),
+    ];
+
+    $leden = EzacUtil::getLeden();
+
+    $caption = "Overzicht EZAC vba bestand";
+    $content['table'] = [
+      '#type' => 'table',
+      '#caption' => $caption,
+      '#header' => $headers,
+      '#rows' => $rows,
+      '#empty' => t('Geen gegevens beschikbaar.'),
+      '#sticky' => TRUE,
+    ];
+    // add pager
+    $content['pager'] = [
+      '#type' => 'pager',
+      '#weight' => 5
+    ];
+    // Don't cache this page.
+    $content['#cache']['max-age'] = 0;
+
+    return $content;
+  } // bevoegdheidLid
+
+  /**
      * Maak exportbestand uit vba tabel
      * geformatteerd voor input in bestand (csv)
      * Output via html headers naar attachment
