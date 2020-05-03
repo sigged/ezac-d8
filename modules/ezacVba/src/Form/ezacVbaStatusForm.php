@@ -122,6 +122,14 @@ class ezacVbaStatusForm extends FormBase
 
       $dagverslagenCount = ezacVbaDagverslag::counter($condition);
       $dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
+
+
+      $condition = [
+        'datum_aan' => [
+          'value' => [$datum_start, $datum_eind],
+          'operator' => 'BETWEEN'
+        ],
+      ];
       $bevoegdheidLidCount = ezacVbaBevoegdheidLid::counter($condition);
 
       $form['status'] = [
