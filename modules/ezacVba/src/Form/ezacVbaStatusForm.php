@@ -7,7 +7,7 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\ezacvba\Model\ezacVbaBevoegdheidLid;
+use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
 use Drupal\ezacVba\Model\ezacVbaDagverslag;
 use Drupal\ezacVba\Model\ezacVbaDagverslagLid;
 
