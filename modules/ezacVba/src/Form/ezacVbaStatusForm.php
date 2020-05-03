@@ -158,15 +158,15 @@ class ezacVbaStatusForm extends FormBase
 
       $rows = [
         [
-          "<a href=$dagverslagenUrl>Dagverslagen</a>",
+          t("<a href=$dagverslagenUrl>Dagverslagen</a>"),
           $dagverslagenCount
         ],
         [
-          "<a href=$dagverslagenLidUrl>Opmerkingen voor leden</a>",
+          t("<a href=$dagverslagenLidUrl>Opmerkingen voor leden</a>"),
           $dagverslagenLidCount
         ],
         [
-          "<a href=$bevoegdheidLidUrl>Bevoegdheden voor leden</a>",
+          t("<a href=$bevoegdheidLidUrl>Bevoegdheden voor leden</a>"),
           $bevoegdheidLidCount
         ],
       ];
