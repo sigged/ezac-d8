@@ -61,11 +61,6 @@ class ezacVbaStatusForm extends FormBase
       ];
 
       $form = [];
-      $form['title'] = [
-        '#type' => 'markup',
-        '#markup' => '<h1>Status Vorderingen en Bevoegdheden Administratie</h1>',
-        '#weight' => 1,
-      ];
 
       $form['periode'] = [
         '#type' => 'select',
@@ -178,14 +173,11 @@ class ezacVbaStatusForm extends FormBase
         '#attributes' => $attributes,
       ];
 
-  /*** D7 code ends here */
+      $form['actions'] = [
+          '#type' => 'actions',
+      ];
 
-
-        $form['actions'] = [
-            '#type' => 'actions',
-        ];
-
-        return $form;
+      return $form;
     }
 
   /**

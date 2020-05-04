@@ -7,15 +7,6 @@ ezac_vba:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
 
-ezac_vba_status:
-  path: '/ezac/vba/status'
-  defaults:
-    _title: 'VBA status overzicht'
-    _form: '\Drupal\ezacVba\Form\ezacVbaStatusForm'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
 ezac_vba_dagverslagen:
   path: '/ezac/vba/dagverslagen'
   defaults:
