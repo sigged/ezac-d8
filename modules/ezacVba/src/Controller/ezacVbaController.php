@@ -150,37 +150,33 @@ class ezacVbaController extends ControllerBase {
 
     foreach ($dagverslagIndex as $id) {
       $dagverslag = (new ezacVbaDagverslag($id));
-      $p_datum = ezacUtil::showDate($dagverslag->datum);
       $p_weer = nl2br($dagverslag->weer);
       $p_verslag = nl2br($dagverslag->verslag);
       $p_instructeur = $namen[$dagverslag->instructeur];
       $overzicht[$dagverslag->datum]['dagverslag'][$dagverslag->id] =
-        "Instructeur: $p_instructeur<br>Weer: $p_weer<br>"
-        ."Verslag: $p_verslag";
+        t("Instructeur: $p_instructeur<br>Weer: $p_weer<br>Verslag: $p_verslag");
     }
 
     //verwerk dagverslagen_lid
 
     foreach ($dagverslagLidIndex as $id) {
       $dl = (new ezacVbaDagverslagLid($id));
-      $p_datum = ezacUtil::showDate($dagverslag->datum);
       $p_naam  = $namen[$dl->afkorting];
       $p_instr = $namen[$dl->instructeur];
       $p_verslag = nl2br($dl->verslag);
       $overzicht[$dl->datum]['dagverslag_lid'][$dl->id] =
-        "Opmerking voor $p_naam: <br>$p_verslag ($p_instr)</p>";
+        t("Opmerking voor $p_naam:<br>$p_verslag ($p_instr)</p>");
     }
 
     //verwerk bevoegdheid_lid
     foreach ($bevoegdheidLidIndex as $$id) {
       $bl = (new ezacVbaBevoegdheidLid($id));
-      $p_datum = ezacUtil::showDate($dagverslag->datum);
       $p_naam  = $namen[$bl->afkorting];
       $p_instr = $namen[$bl->instructeur];
       $p_onderdeel = nl2br($bl->onderdeel);
       $p_opmerking = nl2br($bl->opmerking);
       $overzicht[$bl->datum_aan]['bevoegdheid_lid'][$bl->id] =
-        "Bevoegdheid voor $p_naam: <br>$bl->bevoegdheid $p_onderdeel $p_opmerking($p_instr)</p>";
+        t("Bevoegdheid voor $p_naam: <br>$bl->bevoegdheid $p_onderdeel $p_opmerking($p_instr)</p>");
     }
 
     //display verslagen
