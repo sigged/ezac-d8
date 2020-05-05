@@ -169,7 +169,7 @@ class ezacVbaController extends ControllerBase {
     }
 
     //verwerk bevoegdheid_lid
-    foreach ($bevoegdheidLidIndex as $$id) {
+    foreach ($bevoegdheidLidIndex as $id) {
       $bl = (new ezacVbaBevoegdheidLid)->read($id);
       $p_naam  = $namen[$bl->afkorting];
       $p_instr = $namen[$bl->instructeur];
