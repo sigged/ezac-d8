@@ -128,7 +128,7 @@ class ezacVbaBevoegdheidLid extends EzacStorage
      * @param bool $unique
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum_aan', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
     {
         return EzacStorage::ezacIndex('vba_bevoegdheid_lid', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
