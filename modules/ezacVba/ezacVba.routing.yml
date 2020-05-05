@@ -51,30 +51,3 @@ ezac_vba_create:
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
-
-ezac_vba_export_form:
-  path: '/ezac/vba/export/form'
-  defaults:
-    _title: 'vba export'
-    _form: '\Drupal\ezacVba\Form\ezacVbaExportForm'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vba_export:
-  path: '/ezac/vba/export/{filename}'
-  defaults:
-    _title: 'EZAC_read'
-    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::export'
-  requirements:
-    _permission: 'access content'
-    _user: ^[a-zA-Z0-9_]+
-
-ezac_vba_export_jaar:
-  path: '/ezac/vba/export/{filename}/{jaar}'
-  defaults:
-    _title: 'vba export'
-    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::export'
-  requirements:
-    _permission: 'EZAC_read'
-    _user: ^[a-zA-Z0-9_]+
