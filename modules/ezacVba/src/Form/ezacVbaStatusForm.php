@@ -147,9 +147,27 @@ class ezacVbaStatusForm extends FormBase
         ['data' => 'aantal'], //, 'width' => 20
       ];
 
-      $dagverslagenUrl = Url::fromRoute('ezac_vba_dagverslagen');
-      $dagverslagenLidUrl = Url::fromRoute('ezac_vba_dagverslaglid');
-      $bevoegdheidLidUrl = Url::fromRoute('ezac_vba_bevoegdheidlid');
+      $dagverslagenUrl = Url::fromRoute(
+        'ezac_vba_dagverslagen',
+        [
+          'datum_start' => $datum_start,
+          'datum_eind' => $datum_eind,
+        ]
+      )->toString();
+      $dagverslagenLidUrl = Url::fromRoute(
+        'ezac_vba_dagverslaglid',
+        [
+        'datum_start' => $datum_start,
+          'datum_eind' => $datum_eind,
+        ]
+      )->toString();
+      $bevoegdheidLidUrl = Url::fromRoute(
+        'ezac_vba_bevoegdheidlid',
+        [
+        'datum_start' => $datum_start,
+          'datum_eind' => $datum_eind,
+        ]
+      )->toString();
 
       $rows = [
         [

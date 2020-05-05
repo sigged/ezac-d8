@@ -2,6 +2,7 @@
 
 namespace Drupal\ezacStarts\Controller;
 
+use Drupal;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -123,7 +124,7 @@ class EzacStartsController extends ControllerBase {
       $unique = TRUE; // return unique results only
 
       // bepaal aantal dagen
-      $total = count(EzacStart::index($condition, 'datum', $sortkey, $sortdir, $from, $range, $unique));
+      $total = count(EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique));
 
       // prepare pager
       $range = 120;
@@ -143,9 +144,11 @@ class EzacStartsController extends ControllerBase {
         'ezac_starts_overzicht',  // show starts for datum
         ['datum' => $datum]
       )->toString();
+
+      $d = EzacUtil::showDate($datum);
       $rows[] = [
         //link each record to overzicht route
-        t("<a href=$urlString>$datum"),
+        t("<a href=$urlString>$d"),
         $count,
       ];
     }
@@ -241,7 +244,8 @@ class EzacStartsController extends ControllerBase {
                 $start->opmerking,
             ];
         }
-        $caption = "Overzicht EZAC Starts bestand $datum";
+        $d = EzacUtil::showDate($datum);
+        $caption = "Overzicht EZAC Starts bestand $d";
         $content['table'] = [
             '#type' => 'table',
             '#caption' => $caption,
@@ -273,7 +277,7 @@ class EzacStartsController extends ControllerBase {
      */
   public function export($filename = 'ezac.txt', $jaar = NULL) {
 
-    $messenger = \Drupal::messenger();
+    $messenger = Drupal::messenger();
 
     if ($filename == '') $filename = 'ezac.txt';
 

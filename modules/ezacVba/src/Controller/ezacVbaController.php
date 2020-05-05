@@ -2,6 +2,8 @@
 
 namespace Drupal\ezacVba\Controller;
 
+use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
+use Drupal\ezacVba\Model\ezacVbaDagverslagLid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -94,27 +96,135 @@ class ezacVbaController extends ControllerBase {
     return $content;
   }
 
-    /**
-     * Render a list of entries in the database.
-     * @param string
-     *  $jaar - categorie (optional)
-     * @return array
-     */
-  public function dagverslag() {
+  /**
+   * Render a list of entries in the database.
+   *
+   * @param string $datum_start
+   * @param string $datum_eind
+   *
+   * @return array
+   *  renderable array
+   */
+  public function dagverslagen($datum_start, $datum_eind) {
     $content = array();
 
     $rows = [];
     $headers = [
-        t('datum'),
-        t('aantal vba'),
+        t('Datum'),
+        t('Verslag'),
     ];
 
+    // build dagverslagen table - rows
 
-    $caption = "Overzicht EZAC vba data";
+    // START D7 code
+    $condition = ['actief' => True];
+    $namen = EzacUtil::getLeden($condition);
+    // $bevoegdheden = ezacvba_get_bevoegdheden();
+
+    //lees dagverslag index
+    $condition = [
+      'datum' => [
+        'value' => [$datum_start, $datum_eind],
+        'operator' => 'BETWEEN'
+      ],
+    ];
+    $dagverslagIndex = ezacVbaDagverslag::index($condition);
+
+    //lees dagverslagLid index
+    $dagverslagLidIndex = ezacVbaDagverslagLid::index(($condition));
+
+    // lees bevoegdheidLid index
+    $condition = [
+      'datum_aan' => [
+        'value' => [$datum_start, $datum_eind],
+        'operator' => 'BETWEEN'
+      ],
+    ];
+    $bevoegdheidLidIndex = ezacVbaBevoegdheidLid::index($condition);
+
+    $header = array(
+      array('data' => 'datum', 'width' => '20%'),
+      array('data' => 'verslag'),
+    );
+    $rows = array();
+
+    foreach ($dagverslagIndex as $id) {
+      $dagverslag = (new ezacVbaDagverslag($id));
+      $p_datum = ezacUtil::showDate($dagverslag->datum);
+      $p_weer = nl2br($dagverslag->weer);
+      $p_verslag = nl2br($dagverslag->verslag);
+      $p_instructeur = $namen[$dagverslag->instructeur];
+      $overzicht[$dagverslag->datum]['dagverslag'][$dagverslag->id] =
+        "Instructeur: $p_instructeur<br>Weer: $p_weer<br>"
+        ."Verslag: $p_verslag";
+    }
+
+    //verwerk dagverslagen_lid
+
+    foreach ($dagverslagLidIndex as $id) {
+      $dl = (new ezacVbaDagverslagLid($id));
+      $p_datum = ezacUtil::showDate($dagverslag->datum);
+      $p_naam  = $namen[$dl->afkorting];
+      $p_instr = $namen[$dl->instructeur];
+      $p_verslag = nl2br($dl->verslag);
+      $overzicht[$dl->datum]['dagverslag_lid'][$dl->id] =
+        "Opmerking voor $p_naam: <br>$p_verslag ($p_instr)</p>";
+    }
+
+    //verwerk bevoegdheid_lid
+    foreach ($bevoegdheidLidIndex as $$id) {
+      $bl = (new ezacVbaBevoegdheidLid($id));
+      $p_datum = ezacUtil::showDate($dagverslag->datum);
+      $p_naam  = $namen[$bl->afkorting];
+      $p_instr = $namen[$bl->instructeur];
+      $p_onderdeel = nl2br($bl->onderdeel);
+      $p_opmerking = nl2br($bl->opmerking);
+      $overzicht[$bl->datum_aan]['bevoegdheid_lid'][$bl->id] =
+        "Bevoegdheid voor $p_naam: <br>$bl->bevoegdheid $p_onderdeel $p_opmerking($p_instr)</p>";
+    }
+
+    //display verslagen
+    $p_overzicht = '';
+    if (isset($overzicht)) {
+      krsort($overzicht); //sort overzicht on datum key (descending)
+      foreach ($overzicht as $datum => $ovz) {
+        if (isset($ovz['dagverslag'])) {
+          foreach ($ovz['dagverslag'] as $id => $verslag) {
+            //$p_overzicht .= $verslag;
+            $rows[] = array(
+              ezacUtil::showDate($datum),
+              $verslag,
+            );
+          }
+        }
+        if (isset($ovz['dagverslag_lid'])) {
+          foreach ($ovz['dagverslag_lid'] as $id => $verslag) {
+            //$p_overzicht .= $verslag;
+            $rows[] = array(
+              ezacUtil::showDate($datum),
+              $verslag,
+            );
+          }
+        }
+        if (isset($ovz['bevoegdheid_lid'])) {
+          foreach ($ovz['bevoegdheid_lid'] as $id => $verslag) {
+            //$p_overzicht .= $verslag;
+            $rows[] = array(
+              ezacUtil::showDate($datum),
+              $verslag,
+            );
+          }
+        }
+      }
+    }
+    // END D7 code
+
+    // define table for output
+    $caption = "Overzicht EZAC VBA verslagen van $datum_start tot $datum_eind";
     $content['table'] = [
         '#type' => 'table',
         '#caption' => $caption,
-        '#header' => $headers,
+        '#header' => $header,
         '#rows' => $rows,
         '#empty' => t('Geen gegevens beschikbaar.'),
         '#sticky' => TRUE,
@@ -128,15 +238,16 @@ class ezacVbaController extends ControllerBase {
     $content['#cache']['max-age'] = 0;
 
     return $content;
-  } // overzichtJaar
+  } // dagverslagen
 
     /**
      * Render a list of entries in the database.
-     * @param string
+     * @param string $datum_start
      *  $jaar - categorie (optional)
+     * @param $datum_eind
      * @return array
      */
-    public function dagverslagLid() {
+    public function dagverslagLid($datum_start, $datum_eind) {
         $content = array();
 
         $rows = [];
@@ -174,7 +285,7 @@ class ezacVbaController extends ControllerBase {
    *  $jaar - categorie (optional)
    * @return array
    */
-  public function bevoegdheidLid() {
+  public function bevoegdheidLid($datum_start, $datum_eind) {
     $content = array();
 
     $rows = [];
@@ -204,73 +315,4 @@ class ezacVbaController extends ControllerBase {
     return $content;
   } // bevoegdheidLid
 
-  /**
-     * Maak exportbestand uit vba tabel
-     * geformatteerd voor input in bestand (csv)
-     * Output via html headers naar attachment
-     *
-     * @param string $filename
-     * @param null $jaar
-     * @return mixed Response output text in csv format
-     *   output text in csv format
-     */
-  public function export($filename = 'ezac.txt', $jaar = NULL) {
-
-    $messenger = \Drupal::messenger();
-
-    if ($filename == '') $filename = 'ezac.txt';
-
-    // Determine Jaar  from vba for export
-    if (isset($jaar)) {
-        $condition = [
-            'datum' => [
-                'value' => ["$jaar-01-01", "$jaar-12-31"],
-                'operator' => 'BETWEEN'
-            ],
-        ];
-    }
-    else $condition = []; //select all active records
-
-    $records = EzacStart::index($condition); //read records index
-    $count = count($records);
-    $messenger->addMessage("Export $count records voor jaar [$jaar] naar bestand [$filename]"); //DEBUG
-
-    $output = ""; // initialize output
-    //build header line
-    foreach (EzacStart::$fields as $field => $description) {
-      $output .= '"' .$field .'";';
-    }
-    //remove last ";" 
-    $output = rtrim($output, ";") ."\r\n";
-    
-    // export all records
-    foreach ($records as $id) {
-      $start = (new EzacStart)->read($id);
-      // add all fields
-      foreach (EzacStart::$fields as $field => $description) {
-        $output .= sprintf('"%s";',$start->$field);
-      }
-      //remove last ";" 
-      $output = rtrim($output, ";") ."\r\n";
-    }
-
-    $response = new Response(
-      $output,
-      Response::HTTP_OK,
-      array(
-        'content-type' => 'text/plain',
-      )
-    );
-
-    $disposition = $response->headers->makeDisposition(
-      ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-      $filename
-    );
-    $response->headers->set('Content-Disposition', $disposition);
-    $response->setCharset('UTF-8');
-
-      /** @var mixed $response */
-      return $response;
-  } // export  
-  
 } //class EzacvbaController

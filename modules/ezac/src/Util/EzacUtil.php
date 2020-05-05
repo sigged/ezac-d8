@@ -97,4 +97,10 @@ class EzacUtil
         }
         return $kisten;
     }
+
+    public static function showDate($datum)
+    {
+      // dd maand jaar
+      return strftime('%e %B %Y',strtotime($datum));
+    }
 }
