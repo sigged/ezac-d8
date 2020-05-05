@@ -18,86 +18,8 @@ use Drupal\ezac\Util\EzacUtil;
  */
 class ezacVbaController extends ControllerBase {
 
-  /* @TODO create main menu for VBA: status, entry and update */
-
-    /**
-     * Display the status of the EZAC vba table
-     * @return array
-     */
-  public function status() {
-    $content = [];
-
-    //$schema = drupal_get_module_schema('ezac', 'vba');
-
-    // show record count for each dagverslag type
-    $headers = [
-      t("Status"),
-      t("Aantal vdagverslagen"),
-    ];
-    
-    $total = 0;
-    $condition = [];
-    $datums = array_unique(ezacVbaDagverslag::index($condition, 'datum', 'datum','DESC'));
-    $jaren = [];
-    foreach ($datums as $datum) {
-        $dp = date_parse($datum);
-        $year = $dp['year'];
-        if (isset($jaren[$year])) $jaren[$year]++;
-        else $jaren[$year] = 1;
-    }
-    foreach ($jaren as $jaar => $aantal) {
-      $count = $aantal;
-      $total = $total+$count;
-      $urlJaar = Url::fromRoute(
-        'ezac_vba_overzicht_jaar',
-        [
-          'jaar' => $jaar
-        ]
-      )->toString();
-      $urlExport = Url::fromRoute(
-        'ezac_vba_export_jaar',
-        [
-          'filename' => "vba-$jaar.csv",
-          'jaar' => $jaar
-        ]
-      )->toString();
-      $rows[] = [
-        t("<a href=$urlJaar>$jaar</a>"),
-        $count,
-        t("<a href=$urlExport>vba-$jaar.csv</a>"),
-      ];
-    }
-    // add line for totals
-    $urlExport = Url::fromRoute(
-      'ezac_vba_export',
-      [
-        'filename' => "vba.csv",
-      ]
-    )->toString();
-    $rows[]= [
-      t('Totaal'),
-      $total,
-      t("<a href=$urlExport>vba.csv</a>"),
-    ];
-    //build table
-    $content['table'] = [
-      '#type' => 'table',
-      '#caption' => t("Jaar overzicht van het EZAC vba bestand"),
-      '#header' => $headers,
-      '#rows' => $rows,
-      '#empty' => t('Geen gegevens beschikbaar.'),
-      '#sticky' => TRUE,
-    ];
-    
-
-    // Don't cache this page.
-    $content['#cache']['max-age'] = 0;
-
-    return $content;
-  }
-
   /**
-   * Render a list of entries in the database.
+   * toon dagverslagen
    *
    * @param string $datum_start
    * @param string $datum_eind
