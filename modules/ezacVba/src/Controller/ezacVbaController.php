@@ -117,7 +117,7 @@ class ezacVbaController extends ControllerBase {
     // build dagverslagen table - rows
 
     // START D7 code
-    $condition = ['actief' => True];
+    $condition = [];
     $namen = EzacUtil::getLeden($condition);
     // $bevoegdheden = ezacvba_get_bevoegdheden();
 
@@ -184,13 +184,11 @@ class ezacVbaController extends ControllerBase {
     }
 
     //display verslagen
-    $p_overzicht = '';
     if (isset($overzicht)) {
       krsort($overzicht); //sort overzicht on datum key (descending)
       foreach ($overzicht as $datum => $ovz) {
         if (isset($ovz['dagverslag'])) {
           foreach ($ovz['dagverslag'] as $id => $verslag) {
-            //$p_overzicht .= $verslag;
             $rows[] = array(
               ezacUtil::showDate($datum),
               $verslag,
@@ -199,7 +197,6 @@ class ezacVbaController extends ControllerBase {
         }
         if (isset($ovz['dagverslag_lid'])) {
           foreach ($ovz['dagverslag_lid'] as $id => $verslag) {
-            //$p_overzicht .= $verslag;
             $rows[] = array(
               ezacUtil::showDate($datum),
               $verslag,
@@ -208,7 +205,6 @@ class ezacVbaController extends ControllerBase {
         }
         if (isset($ovz['bevoegdheid_lid'])) {
           foreach ($ovz['bevoegdheid_lid'] as $id => $verslag) {
-            //$p_overzicht .= $verslag;
             $rows[] = array(
               ezacUtil::showDate($datum),
               $verslag,
