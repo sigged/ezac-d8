@@ -82,12 +82,18 @@ class ezacVbaBevoegdheid extends EzacStorage
         return $this->ezacRead('vba_bevoegdheden');
     }
 
-    static public function readAll($condition)
+  /**
+   * @param $condition
+   *
+   * @return mixed
+   */
+  static public function readAll($condition = NULL)
     {
-      $condition = []; // select all records
+      if (!isset($condition)) $condition = []; // select all records
       $bevoegdheden = EzacStorage::ezacReadAll('vba_bevoegdheden', $condition, __CLASS__);
       return $bevoegdheden;
     }
+
     /**
      * update - Updates record in the vba table
      *
