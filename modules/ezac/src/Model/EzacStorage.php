@@ -201,6 +201,41 @@ class EzacStorage
 
     } //ezacRead
 
+  /**
+   * @param $table
+   * @param $condition
+   * @param string $className
+   */
+  static public function ezacReadAll($table, $condition, $className = "stdClass")
+    {
+      // Read all fields from a ezac table.
+      // select EZAC database outside Drupal structure
+      Database::setActiveConnection(self::dbName);
+      $db = Database::getConnection();
+
+      $select = $db->select($table); // geen alias gebruikt
+      $select->fields($table); // all fields of the table
+
+      // Add each field and value as a condition to this query.
+      foreach ((array)$condition as $field => $test) {
+        // condition can be a simple field => value pair for EQUALS (default test)
+        //   or contain value and operator keys for other tests
+        if (is_array($test)) {
+          $value = $test["value"];
+          $operator = $test["operator"];
+          $select->condition($field, $value, $operator);
+        } else $select->condition($field, $test);
+      }
+
+      // Return the result as an object
+      $select->execute()->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
+      $records = $select->execute()->fetchAll();
+
+      // return to standard Drupal database
+      Database::setActiveConnection();
+      return $records;
+    } //ezacReadAll
+
     /**
      * Update an entry in the database.
      *

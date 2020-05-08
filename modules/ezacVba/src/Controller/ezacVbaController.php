@@ -162,6 +162,7 @@ class ezacVbaController extends ControllerBase {
      * @return array
      */
     public function dagverslagLid($datum_start, $datum_eind) {
+      //@todo move to form
         $content = array();
 
         $rows = [];
@@ -200,6 +201,7 @@ class ezacVbaController extends ControllerBase {
    * @return array
    */
   public function bevoegdheidLid($datum_start, $datum_eind) {
+    //@todo move to form
     $content = array();
 
     $rows = [];

@@ -27,7 +27,7 @@ class ezacVbaDagverslag extends EzacStorage
       'mutatie' => 'Mutatie'
     );
 
-    // define the fields for the vba bevoegdheden status table
+    // define the fields for the vba dagverslag table
     public $id = 0;
     public $datum = '';
     public $instructeur = '';
@@ -56,7 +56,6 @@ class ezacVbaDagverslag extends EzacStorage
      */
     public function create()
     {
-
         $this->id = $this->ezacCreate('vba_dagverslagen');
         return $this;
     }

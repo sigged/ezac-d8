@@ -142,7 +142,10 @@ class EzacStartsController extends ControllerBase {
 
       $urlString = Url::fromRoute(
         'ezac_starts_overzicht',  // show starts for datum
-        ['datum' => $datum]
+        [
+          'datum_start' => $datum,
+          'datum_eind' => NULL,
+          ]
       )->toString();
 
       $d = EzacUtil::showDate($datum);
@@ -172,97 +175,119 @@ class EzacStartsController extends ControllerBase {
     return $content;
   } // overzichtJaar
 
+  /**
+   * @param $datum_start
+   * @param $datum_eind
+   * @param null $vlieger
+   * @return array $content
+   */
+  public static function startOverzicht($datum_start, $datum_eind, $vlieger = NULL) {
+    $content = array();
+
+    $rows = [];
+    $headers = [
+      t('datum'),
+      t('start'),
+      t('landing'),
+      t('duur'),
+      t('registratie'),
+      t('gezagvoerder'),
+      t('tweede'),
+      t('soort'),
+      t('startmethode'),
+      t('instructie'),
+      t('opmerking'),
+    ];
+
+    $leden = EzacUtil::getLeden();
+    // $kisten = EzacUtil::getKisten();
+
+    // select all starts for selected date
+    if (isset($datum_eind))
+    {
+      $condition['datum'] =
+        [
+          'value' => [$datum_start, $datum_eind],
+          'operator' => 'BETWEEN',
+        ];
+    }
+    else $condition = ['datum' => $datum_start];
+
+    // prepare pager
+    $total = EzacStart::counter($condition);
+    $field = 'id';
+    $sortkey = 'start';
+    $sortdir = 'ASC'; // newest first
+    $range = 50;
+    $page = pager_default_initialize($total, $range);
+    $from = $range * $page;
+    $unique = FALSE; // return all results
+
+    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
+    foreach ($startsIndex as $id) {
+      $start = (new EzacStart)->read($id);
+
+      $urlString = Url::fromRoute(
+        'ezac_starts_update',  // edit starts record
+        ['id' => $start->id]
+      )->toString();
+
+      if (isset($leden[$start->gezagvoerder]) && $start->gezagvoerder <> '') {
+        $gezagvoerder = $leden[$start->gezagvoerder];
+      }
+      else $gezagvoerder = $start->gezagvoerder; // un-edited record value
+
+      if (isset($leden[$start->tweede]) && $start->tweede <> '') {
+        $tweede = $leden[$start->tweede];
+      }
+      else $tweede = $start->tweede; // un-edited record value
+
+      $rows[] = [
+        //link each record to edit route
+        t("<a href=$urlString>$start->start</a>"),
+        $start->landing,
+        $start->duur,
+        $start->registratie,
+        $gezagvoerder,
+        $tweede,
+        EzacStart::$startSoort[$start->soort],
+        EzacStart::$startMethode[$start->startmethode],
+        $start->instructie,
+        $start->opmerking,
+      ];
+    }
+    $d = EzacUtil::showDate($datum_start);
+    if (isset($datum_eind)) $d.= " tot " .EzacUtil::showDate($datum_eind);
+    $caption = "Overzicht EZAC Starts bestand $d";
+    $content['table'] = [
+      '#type' => 'table',
+      '#caption' => $caption,
+      '#header' => $headers,
+      '#rows' => $rows,
+      '#empty' => t('Geen gegevens beschikbaar.'),
+      '#sticky' => TRUE,
+    ];
+    // add pager
+    $content['pager'] = [
+      '#type' => 'pager',
+      '#weight' => 5
+    ];
+
+    return $content;
+  }
     /**
      * Render a list of entries in the database.
-     * @param string
-     *  $jaar - categorie (optional)
+     * @param string $datum_start
+     * @param string $datum_eind
      * @return array
      */
-    public function overzicht($datum = NULL) {
-        $content = array();
+    public function overzicht($datum_start = NULL, $datum_eind = NULL) {
+      //@todo add filter params for vlieger and registratie
+      $content = self::startOverzicht($datum_start, $datum_eind, NULL);
+      // Don't cache this page.
+      $content['#cache']['max-age'] = 0;
 
-        $rows = [];
-        $headers = [
-            t('start'),
-            t('landing'),
-            t('duur'),
-            t('registratie'),
-            t('gezagvoerder'),
-            t('tweede'),
-            t('soort'),
-            t('startmethode'),
-            t('instructie'),
-            t('opmerking'),
-        ];
-
-        $leden = EzacUtil::getLeden();
-        // $kisten = EzacUtil::getKisten();
-
-        // select all starts for selected date
-        $condition = ['datum' => $datum];
-
-        // prepare pager
-        $total = EzacStart::counter($condition);
-        $field = 'id';
-        $sortkey = 'start';
-        $sortdir = 'ASC'; // newest first
-        $range = 50;
-        $page = pager_default_initialize($total, $range);
-        $from = $range * $page;
-        $unique = FALSE; // return all results
-
-        $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
-        foreach ($startsIndex as $id) {
-            $start = (new EzacStart)->read($id);
-
-            $urlString = Url::fromRoute(
-                'ezac_starts_update',  // edit starts record
-                ['id' => $start->id]
-            )->toString();
-
-            if (isset($leden[$start->gezagvoerder]) && $start->gezagvoerder <> '') {
-                $gezagvoerder = $leden[$start->gezagvoerder];
-            }
-            else $gezagvoerder = $start->gezagvoerder; // un-edited record value
-
-            if (isset($leden[$start->tweede]) && $start->tweede <> '') {
-                $tweede = $leden[$start->tweede];
-            }
-            else $tweede = $start->tweede; // un-edited record value
-
-            $rows[] = [
-                //link each record to edit route
-                t("<a href=$urlString>$start->start</a>"),
-                $start->landing,
-                $start->duur,
-                $start->registratie,
-                $gezagvoerder,
-                $tweede,
-                EzacStart::$startSoort[$start->soort],
-                EzacStart::$startMethode[$start->startmethode],
-                $start->instructie,
-                $start->opmerking,
-            ];
-        }
-        $d = EzacUtil::showDate($datum);
-        $caption = "Overzicht EZAC Starts bestand $d";
-        $content['table'] = [
-            '#type' => 'table',
-            '#caption' => $caption,
-            '#header' => $headers,
-            '#rows' => $rows,
-            '#empty' => t('Geen gegevens beschikbaar.'),
-            '#sticky' => TRUE,
-        ];
-        // add pager
-        $content['pager'] = [
-            '#type' => 'pager',
-            '#weight' => 5
-        ];
-        // Don't cache this page.
-        $content['#cache']['max-age'] = 0;
-
-        return $content;
+      return $content;
     } // overzicht
 
     /**

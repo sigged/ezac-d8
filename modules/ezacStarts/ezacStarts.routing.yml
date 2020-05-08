@@ -8,7 +8,7 @@ ezac_starts:
     _user: ^[a-zA-Z0-9_]+
 
 ezac_starts_overzicht:
-  path: '/ezac/starts/overzicht/{datum}'
+  path: '/ezac/starts/overzicht/{datum_start}/{datum_eind}'
   defaults:
     _title: 'Startsoverzicht'
     _controller: '\Drupal\ezacStarts\Controller\EzacStartsController::overzicht'
