@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezacStarts\Controller\EzacStartsController;
-use Drupal\ezacvba\Model\ezacVbaBevoegdheid;
+use Drupal\ezacVba\Model\ezacVbaBevoegdheid;
 use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
 use Drupal\ezacVba\Model\ezacVbaDagverslag;
 use Drupal\ezacVba\Model\ezacVbaDagverslagLid;
