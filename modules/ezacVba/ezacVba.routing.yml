@@ -20,7 +20,7 @@ ezac_vba_dagverslag_lid:
   path: '/ezac/vba/dagverslaglid/{datum_start}/{datum_eind}'
   defaults:
     _title: 'VBA dagverslagen leden overzicht'
-    _controller: '\Drupal\ezacVba\Controller\ezacVbaController::dagverslagLid'
+    _form: '\Drupal\ezacVba\Controller\ezacVbaLidForm'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+

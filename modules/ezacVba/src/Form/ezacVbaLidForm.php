@@ -40,9 +40,12 @@ class ezacVbaLidForm extends FormBase
    * @param array $form
    * @param FormStateInterface $form_state
    *
+   * @param $datum_start
+   * @param $datum_eind
+   *
    * @return array
    */
-    public function buildForm(array $form, FormStateInterface $form_state) {
+    public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL) {
       // Wrap the form in a div.
       $form = [
         '#prefix' => '<div id="statusform">',
@@ -52,8 +55,9 @@ class ezacVbaLidForm extends FormBase
       // apply the form theme
       //$form['#theme'] = 'ezac_vba_lid_form';
 
-      $datum_start = date('Y') . "-01-01";
-      $datum_eind = date('Y') . "-12-31";
+      // when datum not given, set default for this year
+      if ($datum_start == NULL) $datum_start = date('Y') . "-01-01";
+      if ($datum_eind == NULL) $datum_eind = date('Y') . "-12-31";
 
       $periode_list = [
         'seizoen' => 'dit seizoen',
