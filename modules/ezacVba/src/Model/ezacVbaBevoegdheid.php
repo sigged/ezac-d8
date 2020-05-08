@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezacvba\Model;
+namespace Drupal\ezacVba\Model;
 
 use Drupal\ezac\Model\EzacStorage;
 
