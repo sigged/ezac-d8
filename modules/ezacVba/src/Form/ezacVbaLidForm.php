@@ -218,12 +218,15 @@ class ezacVbaLidForm extends FormBase
       }
 
       $condition = [];
-      $bevoegdheden = ezacVbaBevoegdheid::readAll($condition);
+      $bevoegdhedenIndex = ezacVbaBevoegdheid::index($condition);
       $bv_list[0] = '<Geen wijziging>';
-      if (isset($bevoegdheden)) {
-        foreach ($bevoegdheden as $bevoegdheid => $bevoegdheid_array) {
-          $bv_list[$bevoegdheid] = $bevoegdheid_array['naam'];
-        }
+      if (isset($bevoegdhedenIndex))
+      {
+        foreach ($bevoegdhedenIndex as $id)
+        {
+          $bevoegdheid = (new ezacVbaBevoegdheid)->read($id);
+          $bv_list[$bevoegdheid->bevoegdheid] = $bevoegdheid->naam;
+          }
       }
       //toon huidige bevoegdheden
       // query vba verslag, bevoegdheid records
