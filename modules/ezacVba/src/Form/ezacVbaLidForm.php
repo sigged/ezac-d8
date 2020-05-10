@@ -45,7 +45,8 @@ class ezacVbaLidForm extends FormBase
    *
    * @return array
    */
-    public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL) {
+    public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL)
+    {
       // Wrap the form in a div.
       $form = [
         '#prefix' => '<div id="statusform">',
@@ -56,8 +57,12 @@ class ezacVbaLidForm extends FormBase
       //$form['#theme'] = 'ezac_vba_lid_form';
 
       // when datum not given, set default for this year
-      if ($datum_start == NULL) $datum_start = date('Y') . "-01-01";
-      if ($datum_eind == NULL) $datum_eind = date('Y') . "-12-31";
+      if ($datum_start == NULL) {
+        $datum_start = date('Y') . "-01-01";
+      }
+      if ($datum_eind == NULL) {
+        $datum_eind = date('Y') . "-12-31";
+      }
 
       $periode_list = [
         'seizoen' => 'dit seizoen',
@@ -72,12 +77,12 @@ class ezacVbaLidForm extends FormBase
         '#type' => 'select',
         '#title' => 'Periode',
         '#options' => $periode_list,
-        '#weight' => 2,
+        '#weight' => 1,
         '#ajax' => [
-          'wrapper' => 'status-div',
-          'callback' => '::formPeriodeCallback',
-          //'effect' => 'fade',
-          //'progress' => array('type' => 'throbber'),
+          'wrapper' => 'vlieger-div',
+          'callback' => '::formCallback',
+          'effect' => 'fade',
+          'progress' => ['type' => 'throbber'],
         ],
       ];
       $periode = $form_state->getValue('periode', key($periode_list));
@@ -113,17 +118,37 @@ class ezacVbaLidForm extends FormBase
           }
       }
 
+      global /** @var array $namen */
+      $namen;
+
       $namen = EzacUtil::getLeden();
       $namen['selecteer'] = '<selecteer>';
+
+      // store $namen in form for callback
+      $form['namen'] = [
+        '#type' => 'value',
+        '#value' => $namen,
+      ];
+
+      $form['datum_start'] =[
+        '#type' => 'value',
+        '#value' => $datum_start,
+      ];
+
+      $form['datum_eind'] =[
+        '#type' => 'value',
+        '#value' => $datum_eind,
+      ];
+
       $form['persoon'] = [
         '#type' => 'select',
         '#title' => 'Vlieger',
         '#options' => $namen,
         '#default' => 'selecteer',
-        '#weight' => 3,
+        '#weight' => 2,
         '#ajax' => [
-          'wrapper' => 'status-div',
-          'callback' => '::formPersoonCallback',
+          'wrapper' => 'vlieger-div',
+          'callback' => '::formCallback',
           //'effect' => 'fade',
           //'progress' => array('type' => 'throbber'),
         ],
@@ -145,13 +170,34 @@ class ezacVbaLidForm extends FormBase
         ],
       ];
 
+
+      $form['actions'] = [
+        '#type' => 'actions',
+      ];
+
+      return $form;
+    }
+
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return array|mixed
+   */
+  function formCallback(array $form, FormStateInterface $form_state)
+    {
+      // Kies gewenste periode / vlieger voor overzicht dagverslagen
       $overzicht = TRUE; // @todo replace parameter $overzicht
       // D7 code start
+
+      $namen = $form_state->getValue(('namen'));
+      $datum_start = $form_state->getValue('datum_start');
+      $datum_eind = $form_state->getValue('datum_eind');
 
       $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
       $helenaam = $namen[$vlieger_afkorting];
 
-      $datum = $form_state->getValue('datum', date('Y-m-d'));
+      //$datum = $form_state->getValue('datum', date('Y-m-d'));
 
       //toon vluchten dit jaar
       $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
@@ -227,7 +273,7 @@ class ezacVbaLidForm extends FormBase
         {
           $bevoegdheid = (new ezacVbaBevoegdheid)->read($id);
           $bv_list[$bevoegdheid->bevoegdheid] = $bevoegdheid->naam;
-          }
+        }
       }
       //toon huidige bevoegdheden
       // query vba verslag, bevoegdheid records
@@ -327,53 +373,26 @@ class ezacVbaLidForm extends FormBase
       }
 
 
-    // D7 code end
+      // D7 code end
 
-      $form['actions'] = [
-          '#type' => 'actions',
-      ];
-
-      return $form;
+      return $form['vliegers'];
     }
 
-  /**
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *
-   * @return array|mixed
-   */
-  function formPeriodeCallback(array $form, FormStateInterface $form_state)
-    {
-        // Kies gewenste periode voor overzicht dagverslagen
-        return $form['status'];
-    }
 
   /**
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *
-   * @return array|mixed
+   * {@inheritdoc}
    */
-  function formPersoonCallback(array $form, FormStateInterface $form_state)
+  public function validateForm(array &$form, FormStateInterface $form_state)
   {
-    // Kies gewenste persoon voor overzicht dagverslagen
-    return $form['status'];
+
   }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateForm(array &$form, FormStateInterface $form_state)
-    {
+  /**
+   * {@inheritdoc}
+   * @throws \Exception
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state)
+  {
 
-    }
-
-    /**
-     * {@inheritdoc}
-     * @throws \Exception
-     */
-    public function submitForm(array &$form, FormStateInterface $form_state)
-    {
-
-    } //submitForm
+  } //submitForm
 }
