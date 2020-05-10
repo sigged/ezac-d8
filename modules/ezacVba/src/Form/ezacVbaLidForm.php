@@ -114,7 +114,7 @@ class ezacVbaLidForm extends FormBase
       }
 
       $namen = EzacUtil::getLeden();
-      $namen = ['selecteer' => '<selecteer>'];
+      $namen['selecteer'] = '<selecteer>';
       $form['persoon'] = [
         '#type' => 'select',
         '#title' => 'Vlieger',
