@@ -194,7 +194,7 @@ class EzacStartsController extends ControllerBase {
       t('gezagvoerder'),
       t('tweede'),
       t('soort'),
-      t('startmethode'),
+      t('start methode'),
       t('instructie'),
       t('opmerking'),
     ];
@@ -244,20 +244,21 @@ class EzacStartsController extends ControllerBase {
 
       $rows[] = [
         //link each record to edit route
-        t("<a href=$urlString>$start->start</a>"),
-        $start->landing,
-        $start->duur,
+        $start->datum,
+        t("<a href=$urlString>" .substr($start->start, 0, 5) ."</a>"),
+        substr($start->landing,0,5),
+        substr($start->duur, 0,5),
         $start->registratie,
         $gezagvoerder,
         $tweede,
         EzacStart::$startSoort[$start->soort],
         EzacStart::$startMethode[$start->startmethode],
-        $start->instructie,
+        ($start->instructie) ? 'Ja' :'',
         $start->opmerking,
       ];
     }
     $d = EzacUtil::showDate($datum_start);
-    if (isset($datum_eind)) $d.= " tot " .EzacUtil::showDate($datum_eind);
+    if ($datum_eind <> $datum_start) $d.= " tot " .EzacUtil::showDate($datum_eind);
     $caption = "Overzicht EZAC Starts bestand $d";
     $content['table'] = [
       '#type' => 'table',
