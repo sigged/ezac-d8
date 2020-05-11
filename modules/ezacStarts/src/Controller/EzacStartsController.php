@@ -144,7 +144,7 @@ class EzacStartsController extends ControllerBase {
         'ezac_starts_overzicht',  // show starts for datum
         [
           'datum_start' => $datum,
-          'datum_eind' => NULL,
+          'datum_eind' => $datum,
           ]
       )->toString();
 

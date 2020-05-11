@@ -64,9 +64,6 @@ class ezacVbaLidForm extends FormBase
         $datum_eind = date('Y') . "-12-31";
       }
 
-      global /** @var array $namen */
-      $namen;
-
       $namen = EzacUtil::getLeden();
       $namen['selecteer'] = '<selecteer>';
 
@@ -120,14 +117,12 @@ class ezacVbaLidForm extends FormBase
       $overzicht = TRUE; // @todo replace parameter $overzicht
       // D7 code start
 
-      $namen = $form_state->getValue(('namen'));
-      $datum_start = $form_state->getValue('datum_start');
-      $datum_eind = $form_state->getValue('datum_eind');
-
       $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
       $helenaam = $namen[$vlieger_afkorting];
 
       //$datum = $form_state->getValue('datum', date('Y-m-d'));
+
+      //@todo maak container voor vliegers
 
       //toon vluchten dit jaar
       $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
