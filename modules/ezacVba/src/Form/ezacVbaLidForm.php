@@ -64,60 +64,6 @@ class ezacVbaLidForm extends FormBase
         $datum_eind = date('Y') . "-12-31";
       }
 
-      $periode_list = [
-        'seizoen' => 'dit seizoen',
-        'tweejaar' => '24 maanden',
-        'jaar' => '12 maanden',
-        'maand' => '1 maand',
-        'vandaag' => 'vandaag',
-        //'anders' => 'andere periode',
-      ];
-
-      $form['periode'] = [
-        '#type' => 'select',
-        '#title' => 'Periode',
-        '#options' => $periode_list,
-        '#weight' => 1,
-        '#ajax' => [
-          'wrapper' => 'vlieger-div',
-          'callback' => '::formCallback',
-          'effect' => 'fade',
-          'progress' => ['type' => 'throbber'],
-        ],
-      ];
-      $periode = $form_state->getValue('periode', key($periode_list));
-
-      switch ($periode) {
-        case 'vandaag' :
-          $datum_start = date('Y-m-d');
-          $datum_eind = date('Y-m-d');
-          break;
-        case 'maand' :
-          $datum_start = date('Y-m-d', mktime(0, 0, 0, date('n') - 1, date('j'), date('Y')));
-          $datum_eind = date('Y-m-d'); //previous month
-          break;
-        case 'jaar' :
-          $datum_start = date('Y-m-d', mktime(0, 0, 0, date('n'), date('j'), date('Y') - 1));
-          $datum_eind = date('Y-m-d'); //previous year
-          break;
-        case 'tweejaar' :
-          $datum_start = date('Y-m-d', mktime(0, 0, 0, date('n'), date('j'), date('Y') - 2));
-          $datum_eind = date('Y-m-d'); //previous 2 year
-          break;
-        case 'seizoen' :
-          $datum_start = date('Y') . '-01-01'; //this year
-          $datum_eind = date('Y') . '-12-31';
-          break;
-        case 'anders' :
-          if (!isset($form_state['values']['datum_start'])) {
-            $datum = date('Y-m-d'); //default vandaag
-          }
-          else {
-            $datum_start = $form_state['values']['datum_start'];
-            $datum_eind = $form_state['values']['datum_eind'];
-          }
-      }
-
       global /** @var array $namen */
       $namen;
 
@@ -148,8 +94,8 @@ class ezacVbaLidForm extends FormBase
         '#weight' => 2,
         '#ajax' => [
           'wrapper' => 'vlieger-div',
-          'callback' => '::formCallback',
-          //'effect' => 'fade',
+          'callback' => '::formPersoonCallback',
+          'effect' => 'fade',
           //'progress' => array('type' => 'throbber'),
         ],
       ];
@@ -170,23 +116,7 @@ class ezacVbaLidForm extends FormBase
         ],
       ];
 
-
-      $form['actions'] = [
-        '#type' => 'actions',
-      ];
-
-      return $form;
-    }
-
-  /**
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *
-   * @return array|mixed
-   */
-  function formCallback(array $form, FormStateInterface $form_state)
-    {
-      // Kies gewenste periode / vlieger voor overzicht dagverslagen
+      // Kies gewenste vlieger voor overzicht dagverslagen
       $overzicht = TRUE; // @todo replace parameter $overzicht
       // D7 code start
 
@@ -371,10 +301,22 @@ class ezacVbaLidForm extends FormBase
           '#weight' => 99,
         );
       }
-
-
       // D7 code end
+      $form['actions'] = [
+        '#type' => 'actions',
+      ];
 
+      return $form;
+    }
+
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return array|mixed
+   */
+  function formPersoonCallback(array $form, FormStateInterface $form_state)
+    {
       return $form['vliegers'];
     }
 
