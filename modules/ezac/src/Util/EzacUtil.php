@@ -61,8 +61,8 @@ class EzacUtil
     {
         if ($condition == []) {
             $condition = [
-                'actief' => TRUE,
-                'code' => 'VL',
+                //'actief' => TRUE,
+                //'code' => ['VL'],
             ];
         }
         $ledenIndex = EzacLid::index($condition,'id','achternaam');
