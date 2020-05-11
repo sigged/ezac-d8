@@ -64,8 +64,12 @@ class ezacVbaLidForm extends FormBase
         $datum_eind = date('Y') . "-12-31";
       }
 
-      $namen = EzacUtil::getLeden();
-      $namen['selecteer'] = '<selecteer>';
+      $condition = [
+        'code' => 'VL',
+        'actief' => TRUE,
+      ];
+      $namen = EzacUtil::getLeden($condition);
+      $namen[''] = '<selecteer>';
 
       // store $namen in form for callback
       $form['namen'] = [
