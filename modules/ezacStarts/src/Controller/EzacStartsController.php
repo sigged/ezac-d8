@@ -17,14 +17,14 @@ use Drupal\ezac\Util\EzacUtil;
  */
 class EzacStartsController extends ControllerBase {
 
-    /**
-     * Display the status of the EZAC starts table
-     * @return array
-     */
+  /**
+   * Display the status of the EZAC starts table
+   * @return array
+   */
   public function status() {
     $content = [];
 
-      //$schema = drupal_get_module_schema('ezac', 'starts');
+    //$schema = drupal_get_module_schema('ezac', 'starts');
 
     // show record count for each Code value
     $headers = [
@@ -34,15 +34,15 @@ class EzacStartsController extends ControllerBase {
     ];
     
     $total = 0;
-      $condition = [];
-      $datums = array_unique(EzacStart::index($condition, 'datum', 'datum','DESC'));
-      $jaren = [];
-      foreach ($datums as $datum) {
-          $dp = date_parse($datum);
-          $year = $dp['year'];
-          if (isset($jaren[$year])) $jaren[$year]++;
-          else $jaren[$year] = 1;
-      }
+    $condition = [];
+    $datums = array_unique(EzacStart::index($condition, 'datum', 'datum','DESC'));
+    $jaren = [];
+    foreach ($datums as $datum) {
+      $dp = date_parse($datum);
+      $year = $dp['year'];
+      if (isset($jaren[$year])) $jaren[$year]++;
+      else $jaren[$year] = 1;
+    }
     foreach ($jaren as $jaar => $aantal) {
       $count = $aantal;
       $total = $total+$count;
@@ -86,7 +86,6 @@ class EzacStartsController extends ControllerBase {
       '#empty' => t('Geen gegevens beschikbaar.'),
       '#sticky' => TRUE,
     ];
-    
 
     // Don't cache this page.
     $content['#cache']['max-age'] = 0;
@@ -100,7 +99,7 @@ class EzacStartsController extends ControllerBase {
      *  $jaar - categorie (optional)
      * @return array
      */
-  public function overzichtJaar($jaar = NULL) {
+  public function overzichtJaar($jaar) {
     $content = array();
 
     $rows = [];
@@ -110,42 +109,43 @@ class EzacStartsController extends ControllerBase {
     ];
 
     // select all start dates for selected year
-      $condition = [
-          'datum' => [
-              'value' => ["$jaar-01-01", "$jaar-12-31"],
-              'operator' => 'BETWEEN'
-          ],
-      ];
-      $from = null;
-      $range = null;
-      $field = 'datum';
-      $sortkey = null;
-      $sortdir = null;
-      $unique = TRUE; // return unique results only
+    $condition = [
+        'datum' => [
+            'value' => ["$jaar-01-01", "$jaar-12-31"],
+            'operator' => 'BETWEEN'
+        ],
+    ];
+    $from = null;
+    $range = null;
+    $field = 'datum';
+    $sortkey = null;
+    $sortdir = null;
+    $unique = TRUE; // return unique results only
 
-      // bepaal aantal dagen
-      $total = count(EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique));
+    // bepaal aantal dagen
+    $total = count(EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique));
 
-      // prepare pager
-      $range = 120;
-      $page = pager_default_initialize($total, $range);
-      $from = $range * $page;
-      $field = 'datum';
-      $sortkey = 'datum';
-      $sortdir = 'ASC';
-      $unique = TRUE; // return unique results only
+    // prepare pager
+    $range = 120;
+    $page = pager_default_initialize($total, $range);
+    $from = $range * $page;
+    $field = 'datum';
+    $sortkey = 'datum';
+    $sortdir = 'ASC';
+    $unique = TRUE; // return unique results only
 
-      $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
+    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     foreach ($startsIndex as $datum) {
       $condition = ['datum' => $datum];
-      $count = EzacStart::counter($condition);
+      $count = 0; //test
+      //$count = EzacStart::counter($condition); // @todo this is SLOW - use non-unique index?
 
       $urlString = Url::fromRoute(
         'ezac_starts_overzicht',  // show starts for datum
         [
           'datum_start' => $datum,
           'datum_eind' => $datum,
-          ]
+        ]
       )->toString();
 
       $d = EzacUtil::showDate($datum);
@@ -157,17 +157,17 @@ class EzacStartsController extends ControllerBase {
     }
     $caption = "Overzicht EZAC Starts data voor $jaar";
     $content['table'] = [
-        '#type' => 'table',
-        '#caption' => $caption,
-        '#header' => $headers,
-        '#rows' => $rows,
-        '#empty' => t('Geen gegevens beschikbaar.'),
-        '#sticky' => TRUE,
+      '#type' => 'table',
+      '#caption' => $caption,
+      '#header' => $headers,
+      '#rows' => $rows,
+      '#empty' => t('Geen gegevens beschikbaar.'),
+      '#sticky' => TRUE,
     ];
     // add pager
     $content['pager'] = [
-        '#type' => 'pager',
-        '#weight' => 5
+      '#type' => 'pager',
+      '#weight' => 5
     ];
     // Don't cache this page.
     $content['#cache']['max-age'] = 0;

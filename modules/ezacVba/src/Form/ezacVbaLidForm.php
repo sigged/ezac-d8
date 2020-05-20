@@ -71,22 +71,6 @@ class ezacVbaLidForm extends FormBase
       $namen = EzacUtil::getLeden($condition);
       $namen[''] = '<selecteer>';
 
-      // store $namen in form for callback
-      $form['namen'] = [
-        '#type' => 'value',
-        '#value' => $namen,
-      ];
-
-      $form['datum_start'] =[
-        '#type' => 'value',
-        '#value' => $datum_start,
-      ];
-
-      $form['datum_eind'] =[
-        '#type' => 'value',
-        '#value' => $datum_eind,
-      ];
-
       $form['persoon'] = [
         '#type' => 'select',
         '#title' => 'Vlieger',
