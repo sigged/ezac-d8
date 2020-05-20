@@ -132,14 +132,17 @@ class EzacStartsController extends ControllerBase {
     $field = 'datum';
     $sortkey = 'datum';
     $sortdir = 'ASC';
-    $unique = TRUE; // return unique results only
 
-    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
+    $startsDates = EzacStart::index($condition, $field, $sortkey, $sortdir);
+    $startsIndex = array_unique($startsDates);
+
+    $dagen = [];
+    foreach ($startsDates as $datum) {
+      if (isset($dagen[$datum])) $dagen[$datum]++;
+      else $dagen[$datum] = 1;
+    }
+
     foreach ($startsIndex as $datum) {
-      $condition = ['datum' => $datum];
-      $count = 0; //test
-      //$count = EzacStart::counter($condition); // @todo this is SLOW - use non-unique index?
-
       $urlString = Url::fromRoute(
         'ezac_starts_overzicht',  // show starts for datum
         [
@@ -152,7 +155,7 @@ class EzacStartsController extends ControllerBase {
       $rows[] = [
         //link each record to overzicht route
         t("<a href=$urlString>$d"),
-        $count,
+        $dagen[$datum],
       ];
     }
     $caption = "Overzicht EZAC Starts data voor $jaar";
