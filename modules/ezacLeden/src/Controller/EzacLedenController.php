@@ -132,7 +132,12 @@ class EzacLedenController extends ControllerBase {
     $sortkey = 'achternaam';
     $sortdir = 'ASC';
     $range = 50;
-    $page = pager_default_initialize($total, $range);
+    //$page = pager_default_initialize($total, $range);
+    $pager = \Drupal::service('pager.manager')
+      ->createPager($total, $range);
+    $page = $pager
+      ->getCurrentPage();
+
     $from = $range * $page;
     
     $ledenIndex = EzacLid::index($condition, $field, $sortkey, $sortdir, $from, $range);
