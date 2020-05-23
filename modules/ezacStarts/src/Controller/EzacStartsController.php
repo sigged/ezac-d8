@@ -3,6 +3,8 @@
 namespace Drupal\ezacStarts\Controller;
 
 use Drupal;
+use Drupal\Core\Pager\PagerManager;
+use Drupal\Core\Pager\PagerManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -221,10 +223,48 @@ class EzacStartsController extends ControllerBase {
     $field = 'id';
     $sortkey = 'start';
     $sortdir = 'ASC'; // newest first
-    $range = 50;
+    $range = 10;
+    $limit = 10;
     $page = pager_default_initialize($total, $range);
+    $pager = \Drupal::service('pager.manager')
+      ->createPager($total, $limit);
+    //$pager = \Drupal\Core\Pager\PagerManager()->createPager($total,$limit);
+    $page = $pager
+      ->getCurrentPage();
+
+
     $from = $range * $page;
     $unique = FALSE; // return all results
+
+    /* example drupal
+    // First find the total number of items and initialize the pager.
+    $total = mymodule_select("SELECT COUNT(*) FROM data WHERE status = 1")
+      ->result();
+    $num_per_page = \Drupal::config('mymodule.settings')
+      ->get('num_per_page');
+    $pager = \Drupal::service('pager.manager')
+      ->createPager($total, $num_per_page);
+    $page = $pager
+      ->getCurrentPage();
+
+    // Next, retrieve the items for the current page and put them into a
+    // render array.
+    $offset = $num_per_page * $page;
+    $result = mymodule_select("SELECT * FROM data " . $where . " LIMIT %d, %d", $offset, $num_per_page)
+      ->fetchAll();
+    $render = [];
+    $render[] = [
+      '#theme' => 'mymodule_results',
+      '#result' => $result,
+    ];
+
+    // Finally, add the pager to the render array, and return.
+    $render[] = [
+      '#type' => 'pager',
+    ];
+
+    end example drupal */
+
 
     $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     foreach ($startsIndex as $id) {
