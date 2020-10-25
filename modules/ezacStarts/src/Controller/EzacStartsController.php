@@ -129,7 +129,6 @@ class EzacStartsController extends ControllerBase {
 
     // prepare pager
     $range = 120;
-    //$page = pager_default_initialize($total, $range);
     $pager = \Drupal::service('pager.manager')
       ->createPager($total, $range);
     $page = $pager
@@ -228,7 +227,7 @@ class EzacStartsController extends ControllerBase {
     $field = 'id';
     $sortkey = 'start';
     $sortdir = 'ASC'; // newest first
-    $limit = 10;
+    $limit = 100;
     //$page = pager_default_initialize($total, $range); // deprecated
     $pager = \Drupal::service('pager.manager')
       ->createPager($total, $limit);
