@@ -90,7 +90,7 @@ class ezacVbaLidForm extends FormBase
           'value' => [$datum_start, $datum_eind],
           'operator' => 'BETWEEN'
         ],
-        'afkorting' => $form_state->getValue('persoon', key($namen)),
+        'afkorting' => $form_state->getValue('persoon', key($namen)), // default value is current pointed key in $namen
       ];
       $dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
 
@@ -121,7 +121,7 @@ class ezacVbaLidForm extends FormBase
       $persoon = $form_state->getValue('persoon', key($namen));
 
       dpm($persoon, "persoon"); //debug
-      if (isset($persoon) && $persoon != 'selecteer' ) {
+      if (isset($persoon) && $persoon != '' ) {
         //toon vluchten dit jaar
         dpm($vlieger_afkorting, "vlieger"); //debug
         dpm($datum_start, "datum start"); //debug

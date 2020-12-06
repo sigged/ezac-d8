@@ -75,7 +75,7 @@ class ezacVbaStatusForm extends FormBase
         ],
       ];
 
-      $periode = $form_state->getValue('periode', key($periode_list));
+      $periode = $form_state->getValue('periode', key($periode_list)); // default is current pointed key in periode_list
 
       switch ($periode) {
         case 'vandaag' :
