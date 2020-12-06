@@ -120,6 +120,7 @@ class ezacVbaLidForm extends FormBase
       //@todo check persoon value, then show starts and other details
       $persoon = $form_state->getValue('persoon', key($namen));
 
+      dpm($persoon, "persoon"); //debug
       if (isset($persoon) && $persoon != 'selecteer' ) {
         //toon vluchten dit jaar
         dpm($vlieger_afkorting, "vlieger"); //debug
