@@ -114,6 +114,7 @@ class ezacVbaLidForm extends FormBase
         '#weight' => 4,
         '#prefix' => '<div id="vliegers-div">', //This section replaced by AJAX callback
         '#suffix' => '</div>',
+        '#default' => 'EF', //debug
         '#tree' => TRUE,
       );
 
