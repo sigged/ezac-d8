@@ -70,7 +70,7 @@ class ezacVbaLidForm extends FormBase
       ];
       $namen = EzacUtil::getLeden($condition);
       $namen[''] = '<selecteer>';
-
+      dpm($namen, "namen"); //debug
       $form['persoon'] = [
         '#type' => 'select',
         '#title' => 'Vlieger',
