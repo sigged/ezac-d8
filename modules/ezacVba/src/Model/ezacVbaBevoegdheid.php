@@ -82,6 +82,12 @@ class ezacVbaBevoegdheid extends EzacStorage
         return $this->ezacRead('vba_bevoegdheden');
     }
 
+    static public function readAll($condition)
+    {
+      $condition = []; // select all records
+      $bevoegdheden = EzacStorage::ezacReadAll('vba_bevoegdheden', $condition, __CLASS__);
+      return $bevoegdheden;
+    }
     /**
      * update - Updates record in the vba table
      *
@@ -130,7 +136,7 @@ class ezacVbaBevoegdheid extends EzacStorage
      * @param bool $unique
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'bevoegdheid', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
     {
         return EzacStorage::ezacIndex('vba_bevoegdheden', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
