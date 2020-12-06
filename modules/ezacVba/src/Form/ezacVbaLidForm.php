@@ -107,6 +107,15 @@ class ezacVbaLidForm extends FormBase
       //$datum = $form_state->getValue('datum', date('Y-m-d'));
 
       //@todo maak container voor vliegers
+      //[vliegers] form wordt door AJAX opnieuw opgebouwd
+      $form['vliegers'] = array(
+        '#title' => t('Vlieger'),
+        '#type' => 'container',
+        '#weight' => 4,
+        '#prefix' => '<div id="vliegers-div">', //This section replaced by AJAX callback
+        '#suffix' => '</div>',
+        '#tree' => TRUE,
+      );
 
       //toon vluchten dit jaar
       dpm($vlieger_afkorting, "vlieger"); //debug
@@ -141,7 +150,7 @@ class ezacVbaLidForm extends FormBase
       $verslagenIndex = ezacVbaDagverslagLid::index($condition);
 
       // put in table
-      if (!empty($verslagen)) { //create fieldset
+      if (isset($verslagenIndex)) { //create fieldset
         $form['vliegers']['verslagen'][$vlieger_afkorting] = array(
           '#title' => t("Eerdere verslagen voor $helenaam"),
           '#type'=> 'fieldset',
