@@ -94,15 +94,11 @@ class ezacVbaLidForm extends FormBase
       ];
       $dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
 
-      $condition = [
-        'datum_aan' => [
-          'value' => [$datum_start, $datum_eind],
-          'operator' => 'BETWEEN'
-        ],
-      ];
-
       // Kies gewenste vlieger voor overzicht dagverslagen
       $overzicht = TRUE; // @todo replace parameter $overzicht
+      //@todo het overzicht van vluchten is initieel voor iedereen ipv leeg en de sortering lijkt willekeurig
+      //@todo het overzicht van vluchten wordt ook niet aangepast nadat een vlieger is geselecteerd
+
       // D7 code start
 
       $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
@@ -113,6 +109,10 @@ class ezacVbaLidForm extends FormBase
       //@todo maak container voor vliegers
 
       //toon vluchten dit jaar
+      dpm("vlieger", $vlieger_afkorting); //debug
+      dpm("datum start", $datum_start); //debug
+      dpm("datum eind", $datum_eind); //debug
+
       $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
 
       if (!$overzicht) {
