@@ -109,9 +109,9 @@ class ezacVbaLidForm extends FormBase
       //@todo maak container voor vliegers
 
       //toon vluchten dit jaar
-      dpm("vlieger", $vlieger_afkorting); //debug
-      dpm("datum start", $datum_start); //debug
-      dpm("datum eind", $datum_eind); //debug
+      dpm($vlieger_afkorting, "vlieger"); //debug
+      dpm($datum_start, "datum start"); //debug
+      dpm($datum_eind,"datum eind"); //debug
 
       $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
 
