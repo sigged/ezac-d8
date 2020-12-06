@@ -75,7 +75,7 @@ class ezacVbaLidForm extends FormBase
         '#type' => 'select',
         '#title' => 'Vlieger',
         '#options' => $namen,
-        '#default' => 'selecteer',
+        '#default' => 'EF',
         '#weight' => 2,
         '#ajax' => [
           'wrapper' => 'vlieger-div',
@@ -114,7 +114,6 @@ class ezacVbaLidForm extends FormBase
         '#weight' => 4,
         '#prefix' => '<div id="vliegers-div">', //This section replaced by AJAX callback
         '#suffix' => '</div>',
-        '#default' => 'EF', //debug
         '#tree' => TRUE,
       );
 
