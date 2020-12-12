@@ -26,8 +26,7 @@ class ezacVbaLidForm extends FormBase
     /**
      * @inheritdoc
      */
-    public function getFormId()
-    {
+    public function getFormId(): string {
         return 'ezac_vba_lid_form';
     }
 
@@ -70,7 +69,7 @@ class ezacVbaLidForm extends FormBase
       ];
       $namen = EzacUtil::getLeden($condition);
       $namen[''] = '<selecteer>';
-      dpm($namen, "namen"); //debug
+
       $form['persoon'] = [
         '#type' => 'select',
         '#title' => 'Vlieger',
