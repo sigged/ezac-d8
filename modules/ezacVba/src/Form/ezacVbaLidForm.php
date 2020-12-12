@@ -74,10 +74,10 @@ class ezacVbaLidForm extends FormBase
         '#type' => 'select',
         '#title' => 'Vlieger',
         '#options' => $namen,
-        '#default_value' => 'EF',
+        '#default_value' => 'EF', //debug
         '#weight' => 2,
         '#ajax' => [
-          'wrapper' => 'vlieger-div',
+          'wrapper' => 'vliegers-div',
           'callback' => '::formPersoonCallback',
           'effect' => 'fade',
           //'progress' => array('type' => 'throbber'),
