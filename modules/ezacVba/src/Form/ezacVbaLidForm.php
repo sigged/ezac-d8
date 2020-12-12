@@ -102,6 +102,7 @@ class ezacVbaLidForm extends FormBase
 
       $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
       $helenaam = $namen[$vlieger_afkorting];
+      dpm($dagverslagenLidCount, "aantal dagverslagenvoor $vlieger_afkorting"); //debug
 
       //$datum = $form_state->getValue('datum', date('Y-m-d'));
 
