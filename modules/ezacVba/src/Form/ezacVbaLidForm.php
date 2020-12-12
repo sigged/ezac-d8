@@ -74,7 +74,7 @@ class ezacVbaLidForm extends FormBase
         '#type' => 'select',
         '#title' => 'Vlieger',
         '#options' => $namen,
-        '#default' => 'EF',
+        '#default_value' => 'EF',
         '#weight' => 2,
         '#ajax' => [
           'wrapper' => 'vlieger-div',
@@ -102,7 +102,6 @@ class ezacVbaLidForm extends FormBase
 
       $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
       $helenaam = $namen[$vlieger_afkorting];
-      dpm($dagverslagenLidCount, "aantal dagverslagenvoor $vlieger_afkorting"); //debug
 
       //$datum = $form_state->getValue('datum', date('Y-m-d'));
 
