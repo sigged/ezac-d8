@@ -84,7 +84,12 @@ class EzacStartsUpdateForm extends FormBase
         ];
 
         // get names of leden
-        $leden = EzacUtil::getLeden();
+        $condition = [
+          'actief' => TRUE,
+          'code' => 'VL',
+          ];
+        $leden = EzacUtil::getLeden($condition);
+
         // get kisten details
         $kisten = EzacUtil::getKisten();
 

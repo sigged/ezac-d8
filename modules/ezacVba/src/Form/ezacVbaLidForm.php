@@ -310,6 +310,7 @@ class ezacVbaLidForm extends FormBase
    */
   function formPersoonCallback(array $form, FormStateInterface $form_state)
     {
+      // @todo fill form elements for selected person?
       return $form['vliegers'];
     }
 
