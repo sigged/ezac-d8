@@ -155,7 +155,7 @@ class ezacVbaLidForm extends FormBase
       $helenaam = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
 
       // @todo deze routine geeft niet de juiste starts terug
-      $form['vliegers']['starts'] = self::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
+      $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
 
       if (!$overzicht) {
         //@todo param $overzicht nog hanteren? of apart form voor maken
@@ -391,8 +391,7 @@ class ezacVbaLidForm extends FormBase
 
     // @todo pager not to be used
 
-    $limit = 10;
-    //$page = pager_default_initialize($total, $range); // deprecated
+    $limit = 100;
     $pager = \Drupal::service('pager.manager')
       ->createPager($total, $limit);
     $page = $pager
