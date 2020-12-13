@@ -40,6 +40,10 @@ class EzacStorage
     public static function ezacCount($table, $condition = array())
     {
 
+        // use ezacIndex
+        return count(self::ezacIndex($table, $condition));
+
+        /*
         // Read all fields from a ezac table.
         // EZAC database is outside the Drupal structure
         Database::setActiveConnection(self::dbName);
@@ -63,7 +67,7 @@ class EzacStorage
         Database::setActiveConnection();
 
         return $record_count;
-
+        */
     } // ezacCount
 
     /**
@@ -103,8 +107,6 @@ class EzacStorage
          * OR an array pointing to an orConditionGroup, by key "OR"
          */
 
-      dpm($table, "table"); //debug
-      dpm($condition, "condition"); //debug
         foreach ((array)$condition as $field => $test) {
             // condition can be a simple field => value pair for EQUALS (default test)
             //   or contain value and operator keys for other tests
