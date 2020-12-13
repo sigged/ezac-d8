@@ -377,7 +377,7 @@ class ezacVbaLidForm extends FormBase
 
     // add orGroup to selection
 
-    $conditio['OR'] =
+    $condition['OR'] =
       [
         'gezagvoerder' => $vlieger,
         'tweede' => $vlieger,
@@ -392,6 +392,7 @@ class ezacVbaLidForm extends FormBase
     $sortdir = 'ASC'; // newest first
 
     // @todo pager not to be used
+    /*
     $limit = 100;
     //$page = pager_default_initialize($total, $range); // deprecated
     $pager = \Drupal::service('pager.manager')
@@ -401,8 +402,8 @@ class ezacVbaLidForm extends FormBase
 
     $from = $limit * $page;
     $unique = FALSE; // return all results
-
-    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $limit, $unique);
+    */
+    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir); //, $from, $limit, $unique);
     foreach ($startsIndex as $id) {
       $start = (new EzacStart)->read($id);
 
