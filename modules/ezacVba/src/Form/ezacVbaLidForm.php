@@ -377,7 +377,7 @@ class ezacVbaLidForm extends FormBase
 
     // add orGroup to selection
 
-    $condition['NOR'] =
+    $conditio['OR'] =
       [
         'gezagvoerder' => $vlieger,
         'tweede' => $vlieger,
