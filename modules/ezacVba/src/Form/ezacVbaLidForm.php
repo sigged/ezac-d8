@@ -394,7 +394,7 @@ class ezacVbaLidForm extends FormBase
         'gezagvoerder' => $vlieger,
         'tweede' => $vlieger,
     ];
-    //dpm($condition, "condition after orGroup"); //debug
+    dpm($condition, "condition after orGroup"); //debug
 
     // prepare pager
     $total = EzacStart::counter($condition);
