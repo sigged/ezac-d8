@@ -113,9 +113,6 @@ class ezacVbaLidForm extends FormBase
         '#tree' => TRUE,
       );
 
-      //@todo check persoon value, then show starts and other details
-      $persoon = $form_state->getValue('persoon', key($namen));
-
       //submit
       $form['vliegers']['submit'] = [
         '#type' => 'submit',
@@ -157,17 +154,8 @@ class ezacVbaLidForm extends FormBase
       $lid = (new EzacLid)->read(EzacLid::getId($vlieger_afkorting));
       $helenaam = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
 
-      $condition = [
-        'datum' => [
-          'value' => [$datum_start, $datum_eind],
-          'operator' => 'BETWEEN'
-        ],
-        'afkorting' => $vlieger_afkorting,
-      ];
-      //$dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
-
       // @todo deze routine geeft niet de juiste starts terug
-      $form['vliegers']['starts'] = self::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
+      //$form['vliegers']['starts'] = self::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
 
       if (!$overzicht) {
         //@todo param $overzicht nog hanteren? of apart form voor maken
@@ -388,7 +376,6 @@ class ezacVbaLidForm extends FormBase
     else $condition = ['datum' => $datum_start];
 
     // add orGroup to selection
-
 
     $condition['OR'] =
       [
