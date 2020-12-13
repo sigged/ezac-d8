@@ -129,9 +129,8 @@ class EzacStorage
                       //single condition
                       $orGroup->condition($field2, $test2);
                     }
-                    $select->condition($orGroup);
                 } // orGroup element
-
+                $select->condition($orGroup);
               } //orGroup
               else {
                 // combined condition
