@@ -103,6 +103,7 @@ class EzacStorage
          * OR an array pointing to an orConditionGroup, by key "OR"
          */
 
+      dpm($table, "table"); //debug
       dpm($condition, "condition"); //debug
         foreach ((array)$condition as $field => $test) {
             // condition can be a simple field => value pair for EQUALS (default test)
