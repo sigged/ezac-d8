@@ -148,6 +148,7 @@ class ezacVbaLidForm extends FormBase
     $persoon = $form_state->getValue('persoon');
     $datum_start = $form_state->getValue('datum_start');
     $datum_eind = $form_state->getValue('datum_eind');
+    dpm($persoon, "persoon"); //debug
 
     if (isset($persoon) && $persoon != '') {
       //toon vluchten dit jaar
