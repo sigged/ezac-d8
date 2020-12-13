@@ -121,11 +121,11 @@ class EzacStorage
                       // combined condition
                       $value = $test2["value"];
                       $operator = $test2["operator"];
-                      $orGroup = $orGroup->condition($field2, $value, $operator);
+                      $orGroup->condition($field2, $value, $operator);
                     }
                     else {
                       //single condition
-                      $orGroup = $orGroup->condition($field2, $test2);
+                      $orGroup->condition($field2, $test2);
                     }
                     $select->condition($orGroup);
                 } // orGroup element
