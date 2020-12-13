@@ -109,11 +109,10 @@ class EzacStorage
             $orGroup = [];
             if (is_array($test)) {
               // combined condition with value(s) and operator
-              if (key_exists("OR", $test)) {
+              if ($field == "OR") {
                 // test is part of an orGroup
                 $select->orConditionGroup();
-                foreach ($test as $field => $test2) {
-                  if ($field <> "OR") {
+                foreach ($test as $field2 => $test2) {
                     if (is_array($test2)) {
                       // combined condition
                       $value = $test2["value"];
@@ -122,9 +121,8 @@ class EzacStorage
                     }
                     else {
                       //single condition
-                      $select->condition($field, $test2);
+                      $select->condition($field2, $test2);
                     }
-                  } // omit OR key
                 } // orGroup element
               } //orGroup
               else {
