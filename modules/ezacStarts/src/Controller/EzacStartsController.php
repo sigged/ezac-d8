@@ -223,6 +223,13 @@ class EzacStartsController extends ControllerBase {
     }
     else $condition = ['datum' => $datum_start];
 
+    // add orGroup to selection
+    $condition['OR'] =
+      [
+        'gezagvoerder' => $vlieger,
+        'tweede' => $vlieger,
+      ];
+
     // prepare pager
     $total = EzacStart::counter($condition);
     $field = 'id';
