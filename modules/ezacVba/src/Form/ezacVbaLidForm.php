@@ -383,16 +383,14 @@ class ezacVbaLidForm extends FormBase
         'tweede' => $vlieger,
     ];
 
-    dpm($condition, "condition after orGroup"); //debug
-
     // prepare pager
-    // $total = EzacStart::counter($condition);
+    $total = EzacStart::counter($condition);
     $field = 'id';
     $sortkey = 'start';
     $sortdir = 'ASC'; // newest first
 
     // @todo pager not to be used
-    /*
+
     $limit = 100;
     //$page = pager_default_initialize($total, $range); // deprecated
     $pager = \Drupal::service('pager.manager')
@@ -402,7 +400,7 @@ class ezacVbaLidForm extends FormBase
 
     $from = $limit * $page;
     $unique = FALSE; // return all results
-    */
+
     $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir); //, $from, $limit, $unique);
     foreach ($startsIndex as $id) {
       $start = (new EzacStart)->read($id);
