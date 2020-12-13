@@ -191,6 +191,7 @@ class EzacStartsController extends ControllerBase {
    * @return array $content
    */
   public static function startOverzicht($datum_start, $datum_eind, $vlieger = NULL) {
+    //@TODO this routine to be removed here
     $content = array();
 
     $rows = [];

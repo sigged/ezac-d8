@@ -10,6 +10,7 @@ use Drupal\Core\Url;
 use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\ezacStarts\Controller\EzacStartsController;
+use Drupal\ezacStarts\Model\EzacStart;
 use Drupal\ezacVba\Model\ezacVbaBevoegdheid;
 use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
 use Drupal\ezacVba\Model\ezacVbaDagverslag;
@@ -148,7 +149,6 @@ class ezacVbaLidForm extends FormBase
     $persoon = $form_state->getValue('persoon');
     $datum_start = $form_state->getValue('datum_start');
     $datum_eind = $form_state->getValue('datum_eind');
-    dpm($persoon, "persoon"); //debug
 
     if (isset($persoon) && $persoon != '') {
       //toon vluchten dit jaar
@@ -348,4 +348,117 @@ class ezacVbaLidForm extends FormBase
   {
 
   } //submitForm
+
+  /**
+   * @param $datum_start
+   * @param $datum_eind
+   * @param null $vlieger
+   * @return array $content
+   */
+  public static function startOverzicht($datum_start, $datum_eind, $vlieger = NULL) {
+    $content = array();
+
+    $rows = [];
+    $headers = [
+      t('datum'),
+      t('start'),
+      t('landing'),
+      t('duur'),
+      t('registratie'),
+      t('gezagvoerder'),
+      t('tweede'),
+      t('soort'),
+      t('start methode'),
+      t('instructie'),
+      t('opmerking'),
+    ];
+
+    $leden = EzacUtil::getLeden();
+    // $kisten = EzacUtil::getKisten();
+
+    // select all starts for selected date
+    if (isset($datum_eind))
+    {
+      $condition['datum'] =
+        [
+          'value' => [$datum_start, $datum_eind],
+          'operator' => 'BETWEEN',
+        ];
+    }
+    else $condition = ['datum' => $datum_start];
+
+    $condition['gezagvoerder'] = $vlieger;
+    $condition['tweede'] = $vlieger;
+
+    // prepare pager
+    $total = EzacStart::counter($condition);
+    $field = 'id';
+    $sortkey = 'start';
+    $sortdir = 'ASC'; // newest first
+
+    // @todo pager not to be used
+    $limit = 100;
+    //$page = pager_default_initialize($total, $range); // deprecated
+    $pager = \Drupal::service('pager.manager')
+      ->createPager($total, $limit);
+    $page = $pager
+      ->getCurrentPage();
+
+    $from = $limit * $page;
+    $unique = FALSE; // return all results
+
+    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir); //, $from, $limit, $unique);
+    foreach ($startsIndex as $id) {
+      $start = (new EzacStart)->read($id);
+
+      $urlString = Url::fromRoute(
+        'ezac_starts_update',  // edit starts record
+        ['id' => $start->id]
+      )->toString();
+
+      if (isset($leden[$start->gezagvoerder]) && $start->gezagvoerder <> '') {
+        $gezagvoerder = $leden[$start->gezagvoerder];
+      }
+      else $gezagvoerder = $start->gezagvoerder; // un-edited record value
+
+      if (isset($leden[$start->tweede]) && $start->tweede <> '') {
+        $tweede = $leden[$start->tweede];
+      }
+      else $tweede = $start->tweede; // un-edited record value
+
+      $rows[] = [
+        //link each record to edit route
+        $start->datum,
+        t("<a href=$urlString>" .substr($start->start, 0, 5) ."</a>"),
+        substr($start->landing,0,5),
+        substr($start->duur, 0,5),
+        $start->registratie,
+        $gezagvoerder,
+        $tweede,
+        EzacStart::$startSoort[$start->soort],
+        EzacStart::$startMethode[$start->startmethode],
+        ($start->instructie) ? 'Ja' :'',
+        $start->opmerking,
+      ];
+    }
+    $d = EzacUtil::showDate($datum_start);
+    if ($datum_eind <> $datum_start) $d.= " tot " .EzacUtil::showDate($datum_eind);
+    $caption = "Overzicht EZAC Starts bestand $d";
+    $content['table'] = [
+      '#type' => 'table',
+      '#caption' => $caption,
+      '#header' => $headers,
+      '#rows' => $rows,
+      '#empty' => t('Geen gegevens beschikbaar.'),
+      '#sticky' => TRUE,
+    ];
+    // add pager
+    $content['pager'] = [
+      '#type' => 'pager',
+      '#weight' => 5
+    ];
+
+    return $content;
+  }
+
 }

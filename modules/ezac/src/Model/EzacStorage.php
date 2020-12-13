@@ -96,13 +96,43 @@ class EzacStorage
         $select->addField('t', $field);
 
         // Add each field and value as a condition to this query.
+
+        /*
+         * a condition entry is either a field and value
+         * OR a field pointing to an array of value and operator
+         * OR an array pointing to an orConditionGroup, by key "OR"
+         */
+
         foreach ((array)$condition as $field => $test) {
             // condition can be a simple field => value pair for EQUALS (default test)
             //   or contain value and operator keys for other tests
+            $orGroup = [];
             if (is_array($test)) {
+              // combined condition with value(s) and operator
+              if (key_exists("OR", $test)) {
+                // test is part of an orGroup
+                $select->orConditionGroup();
+                foreach ($test as $field => $test2) {
+                  if ($field <> "OR") {
+                    if (is_array($test2)) {
+                      // combined condition
+                      $value = $test2["value"];
+                      $operator = $test2["operator"];
+                      $select->condition($field, $value, $operator);
+                    }
+                    else {
+                      //single condition
+                      $select->condition($field, $test2);
+                    }
+                  } // omit OR key
+                } // orGroup element
+              } //orGroup
+              else {
+                // combined condition
                 $value = $test["value"];
                 $operator = $test["operator"];
                 $select->condition($field, $value, $operator);
+              }
             } else $select->condition($field, $test);
         }
         // sort the result
