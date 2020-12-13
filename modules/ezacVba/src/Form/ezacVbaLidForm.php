@@ -82,24 +82,14 @@ class ezacVbaLidForm extends FormBase
         '#type' => 'select',
         '#title' => 'Vlieger',
         '#options' => $namen,
-        '#default_value' => 'EF', //debug
         '#weight' => 2,
         '#ajax' => [
           'wrapper' => 'vliegers-div',
           'callback' => '::formPersoonCallback',
           'effect' => 'fade',
-          //'progress' => array('type' => 'throbber'),
         ],
       ];
 
-      $condition = [
-        'datum' => [
-          'value' => [$datum_start, $datum_eind],
-          'operator' => 'BETWEEN'
-        ],
-        'afkorting' => $form_state->getValue('persoon'),
-      ];
-      $dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
 
       // Kies gewenste vlieger voor overzicht dagverslagen
       $overzicht = TRUE; // @todo replace parameter $overzicht
@@ -124,14 +114,11 @@ class ezacVbaLidForm extends FormBase
       //@todo check persoon value, then show starts and other details
       $persoon = $form_state->getValue('persoon', key($namen));
 
+      /* remove code that is in the callback now
       if (isset($persoon) && $persoon != '' ) {
         //toon vluchten dit jaar
         $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
         $helenaam = $namen[$vlieger_afkorting];
-
-        dpm($vlieger_afkorting, "vlieger"); //debug
-        dpm($datum_start, "datum start"); //debug
-        dpm($datum_eind, "datum eind"); //debug
 
         $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
 
@@ -292,21 +279,22 @@ class ezacVbaLidForm extends FormBase
               '#tree' => TRUE,
             ];
           }
-
-          //submit
-          $form['vliegers']['submit'] = [
-            '#type' => 'submit',
-            '#description' => t('Opslaan'),
-            '#value' => t('Opslaan'),
-            '#weight' => 99,
-          ];
-        }
-        // D7 code end
-        $form['actions'] = [
-          '#type' => 'actions',
-        ];
       }
-        return $form;
+      */
+
+      //submit
+      $form['vliegers']['submit'] = [
+        '#type' => 'submit',
+        '#description' => t('Opslaan'),
+        '#value' => t('Opslaan'),
+        '#weight' => 99,
+      ];
+
+      // D7 code end
+      $form['actions'] = [
+      '#type' => 'actions',
+      ];
+      return $form;
     }
 
   /**
@@ -335,6 +323,16 @@ class ezacVbaLidForm extends FormBase
       $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
       $helenaam = $namen[$vlieger_afkorting];
 
+      $condition = [
+        'datum' => [
+          'value' => [$datum_start, $datum_eind],
+          'operator' => 'BETWEEN'
+        ],
+        'afkorting' => $form_state->getValue('persoon'),
+      ];
+      $dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
+
+      // @todo deze routine geeft niet de juiste starts terug
       $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
 
       if (!$overzicht) {
