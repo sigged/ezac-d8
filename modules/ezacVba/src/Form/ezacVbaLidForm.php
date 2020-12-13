@@ -388,11 +388,12 @@ class ezacVbaLidForm extends FormBase
     else $condition = ['datum' => $datum_start];
 
     // add orGroup to selection
-    $condition["OR"] = [
-      'gezagvoerder' => $vlieger,
-      'tweede' => $vlieger,
+    $condition['OR'] =
+      [
+        'gezagvoerder' => $vlieger,
+        'tweede' => $vlieger,
     ];
-
+    dpm($condition, "condition after orGroup"); //debug
     // prepare pager
     $total = EzacStart::counter($condition);
     $field = 'id';
