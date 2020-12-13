@@ -167,7 +167,7 @@ class ezacVbaLidForm extends FormBase
       //$dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
 
       // @todo deze routine geeft niet de juiste starts terug
-      $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
+      $form['vliegers']['starts'] = self::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
 
       if (!$overzicht) {
         //@todo param $overzicht nog hanteren? of apart form voor maken
