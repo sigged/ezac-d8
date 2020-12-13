@@ -112,6 +112,9 @@ class EzacStorage
                 // test is part of an orGroup
                 $orGroup = $select->orConditionGroup();
                 foreach ($test as $field2 => $test2) {
+                  dpm($test, "OR test"); //debug
+                  dpm($field2, "field");
+                  dpm($test2, "test");
                     if (is_array($test2)) {
                       // combined condition
                       $value = $test2["value"];
