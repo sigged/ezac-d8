@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\ezac\Util\EzacUtil;
+use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\ezacStarts\Controller\EzacStartsController;
 use Drupal\ezacVba\Model\ezacVbaBevoegdheid;
 use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
@@ -114,174 +115,6 @@ class ezacVbaLidForm extends FormBase
       //@todo check persoon value, then show starts and other details
       $persoon = $form_state->getValue('persoon', key($namen));
 
-      /* remove code that is in the callback now
-      if (isset($persoon) && $persoon != '' ) {
-        //toon vluchten dit jaar
-        $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
-        $helenaam = $namen[$vlieger_afkorting];
-
-        $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
-
-        if (!$overzicht) {
-          //@todo param $overzicht nog hanteren? of apart form voor maken
-          // invoeren opmerking
-          $form['vliegers']['opmerking'] = [
-            '#title' => t("Opmerkingen voor $helenaam"),
-            '#type' => 'textarea',
-            '#rows' => 3,
-            '#required' => FALSE,
-            '#weight' => 5,
-            '#tree' => TRUE,
-          ];
-        }
-
-        //Toon eerdere verslagen per lid
-        // query vba verslag, bevoegdheid records
-        $condition = ['afkorting' => $vlieger_afkorting];
-        if (isset($datum_start)) {
-          $condition ['datum'] =
-            [
-              'value' => [$datum_start, $datum_eind],
-              'operator' => 'BETWEEN'
-            ];
-        }
-        $verslagenIndex = ezacVbaDagverslagLid::index($condition);
-
-        // put in table
-        if (isset($verslagenIndex)) { //create fieldset
-          $form['vliegers']['verslagen'][$vlieger_afkorting] = [
-            '#title' => t("Eerdere verslagen voor $helenaam"),
-            '#type' => 'fieldset',
-            '#edit' => FALSE,
-            '#required' => FALSE,
-            '#collapsible' => TRUE,
-            '#collapsed' => !$overzicht,
-            '#weight' => 6,
-            '#tree' => TRUE,
-          ];
-
-          $header = [
-            ['data' => 'datum', 'width' => '20%'],
-            ['data' => 'instructeur', 'width' => '20%'],
-            ['data' => 'opmerking'],
-          ];
-
-          $rows = [];
-          foreach ($verslagenIndex as $id) {
-            $verslag = (new ezacVbaDagverslagLid)->read($id);
-            $rows[] = [
-              EzacUtil::showDate($verslag->datum),
-              $namen[$verslag->instructeur],
-              nl2br($verslag->verslag),
-            ];
-          }
-          $form['vliegers']['verslagen'][$vlieger_afkorting]['tabel'] = [
-            '#theme' => 'table',
-            '#header' => $header,
-            '#rows' => $rows,
-            '#empty' => t('Geen gegevens beschikbaar'),
-            //'#attributes' => $attributes,
-          ];
-        }
-
-        $condition = [];
-        $bevoegdhedenIndex = ezacVbaBevoegdheid::index($condition);
-        $bv_list[0] = '<Geen wijziging>';
-        if (isset($bevoegdhedenIndex)) {
-          foreach ($bevoegdhedenIndex as $id) {
-            $bevoegdheid = (new ezacVbaBevoegdheid)->read($id);
-            $bv_list[$bevoegdheid->bevoegdheid] = $bevoegdheid->naam;
-          }
-        }
-        //toon huidige bevoegdheden
-        // query vba verslag, bevoegdheid records
-        $condition['afkorting'] = $vlieger_afkorting;
-        $condition['actief'] = TRUE;
-        $vlieger_bevoegdhedenIndex = ezacVbaBevoegdheidLid::index($condition);
-
-        // put in table
-        $header = [
-          ['data' => 'datum', 'width' => '20%'],
-          ['data' => 'instructeur', 'width' => '20%'],
-          ['data' => 'bevoegdheid'],
-        ];
-        $rows = [];
-
-        if (!empty($vlieger_bevoegdhedenIndex)) { //create fieldset
-          $form['vliegers']['bevoegdheden'][$vlieger_afkorting] = [
-            '#title' => t("Bevoegdheden voor $helenaam"),
-            '#type' => 'fieldset',
-            '#edit' => FALSE,
-            '#required' => FALSE,
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE, //!$overzicht,
-            '#weight' => 7,
-            '#tree' => TRUE,
-          ];
-          foreach ($vlieger_bevoegdhedenIndex as $id) {
-            $bevoegdheid = (new ezacVbaBevoegdheidLid)->read($id);
-            $rows[] = [
-              EzacUtil::showDate($bevoegdheid->datum_aan),
-              $namen[$bevoegdheid->instructeur],
-              $bevoegdheid->bevoegdheid . ' - '
-              . $bv_list[$bevoegdheid->bevoegdheid] . ' '
-              . nl2br($bevoegdheid->onderdeel)
-            ];
-          }
-          $form['vliegers']['bevoegdheden'][$vlieger_afkorting]['tabel'] = [
-            '#theme' => 'table',
-            '#header' => $header,
-            '#rows' => $rows,
-            '#empty' => t('Geen gegevens beschikbaar'),
-            '#weight' => 7,
-          ];
-        }
-
-        if (!$overzicht) {
-          //invoer bevoegdheid
-          $form['vliegers']['bevoegdheid'] = [
-            '#title' => 'Bevoegdheid',
-            '#type' => 'container',
-            '#prefix' => '<div id="bevoegdheid-div">',
-            '#suffix' => '</div>',
-            '#required' => FALSE,
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE,
-            '#weight' => 10,
-            '#tree' => TRUE,
-          ];
-
-          $form['vliegers']['bevoegdheid']['keuze'] = [
-            '#title' => t('Bevoegdheid'),
-            '#type' => 'select',
-            '#options' => $bv_list,
-            '#default_value' => 0, //<Geen wijziging>
-            '#weight' => 10,
-            '#tree' => TRUE,
-            '#ajax' => [
-              'callback' => 'ezacvba_bevoegdheid_callback',
-              'wrapper' => 'bevoegdheid-div',
-              'effect' => 'fade',
-              'progress' => ['type' => 'throbber'],
-            ],
-          ];
-
-          if (isset($form_state['values']['vliegers']['bevoegdheid']['keuze'])
-            && ($form_state->getValue(['bevoegdheid']['keuze']) <> '0')) {
-            $form['vliegers']['bevoegdheid']['onderdeel'] = [
-              '#title' => t('Onderdeel'),
-              '#description' => 'Bijvoorbeeld overland type',
-              '#type' => 'textfield',
-              '#maxlength' => 30,
-              '#required' => FALSE,
-              '#default_value' => '',
-              '#weight' => 11,
-              '#tree' => TRUE,
-            ];
-          }
-      }
-      */
-
       //submit
       $form['vliegers']['submit'] = [
         '#type' => 'submit',
@@ -304,9 +137,7 @@ class ezacVbaLidForm extends FormBase
    * @return array|mixed
    */
   function formPersoonCallback(array $form, FormStateInterface $form_state) {
-    // @todo fill form elements for selected person?
 
-    // copy code from main routine
     $overzicht = TRUE; //@todo temporary fix
     $condition = [
       'code' => 'VL',
@@ -320,17 +151,19 @@ class ezacVbaLidForm extends FormBase
 
     if (isset($persoon) && $persoon != '') {
       //toon vluchten dit jaar
-      $vlieger_afkorting = $form_state->getValue('persoon', key($namen));
-      $helenaam = $namen[$vlieger_afkorting];
+      $vlieger_afkorting = $form_state->getValue('persoon');
+
+      $lid = (new EzacLid)->read(EzacLid::getId($vlieger_afkorting));
+      $helenaam = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
 
       $condition = [
         'datum' => [
           'value' => [$datum_start, $datum_eind],
           'operator' => 'BETWEEN'
         ],
-        'afkorting' => $form_state->getValue('persoon'),
+        'afkorting' => $vlieger_afkorting,
       ];
-      $dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
+      //$dagverslagenLidCount = ezacVbaDagverslagLid::counter($condition);
 
       // @todo deze routine geeft niet de juiste starts terug
       $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
