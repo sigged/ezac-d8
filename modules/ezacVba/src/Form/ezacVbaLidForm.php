@@ -389,13 +389,14 @@ class ezacVbaLidForm extends FormBase
 
     // add orGroup to selection
 
+    /*
     $condition['OR'] =
       [
         'gezagvoerder' => $vlieger,
         'tweede' => $vlieger,
     ];
     //dpm($condition, "condition after orGroup"); //debug
-
+  */
     // prepare pager
     $total = EzacStart::counter($condition);
     $field = 'id';
@@ -413,7 +414,7 @@ class ezacVbaLidForm extends FormBase
     $from = $limit * $page;
     $unique = FALSE; // return all results
 
-    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir); //, $from, $limit, $unique);
+    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $limit, $unique);
     foreach ($startsIndex as $id) {
       $start = (new EzacStart)->read($id);
 
