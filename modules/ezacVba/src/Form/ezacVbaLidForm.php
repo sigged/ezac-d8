@@ -389,11 +389,13 @@ class ezacVbaLidForm extends FormBase
 
     // add orGroup to selection
 
+
     $condition['OR'] =
       [
         'gezagvoerder' => $vlieger,
         'tweede' => $vlieger,
     ];
+
     dpm($condition, "condition after orGroup"); //debug
 
     // prepare pager
