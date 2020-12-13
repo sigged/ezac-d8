@@ -113,7 +113,7 @@ class EzacStorage
               if ($field == 'OR') {
                 // test is part of an orGroup
                 dpm($field, "field"); //debug
-                /*
+
                 $orGroup = $select->orConditionGroup();
                 foreach ($test as $field2 => $test2) {
                   dpm($test, "OR test"); //debug
@@ -131,7 +131,7 @@ class EzacStorage
                     }
                     $select->condition($orGroup);
                 } // orGroup element
-                */
+
               } //orGroup
               else {
                 // combined condition
