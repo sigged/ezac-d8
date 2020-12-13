@@ -112,23 +112,18 @@ class EzacStorage
               // combined condition with value(s) and operator
               if ($field == 'OR') {
                 // test is part of an orGroup
-                dpm($field, "field"); //debug
-
                 $orGroup = $select->orConditionGroup();
                 foreach ($test as $field2 => $test2) {
-                  dpm($test, "OR test"); //debug
-                  dpm($field2, "field");
-                  dpm($test2, "test");
-                    if (is_array($test2)) {
-                      // combined condition
-                      $value = $test2["value"];
-                      $operator = $test2["operator"];
-                      $orGroup->condition($field2, $value, $operator);
-                    }
-                    else {
-                      //single condition
-                      $orGroup->condition($field2, $test2);
-                    }
+                  if (is_array($test2)) {
+                    // combined condition
+                    $value = $test2["value"];
+                    $operator = $test2["operator"];
+                    $orGroup->condition($field2, $value, $operator);
+                  }
+                  else {
+                    //single condition
+                    $orGroup->condition($field2, $test2, '=');
+                  }
                 } // orGroup element
                 $select->condition($orGroup);
               } //orGroup
@@ -138,6 +133,7 @@ class EzacStorage
                 $operator = $test["operator"];
                 $select->condition($field, $value, $operator);
               }
+              // simple condition
             } else $select->condition($field, $test);
         }
         // sort the result
@@ -155,7 +151,6 @@ class EzacStorage
         // return to standard Drupal database
         Database::setActiveConnection();
 
-        //return array_unique($index);
         return (array)$index;
 
     } // ezacIndex
