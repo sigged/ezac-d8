@@ -386,7 +386,7 @@ class ezacVbaLidForm extends FormBase
     dpm($condition, "condition after orGroup"); //debug
 
     // prepare pager
-    $total = EzacStart::counter($condition);
+    // $total = EzacStart::counter($condition);
     $field = 'id';
     $sortkey = 'start';
     $sortdir = 'ASC'; // newest first
