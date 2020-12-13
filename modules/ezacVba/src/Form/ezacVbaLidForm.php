@@ -22,15 +22,14 @@ use Twig\Error\RuntimeError;
  */
 
 
-class ezacVbaLidForm extends FormBase
-{
+class ezacVbaLidForm extends FormBase {
 
-    /**
-     * @inheritdoc
-     */
-    public function getFormId(): string {
-        return 'ezac_vba_lid_form';
-    }
+  /**
+   * @inheritdoc
+   */
+  public function getFormId(): string {
+    return 'ezac_vba_lid_form';
+  }
 
   /**
    * buildForm for vba lid status and bevoegdheid
@@ -46,87 +45,87 @@ class ezacVbaLidForm extends FormBase
    *
    * @return array
    */
-    public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL)
-    {
-      // Wrap the form in a div.
-      $form = [
-        '#prefix' => '<div id="statusform">',
-        '#suffix' => '</div>',
-      ];
+  public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL) {
+    // Wrap the form in a div.
+    $form = [
+      '#prefix' => '<div id="statusform">',
+      '#suffix' => '</div>',
+    ];
 
-      // apply the form theme
-      //$form['#theme'] = 'ezac_vba_lid_form';
+    // apply the form theme
+    //$form['#theme'] = 'ezac_vba_lid_form';
 
-      // when datum not given, set default for this year
-      if ($datum_start == NULL) {
-        $datum_start = date('Y') . "-01-01";
-      }
-      if ($datum_eind == NULL) {
-        $datum_eind = date('Y') . "-12-31";
-      }
-      $form['datum_start'] = [
-        '#type' => 'value',
-        '#value' => $datum_start,
-      ];
-      $form['datum_eind'] = [
-        '#type' => 'value',
-        '#value' => $datum_eind,
-      ];
-
-      $condition = [
-        'code' => 'VL',
-        'actief' => TRUE,
-      ];
-      $namen = EzacUtil::getLeden($condition);
-      $namen[''] = '<selecteer>';
-
-      $form['persoon'] = [
-        '#type' => 'select',
-        '#title' => 'Vlieger',
-        '#options' => $namen,
-        '#weight' => 2,
-        '#ajax' => [
-          'wrapper' => 'vliegers-div',
-          'callback' => '::formPersoonCallback',
-          'effect' => 'fade',
-        ],
-      ];
-
-
-      // Kies gewenste vlieger voor overzicht dagverslagen
-      $overzicht = TRUE; // @todo replace parameter $overzicht
-      //@todo het overzicht van vluchten is initieel voor iedereen ipv leeg en de sortering lijkt willekeurig
-      //@todo het overzicht van vluchten wordt ook niet aangepast nadat een vlieger is geselecteerd
-
-      // D7 code start
-
-      //$datum = $form_state->getValue('datum', date('Y-m-d'));
-
-      //maak container voor vliegers
-      //[vliegers] form wordt door AJAX opnieuw opgebouwd
-      $form['vliegers'] = array(
-        '#title' => t('Vlieger'),
-        '#type' => 'container',
-        '#weight' => 4,
-        '#prefix' => '<div id="vliegers-div">', //This section replaced by AJAX callback
-        '#suffix' => '</div>',
-        '#tree' => TRUE,
-      );
-
-      //submit
-      $form['vliegers']['submit'] = [
-        '#type' => 'submit',
-        '#description' => t('Opslaan'),
-        '#value' => t('Opslaan'),
-        '#weight' => 99,
-      ];
-
-      // D7 code end
-      $form['actions'] = [
-      '#type' => 'actions',
-      ];
-      return $form;
+    // when datum not given, set default for this year
+    if ($datum_start == NULL) {
+      $datum_start = date('Y') . "-01-01";
     }
+    if ($datum_eind == NULL) {
+      $datum_eind = date('Y') . "-12-31";
+    }
+    $form['datum_start'] = [
+      '#type' => 'value',
+      '#value' => $datum_start,
+    ];
+    $form['datum_eind'] = [
+      '#type' => 'value',
+      '#value' => $datum_eind,
+    ];
+
+    $condition = [
+      'code' => 'VL',
+      'actief' => TRUE,
+    ];
+    $namen = EzacUtil::getLeden($condition);
+    $namen[''] = '<selecteer>';
+
+    $form['persoon'] = [
+      '#type' => 'select',
+      '#title' => 'Vlieger',
+      '#options' => $namen,
+      '#weight' => 2,
+      '#ajax' => [
+        'wrapper' => 'vliegers-div',
+        'callback' => '::formPersoonCallback',
+        'effect' => 'fade',
+      ],
+    ];
+
+
+    // Kies gewenste vlieger voor overzicht dagverslagen
+    $overzicht = TRUE; // @todo replace parameter $overzicht
+    //@todo het overzicht van vluchten is initieel voor iedereen ipv leeg en de sortering lijkt willekeurig
+    //@todo het overzicht van vluchten wordt ook niet aangepast nadat een vlieger is geselecteerd
+
+    // D7 code start
+
+    //$datum = $form_state->getValue('datum', date('Y-m-d'));
+
+    //maak container voor vliegers
+    //[vliegers] form wordt door AJAX opnieuw opgebouwd
+    $form['vliegers'] = [
+      '#title' => t('Vlieger'),
+      '#type' => 'container',
+      '#weight' => 4,
+      '#prefix' => '<div id="vliegers-div">',
+      //This section replaced by AJAX callback
+      '#suffix' => '</div>',
+      '#tree' => TRUE,
+    ];
+
+    //submit
+    $form['vliegers']['submit'] = [
+      '#type' => 'submit',
+      '#description' => t('Opslaan'),
+      '#value' => t('Opslaan'),
+      '#weight' => 99,
+    ];
+
+    // D7 code end
+    $form['actions'] = [
+      '#type' => 'actions',
+    ];
+    return $form;
+  }
 
   /**
    * @param array $form
@@ -323,8 +322,7 @@ class ezacVbaLidForm extends FormBase
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state)
-  {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
 
   }
 
@@ -332,126 +330,8 @@ class ezacVbaLidForm extends FormBase
    * {@inheritdoc}
    * @throws \Exception
    */
-  public function submitForm(array &$form, FormStateInterface $form_state)
-  {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
 
   } //submitForm
-
-  /**
-   * @param $datum_start
-   * @param $datum_eind
-   * @param null $vlieger
-   * @return array $content
-   */
-  public static function startOverzicht($datum_start, $datum_eind, $vlieger = NULL) {
-    $content = array();
-
-    $rows = [];
-    $headers = [
-      t('datum'),
-      t('start'),
-      t('landing'),
-      t('duur'),
-      t('registratie'),
-      t('gezagvoerder'),
-      t('tweede'),
-      t('soort'),
-      t('start methode'),
-      t('instructie'),
-      t('opmerking'),
-    ];
-
-    $leden = EzacUtil::getLeden();
-    // $kisten = EzacUtil::getKisten();
-
-    // select all starts for selected date
-    if (isset($datum_eind))
-    {
-      $condition['datum'] =
-        [
-          'value' => [$datum_start, $datum_eind],
-          'operator' => 'BETWEEN',
-        ];
-    }
-    else $condition = ['datum' => $datum_start];
-
-    // add orGroup to selection
-
-    $condition['OR'] =
-      [
-        'gezagvoerder' => $vlieger,
-        'tweede' => $vlieger,
-    ];
-
-    // prepare pager
-    $total = EzacStart::counter($condition);
-    $field = 'id';
-    $sortkey = 'start';
-    $sortdir = 'ASC'; // newest first
-
-    // @todo pager not to be used
-
-    $limit = 100;
-    $pager = \Drupal::service('pager.manager')
-      ->createPager($total, $limit);
-    $page = $pager
-      ->getCurrentPage();
-
-    $from = $limit * $page;
-    $unique = FALSE; // return all results
-
-    $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $limit, $unique);
-    foreach ($startsIndex as $id) {
-      $start = (new EzacStart)->read($id);
-
-      $urlString = Url::fromRoute(
-        'ezac_starts_update',  // edit starts record
-        ['id' => $start->id]
-      )->toString();
-
-      if (isset($leden[$start->gezagvoerder]) && $start->gezagvoerder <> '') {
-        $gezagvoerder = $leden[$start->gezagvoerder];
-      }
-      else $gezagvoerder = $start->gezagvoerder; // un-edited record value
-
-      if (isset($leden[$start->tweede]) && $start->tweede <> '') {
-        $tweede = $leden[$start->tweede];
-      }
-      else $tweede = $start->tweede; // un-edited record value
-
-      $rows[] = [
-        //link each record to edit route
-        $start->datum,
-        t("<a href=$urlString>" .substr($start->start, 0, 5) ."</a>"),
-        substr($start->landing,0,5),
-        substr($start->duur, 0,5),
-        $start->registratie,
-        $gezagvoerder,
-        $tweede,
-        EzacStart::$startSoort[$start->soort],
-        EzacStart::$startMethode[$start->startmethode],
-        ($start->instructie) ? 'Ja' :'',
-        $start->opmerking,
-      ];
-    }
-    $d = EzacUtil::showDate($datum_start);
-    if ($datum_eind <> $datum_start) $d.= " tot " .EzacUtil::showDate($datum_eind);
-    $caption = "Overzicht EZAC Starts bestand $d";
-    $content['table'] = [
-      '#type' => 'table',
-      '#caption' => $caption,
-      '#header' => $headers,
-      '#rows' => $rows,
-      '#empty' => t('Geen gegevens beschikbaar.'),
-      '#sticky' => TRUE,
-    ];
-    // add pager
-    $content['pager'] = [
-      '#type' => 'pager',
-      '#weight' => 5
-    ];
-
-    return $content;
-  }
 
 }
