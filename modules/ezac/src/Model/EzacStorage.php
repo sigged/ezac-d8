@@ -106,7 +106,6 @@ class EzacStorage
         foreach ((array)$condition as $field => $test) {
             // condition can be a simple field => value pair for EQUALS (default test)
             //   or contain value and operator keys for other tests
-            $orGroup = [];
             if (is_array($test)) {
               // combined condition with value(s) and operator
               if ($field == "OR") {
@@ -117,7 +116,7 @@ class EzacStorage
                       // combined condition
                       $value = $test2["value"];
                       $operator = $test2["operator"];
-                      $select->condition($field, $value, $operator);
+                      $select->condition($field2, $value, $operator);
                     }
                     else {
                       //single condition
