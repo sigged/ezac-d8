@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ezacLeden\src\Plugin\rest\resource;
+namespace ezacLeden\Plugin\rest\resource;
 
 use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\rest\Plugin\ResourceBase;
@@ -13,10 +13,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
    * Provides a resource for leden table reads
    *
    * @RestResource(
-   *   id = "leden",
+   *   id = "ezac_leden_resource",
    *   label = @Translation("EZAC leden table"),
    *   uri_paths = {
-   *     "canonical" = "api/v1/leden/{id}"
+   *     "canonical" = "/api/v1/leden/{id}",
+   *     "https://www.drupal.org/link-relations/create" = "/api/v1/leden"
    *   }
    * )
    */
