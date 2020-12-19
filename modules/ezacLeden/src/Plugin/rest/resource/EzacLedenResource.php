@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
    *   id = "leden",
    *   label = @Translation("EZAC leden table"),
    *   uri_paths = {
-   *     "canonical" = "/leden/{id}"
+   *     "canonical" = "api/v1/leden/{id}"
    *   }
    * )
    */
