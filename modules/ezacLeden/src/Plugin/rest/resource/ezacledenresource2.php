@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  *   }
  * )
  */
-class ezacLedenResource2 extends ResourceBase {
+class ezacledenresource2 extends ResourceBase {
 
   /**
    * A current user instance.
