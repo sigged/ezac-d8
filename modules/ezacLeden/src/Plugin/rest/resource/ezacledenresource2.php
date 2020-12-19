@@ -1,8 +1,7 @@
 <?php
 
-namespace Drupal\ezacLeden\Plugin\rest\resource;
+namespace ezacLeden\src\Plugin\rest\resource;
 
-use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
