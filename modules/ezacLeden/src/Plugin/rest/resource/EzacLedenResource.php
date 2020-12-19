@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ezacLeden\Plugin\rest\resource;
+namespace Drupal\ezacLeden\Plugin\rest\resource;
 
 use Drupal\ezacLeden\Model\EzacLid;
 use Drupal\rest\Plugin\ResourceBase;
