@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Ezac\Model;
+namespace Ezac\src\Model;
 
 use Drupal;
 use Drupal\Core\Database\Database;
