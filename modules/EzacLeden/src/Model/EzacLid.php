@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezacLeden\Model;
+namespace Drupal\EzacLeden\Model;
 
 use Drupal\ezac\Model\EzacStorage;
 

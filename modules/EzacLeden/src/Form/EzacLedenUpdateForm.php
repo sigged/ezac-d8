@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\ezacLeden\Form;
+namespace Drupal\EzacLeden\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\ezacLeden\Model\EzacLid;
+use Drupal\EzacLeden\Model\EzacLid;
 
 /**
  * UI to update leden record

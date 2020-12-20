@@ -1,6 +1,6 @@
 <?php
 
-namespace ezacLeden\src\Plugin\rest\resource;
+namespace EzacLeden\src\Plugin\rest\resource;
 
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  *   }
  * )
  */
-class ezacledenresource2 extends ResourceBase {
+class EzacLedenresource2 extends ResourceBase {
 
   /**
    * A current user instance.
@@ -32,7 +32,7 @@ class ezacledenresource2 extends ResourceBase {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->logger = $container->get('logger.factory')->get('ezacLeden');
+    $instance->logger = $container->get('logger.factory')->get('EzacLeden');
     $instance->currentUser = $container->get('current_user');
     return $instance;
   }

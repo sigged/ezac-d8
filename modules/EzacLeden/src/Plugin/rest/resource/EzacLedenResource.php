@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Drupal\ezacLeden\Plugin\rest\resource;
+namespace Drupal\EzacLeden\Plugin\rest\resource;
 
-use Drupal\ezacLeden\Model\EzacLid;
+use Drupal\EzacLeden\Model\EzacLid;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

@@ -1,6 +1,6 @@
 name: EZAC administratie
 description: Operationele administratie EZAC zweefvliegclub
-package: EZAC
+package: Ezac
 type: module
 core: 8.x
 

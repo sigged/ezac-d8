@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezacLeden\Controller;
+namespace Drupal\EzacLeden\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
-use Drupal\ezacLeden\Model\EzacLid;
+use Drupal\EzacLeden\Model\EzacLid;
 
 /**
  * Controller for DLO administration.
@@ -244,5 +244,5 @@ class EzacLedenController extends ControllerBase {
       /** @var mixed $response */
       return $response;
   } // export  
-  
+
 } //class EzacLedenController

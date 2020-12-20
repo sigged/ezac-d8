@@ -78,7 +78,7 @@ function ezac_schema_extraDb()
      */
 
     $schema = [];
-    require "ezacLedenSchema.inc";
+    require "EzacLedenSchema.inc";
 
     return $schema;
 }
@@ -100,7 +100,7 @@ function ezac_schema()
      */
 
     $schema = [];
-    require "ezacLedenSchema.inc";
+    require "EzacLedenSchema.inc";
 
     return $schema;
 }
