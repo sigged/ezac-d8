@@ -11,7 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
 use Drupal\EzacVba\Model\EzacVbaDagverslag;
-use Drupal\ezac\Util\EzacUtil;
+use Drupal\Ezac\Util\EzacUtil;
 
 /**
  * Controller for EZAC start administration.

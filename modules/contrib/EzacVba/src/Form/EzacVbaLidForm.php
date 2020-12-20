@@ -1,20 +1,22 @@
 <?php
 
-namespace Drupal\ezacVba\Form;
+namespace Drupal\EzacVba\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\ezac\Util\EzacUtil;
-use Drupal\ezacLeden\Model\EzacLid;
-use Drupal\ezacStarts\Controller\EzacStartsController;
-use Drupal\ezacStarts\Model\EzacStart;
-use Drupal\ezacVba\Model\ezacVbaBevoegdheid;
-use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
-use Drupal\ezacVba\Model\ezacVbaDagverslag;
-use Drupal\ezacVba\Model\ezacVbaDagverslagLid;
+
+use Drupal\Ezac\Util\EzacUtil;
+use Drupal\EzacLeden\Model\EzacLid;
+use Drupal\EzacStarts\Controller\EzacStartsController;
+use Drupal\EzacStarts\Model\EzacStart;
+use Drupal\EzacVba\Model\EzacVbaBevoegdheid;
+use Drupal\EzacVba\Model\EzacVbaBevoegdheidLid;
+use Drupal\EzacVba\Model\EzacVbaDagverslag;
+use Drupal\EzacVba\Model\EzacVbaDagverslagLid;
+
 use Twig\Error\RuntimeError;
 
 /**
@@ -22,7 +24,7 @@ use Twig\Error\RuntimeError;
  */
 
 
-class ezacVbaLidForm extends FormBase {
+class EzacVbaLidForm extends FormBase {
 
   /**
    * @inheritdoc
@@ -179,7 +181,7 @@ class ezacVbaLidForm extends FormBase {
             'operator' => 'BETWEEN'
           ];
       }
-      $verslagenIndex = ezacVbaDagverslagLid::index($condition);
+      $verslagenIndex = EzacVbaDagverslagLid::index($condition);
 
       // put in table
       if (isset($verslagenIndex)) { //create fieldset
@@ -202,7 +204,7 @@ class ezacVbaLidForm extends FormBase {
 
         $rows = [];
         foreach ($verslagenIndex as $id) {
-          $verslag = (new ezacVbaDagverslagLid)->read($id);
+          $verslag = (new EzacVbaDagverslagLid)->read($id);
           $rows[] = [
             EzacUtil::showDate($verslag->datum),
             $namen[$verslag->instructeur],
@@ -219,11 +221,11 @@ class ezacVbaLidForm extends FormBase {
       }
 
       $condition = [];
-      $bevoegdhedenIndex = ezacVbaBevoegdheid::index($condition);
+      $bevoegdhedenIndex = EzacVbaBevoegdheid::index($condition);
       $bv_list[0] = '<Geen wijziging>';
       if (isset($bevoegdhedenIndex)) {
         foreach ($bevoegdhedenIndex as $id) {
-          $bevoegdheid = (new ezacVbaBevoegdheid)->read($id);
+          $bevoegdheid = (new EzacVbaBevoegdheid)->read($id);
           $bv_list[$bevoegdheid->bevoegdheid] = $bevoegdheid->naam;
         }
       }
@@ -231,7 +233,7 @@ class ezacVbaLidForm extends FormBase {
       // query vba verslag, bevoegdheid records
       $condition['afkorting'] = $vlieger_afkorting;
       $condition['actief'] = TRUE;
-      $vlieger_bevoegdhedenIndex = ezacVbaBevoegdheidLid::index($condition);
+      $vlieger_bevoegdhedenIndex = EzacVbaBevoegdheidLid::index($condition);
 
       // put in table
       $header = [
@@ -253,7 +255,7 @@ class ezacVbaLidForm extends FormBase {
           '#tree' => TRUE,
         ];
         foreach ($vlieger_bevoegdhedenIndex as $id) {
-          $bevoegdheid = (new ezacVbaBevoegdheidLid)->read($id);
+          $bevoegdheid = (new EzacVbaBevoegdheidLid)->read($id);
           $rows[] = [
             EzacUtil::showDate($bevoegdheid->datum_aan),
             $namen[$bevoegdheid->instructeur],
@@ -293,7 +295,7 @@ class ezacVbaLidForm extends FormBase {
           '#weight' => 10,
           '#tree' => TRUE,
           '#ajax' => [
-            'callback' => 'ezacvba_bevoegdheid_callback',
+            'callback' => 'EzacVba_bevoegdheid_callback',
             'wrapper' => 'bevoegdheid-div',
             'effect' => 'fade',
             'progress' => ['type' => 'throbber'],

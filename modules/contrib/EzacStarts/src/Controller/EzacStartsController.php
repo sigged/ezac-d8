@@ -12,7 +12,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
 use Drupal\EzacStarts\Model\EzacStart;
-use Drupal\ezac\Util\EzacUtil;
+use Drupal\Ezac\Util\EzacUtil;
 
 /**
  * Controller for EZAC start administration.

@@ -2,7 +2,7 @@
 
 namespace Drupal\EzacKisten\Model;
 
-use Ezac\src\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacKist.php
