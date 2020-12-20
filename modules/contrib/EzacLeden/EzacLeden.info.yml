@@ -2,7 +2,7 @@ name: EZAC administratie - Leden
 description: Operationele administratie EZAC zweefvliegclub
 package: Ezac
 type: module
-core: 9.x
+core_version_requirement: ^8.8 || ^9
 
 dependencies:
   - Ezac
