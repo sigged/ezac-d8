@@ -2,7 +2,7 @@
 
 namespace Drupal\EzacLeden\Model;
 
-use Ezac\src\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacLid.php
@@ -124,8 +124,7 @@ class EzacLid extends EzacStorage
      * @return EzacLid ID of record created
      *   ID of record created
      */
-    public function create()
-    {
+    public function create(): EzacLid {
 
         $this->id = $this->ezacCreate('leden');
         return $this;
@@ -149,8 +148,7 @@ class EzacLid extends EzacStorage
      * @return int
      *   records_updated
      */
-    public function update()
-    {
+    public function update(): int {
         // build $condition
         return $this->ezacUpdate('leden');
     }
@@ -161,8 +159,7 @@ class EzacLid extends EzacStorage
      * @return int
      *   records_deleted
      */
-    public function delete()
-    {
+    public function delete(): int {
         return $this->ezacDelete('leden');
     }
 
@@ -174,8 +171,7 @@ class EzacLid extends EzacStorage
      * @return int
      *   number of records
      */
-    public static function counter($condition)
-    {
+    public static function counter($condition): int {
         return EzacStorage::ezacCount("leden", $condition);
     }
 
@@ -192,8 +188,7 @@ class EzacLid extends EzacStorage
      * @param $range
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'afkorting', $sortdir = 'ASC', $from = NULL, $range = NULL)
-    {
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'afkorting', $sortdir = 'ASC', $from = NULL, $range = NULL): array {
         return EzacStorage::ezacIndex('leden', $condition, $field, $sortkey, $sortdir, $from, $range);
     }
 
@@ -202,10 +197,9 @@ class EzacLid extends EzacStorage
      * @param string afkorting
      * @return int id
      */
-    public static function getId($afkorting)
-    {
+    public static function getId($afkorting): ?int {
         //find id for lid
-        $index = self::index(['afkorting' => $afkorting], 'id');
+        $index = self::index(['afkorting' => $afkorting]);
         if (isset($index[0])) { // record found
             return $index[0];
         } else return NULL;

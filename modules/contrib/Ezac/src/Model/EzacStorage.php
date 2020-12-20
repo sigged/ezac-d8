@@ -1,6 +1,6 @@
 <?php
 
-namespace Ezac\src\Model;
+namespace Drupal\Ezac\Model;
 
 use Drupal;
 use Drupal\Core\Database\Database;
@@ -70,28 +70,28 @@ class EzacStorage
         */
     } // ezacCount
 
-    /**
-     * Read index from the database using a filter array.
-     *
-     * @param string $table
-     *   The EZAC table to be used for the database operation
-     * @param array $condition
-     *   The condition for the update as array (field => value) (=)
-     *   alternative: field[value => value, operator => operator]
-     * @param string $field
-     * @param string $sortkey
-     *  the field for which the read should be sorted
-     * @param $sortdir string default 'ASC' sort direction
-     * @param int $from for range selection default NULL
-     * @param int $range default NULL the range for the query
-     * @param bool $unique default FALSE, return DISTINCT results
-     * @return array
-     *   An array of objects containing the loaded entries if found.
-     */
-    public static function ezacIndex($table, $condition = NULL, $field = 'id', $sortkey = NULL, $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
-    {
+  /**
+   * Read index from the database using a filter array.
+   *
+   * @param string $table
+   *   The EZAC table to be used for the database operation
+   * @param null $condition
+   *   The condition for the update as array (field => value) (=)
+   *   alternative: field[value => value, operator => operator]
+   * @param string $field
+   * @param null $sortkey
+   *  the field for which the read should be sorted
+   * @param $sortdir string default 'ASC' sort direction
+   * @param null $from for range selection default NULL
+   * @param null $range default NULL the range for the query
+   * @param bool $unique default FALSE, return DISTINCT results
+   *
+   * @return array
+   *   An array of objects containing the loaded entries if found.
+   */
+    public static function ezacIndex(string $table, $condition = NULL, $field = 'id', $sortkey = NULL, $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
 
-        // Read unique index from a Ezac table.
+      // Read unique index from a Ezac table.
         // EZAC database is outside the Drupal structure
         Database::setActiveConnection(self::dbName);
         $db = Database::getConnection();
@@ -124,7 +124,7 @@ class EzacStorage
                   }
                   else {
                     //single condition
-                    $orGroup->condition($field2, $test2, '=');
+                    $orGroup->condition($field2, $test2);
                   }
                 } // orGroup element
                 $select->condition($orGroup);
@@ -157,17 +157,16 @@ class EzacStorage
 
     } // ezacIndex
 
-    /**
-     * Insert a record in the EZAC database
-     *
-     * @param string $table
-     *   The EZAC table to be used for the database operation
-     * @return int
-     *   The id of the inserted record
-     *
-     */
-    public function ezacCreate($table)
-    {
+  /**
+   * Insert a record in the EZAC database
+   *
+   * @param string $table
+   *   The EZAC table to be used for the database operation
+   *
+   * @return int
+   *   The id of the inserted record
+   */
+    public function ezacCreate(string $table): ?int {
 
         // EZAC database is outside the Drupal structure
         // select EZAC database outside Drupal structure
@@ -198,16 +197,18 @@ class EzacStorage
 
     } // ezacCreate
 
-    /**
-     * Read from the database
-     * The id of the record to be read is taken from the object->id
-     * @param string $table
-     *   The EZAC table to be used for the database operation
-     * @param string $className default stdClass
-     * @return object className
-     *   An object containing the loaded entry if found.
-     */
-    protected function ezacRead($table, $className = "stdClass")
+  /**
+   * Read from the database
+   * The id of the record to be read is taken from the object->id
+   *
+   * @param string $table
+   *   The EZAC table to be used for the database operation
+   * @param string $className default stdClass
+   *
+   * @return object className
+   *   An object containing the loaded entry if found.
+   */
+    protected function ezacRead(string $table, $className = "stdClass")
     {
 
         // define prefix for EZAC tables
@@ -237,6 +238,8 @@ class EzacStorage
    * @param $table
    * @param $condition
    * @param string $className
+   *
+   * @return mixed
    */
   static public function ezacReadAll($table, $condition, $className = "stdClass")
     {
@@ -268,19 +271,18 @@ class EzacStorage
       return $records;
     } //ezacReadAll
 
-    /**
-     * Update an entry in the database.
-     *
-     * @param string $table
-     *   The EZAC table to be used for the database operation
-     *
-     * @return int
-     *   The number of updated rows.
-     *
-     * @see db_update()
-     */
-    public function ezacUpdate($table)
-    {
+  /**
+   * Update an entry in the database.
+   *
+   * @param string $table
+   *   The EZAC table to be used for the database operation
+   *
+   * @return int
+   *   The number of updated rows.
+   *
+   * @see db_update()
+   */
+    public function ezacUpdate(string $table): int {
         $messenger = Drupal::messenger();
 
         // EZAC database is outside the Drupal structure
@@ -309,17 +311,17 @@ class EzacStorage
 
     }  // ezacUpdate
 
-    /**
-     * Delete an entry from the database.
-     *
-     * @param string $table
-     *   The EZAC table to be used for the database operation
-     * @return int
-     *   records_deleted
-     * @see db_delete()
-     */
-    public function ezacDelete($table)
-    {
+  /**
+   * Delete an entry from the database.
+   *
+   * @param string $table
+   *   The EZAC table to be used for the database operation
+   *
+   * @return int
+   *   records_deleted
+   * @see db_delete()
+   */
+    public function ezacDelete(string $table): int {
 
         // EZAC database is outside the Drupal structure
         Database::setActiveConnection(self::dbName);
