@@ -1,0 +1,4 @@
+database:
+  external: '1'
+  name: 'Ezac'
+  prefix: 'ezac_'

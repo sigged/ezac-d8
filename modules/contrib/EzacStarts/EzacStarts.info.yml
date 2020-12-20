@@ -1,0 +1,10 @@
+name: EZAC administratie - Starts
+description: Operationele administratie EZAC zweefvliegclub
+package: Ezac
+type: module
+core: 9.x
+
+dependencies:
+  - Ezac
+  
+#configure: EzacStarts.settings

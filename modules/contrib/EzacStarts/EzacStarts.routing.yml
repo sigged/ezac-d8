@@ -1,0 +1,71 @@
+ezac_starts:
+  path: '/ezac/starts'
+  defaults:
+    _title: 'EZAC start administratie'
+    _controller: '\Drupal\EzacStarts\Controller\EzacStartsController::status'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_starts_overzicht:
+  path: '/ezac/starts/overzicht/{datum_start}/{datum_eind}'
+  defaults:
+    _title: 'Startsoverzicht'
+    _controller: '\Drupal\EzacStarts\Controller\EzacStartsController::overzicht'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_starts_overzicht_jaar:
+  path: '/ezac/starts/overzicht/jaar/{jaar}'
+  defaults:
+    _title: 'Startsoverzicht'
+    _controller: '\Drupal\EzacStarts\Controller\EzacStartsController::overzichtJaar'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_starts_update:
+  path: '/ezac/starts/update/{id}'
+  defaults:
+    _title: 'Start wijzigen'
+    _form: '\Drupal\EzacStarts\Form\EzacStartsUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_starts_create:
+  path: '/ezac/starts/create'
+  defaults:
+    _title: 'Start aanmaken'
+    _form: '\Drupal\EzacStarts\Form\EzacStartsUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_starts_export_form:
+  path: '/ezac/starts/export/form'
+  defaults:
+    _title: 'Starts export'
+    _form: '\Drupal\EzacStarts\Form\EzacStartsExportForm'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_starts_export:
+  path: '/ezac/starts/export/{filename}'
+  defaults:
+    _title: 'EZAC_read'
+    _controller: '\Drupal\EzacStarts\Controller\EzacStartsController::export'
+  requirements:
+    _permission: 'access content'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_starts_export_jaar:
+  path: '/ezac/starts/export/{filename}/{jaar}'
+  defaults:
+    _title: 'Starts export'
+    _controller: '\Drupal\EzacStarts\Controller\EzacStartsController::export'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+

@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * This is the main module for EZAC - Kisten
+ *
+ */
+ 
+ /**
+  * @defgroup Ezac
+  * @{
+  *
+  * @todo Insert usage examples
+  */
+  
+/**
+ * @} End of "defgroup Ezac".
+ */
+
+
+
+

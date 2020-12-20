@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * This is the main module for EZAC - Leden
+ *
+ */
+ 
+    /**
+    * @defgroup Ezac
+    * @{
+    *
+    * @todo Insert usage examples
+    */
+
+    /**
+     * @} End of "defgroup Ezac".
+     */
+
+/**
+* Implements hook_theme()
+*/
+function ezacStarts_theme() {
+ return [
+     'ezac_starts_update_form' => [
+         'render element'   => 'form',
+         'template'         => 'ezac_starts_update_form',
+    ],
+ ];
+}
+
