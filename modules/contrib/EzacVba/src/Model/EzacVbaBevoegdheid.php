@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\ezacVba\Model;
+namespace Drupal\EzacVba\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacVbaBevoegdheid.php
@@ -14,7 +14,7 @@ use Drupal\ezac\Model\EzacStorage;
 /**
  * Provides the implementation of the EzacVbabevoegdheid class
  */
-class ezacVbaBevoegdheid extends EzacStorage
+class EzacVbaBevoegdheid extends EzacStorage
 {
     // Define vba bevoegdheid status values
     public static $bevoegdheidStatus = array(
@@ -60,7 +60,7 @@ class ezacVbaBevoegdheid extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return ezacVbaBevoegdheid ID of record created
+     * @return EzacVbaBevoegdheid ID of record created
      *   ID of record created
      */
     public function create()

@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\ezacKisten\Form;
+namespace Drupal\EzacKisten\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\ezacKisten\Model\EzacKist;
+use Drupal\EzacKisten\Model\EzacKist;
 
 /**
  * UI to update kisten record

@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\ezacStarts\Model;
+namespace Drupal\EzacStarts\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacStart.php

@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\ezacVba\Model;
+namespace Drupal\EzacVba\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacBevoegdheidLid.php
@@ -14,7 +14,7 @@ use Drupal\ezac\Model\EzacStorage;
 /**
  * Provides the implementation of the EzacVbaBevoegdheden class
  */
-class ezacVbaBevoegdheidLid extends EzacStorage
+class EzacVbaBevoegdheidLid extends EzacStorage
 {
     //Define vba bevoegdheden lid fields
     public static $fields = array(
@@ -58,7 +58,7 @@ class ezacVbaBevoegdheidLid extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\ezacvba\Model\ezacVbaBevoegdheidLid
+     * @return \Drupal\EzacVba\Model\EzacVbaBevoegdheidLid
      *   ID of record created
      */
     public function create()

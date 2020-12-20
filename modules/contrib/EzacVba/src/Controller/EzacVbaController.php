@@ -1,22 +1,22 @@
 <?php
 
-namespace Drupal\ezacVba\Controller;
+namespace Drupal\EzacVba\Controller;
 
-use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
-use Drupal\ezacVba\Model\ezacVbaDagverslagLid;
+use Drupal\EzacVba\Model\EzacVbaBevoegdheidLid;
+use Drupal\EzacVba\Model\EzacVbaDagverslagLid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
-use Drupal\ezacVba\Model\ezacVbaDagverslag;
+use Drupal\EzacVba\Model\EzacVbaDagverslag;
 use Drupal\ezac\Util\EzacUtil;
 
 /**
  * Controller for EZAC start administration.
  */
-class ezacVbaController extends ControllerBase {
+class EzacVbaController extends ControllerBase {
 
   /**
    * toon dagverslagen
@@ -41,7 +41,7 @@ class ezacVbaController extends ControllerBase {
     // START D7 code
     $condition = [];
     $namen = EzacUtil::getLeden($condition);
-    // $bevoegdheden = ezacvba_get_bevoegdheden();
+    // $bevoegdheden = EzacVba_get_bevoegdheden();
 
     //lees dagverslag index
     $condition = [
@@ -50,10 +50,10 @@ class ezacVbaController extends ControllerBase {
         'operator' => 'BETWEEN'
       ],
     ];
-    $dagverslagIndex = ezacVbaDagverslag::index($condition);
+    $dagverslagIndex = EzacVbaDagverslag::index($condition);
 
     //lees dagverslagLid index
-    $dagverslagLidIndex = ezacVbaDagverslagLid::index(($condition));
+    $dagverslagLidIndex = EzacVbaDagverslagLid::index(($condition));
 
     // lees bevoegdheidLid index
     $condition = [
@@ -62,7 +62,7 @@ class ezacVbaController extends ControllerBase {
         'operator' => 'BETWEEN'
       ],
     ];
-    $bevoegdheidLidIndex = ezacVbaBevoegdheidLid::index($condition);
+    $bevoegdheidLidIndex = EzacVbaBevoegdheidLid::index($condition);
 
     $header = array(
       array('data' => 'datum', 'width' => '20%'),
@@ -71,7 +71,7 @@ class ezacVbaController extends ControllerBase {
     $rows = array();
 
     foreach ($dagverslagIndex as $id) {
-      $dagverslag = (new ezacVbaDagverslag)->read($id);
+      $dagverslag = (new EzacVbaDagverslag)->read($id);
       $p_weer = nl2br($dagverslag->weer);
       $p_verslag = nl2br($dagverslag->verslag);
       $p_instructeur = $namen[$dagverslag->instructeur];
@@ -82,7 +82,7 @@ class ezacVbaController extends ControllerBase {
     //verwerk dagverslagen_lid
 
     foreach ($dagverslagLidIndex as $id) {
-      $dl = (new ezacVbaDagverslagLid)->read($id);
+      $dl = (new EzacVbaDagverslagLid)->read($id);
       $p_naam  = $namen[$dl->afkorting];
       $p_instr = $namen[$dl->instructeur];
       $p_verslag = nl2br($dl->verslag);
@@ -92,7 +92,7 @@ class ezacVbaController extends ControllerBase {
 
     //verwerk bevoegdheid_lid
     foreach ($bevoegdheidLidIndex as $id) {
-      $bl = (new ezacVbaBevoegdheidLid)->read($id);
+      $bl = (new EzacVbaBevoegdheidLid)->read($id);
       $p_naam  = $namen[$bl->afkorting];
       $p_instr = $namen[$bl->instructeur];
       $p_onderdeel = nl2br($bl->onderdeel);
@@ -231,4 +231,4 @@ class ezacVbaController extends ControllerBase {
     return $content;
   } // bevoegdheidLid
 
-} //class EzacvbaController
+} //class EzacVbaController

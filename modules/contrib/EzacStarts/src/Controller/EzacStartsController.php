@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezacStarts\Controller;
+namespace Drupal\EzacStarts\Controller;
 
 use Drupal;
 use Drupal\Core\Pager\PagerManager;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
-use Drupal\ezacStarts\Model\EzacStart;
+use Drupal\EzacStarts\Model\EzacStart;
 use Drupal\ezac\Util\EzacUtil;
 
 /**

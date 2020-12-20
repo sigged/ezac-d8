@@ -1,22 +1,22 @@
 <?php
 
-namespace Drupal\ezacVba\Form;
+namespace Drupal\EzacVba\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\ezacVba\Model\ezacVbaBevoegdheidLid;
-use Drupal\ezacVba\Model\ezacVbaDagverslag;
-use Drupal\ezacVba\Model\ezacVbaDagverslagLid;
+use Drupal\ezacVba\Model\EzacVbaBevoegdheidLid;
+use Drupal\ezacVba\Model\EzacVbaDagverslag;
+use Drupal\ezacVba\Model\EzacVbaDagverslagLid;
 
 /**
  * UI to show status of VBA records
  */
 
 
-class ezacVbaStatusForm extends FormBase
+class EzacVbaStatusForm extends FormBase
 {
 
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\ezacKisten\Model;
+namespace Drupal\EzacKisten\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacKist.php

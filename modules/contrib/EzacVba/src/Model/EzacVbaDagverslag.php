@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\ezacVba\Model;
+namespace Drupal\EzacVba\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacDagverslag.php
@@ -14,7 +14,7 @@ use Drupal\ezac\Model\EzacStorage;
 /**
  * Provides the implementation of the EzacVbaBevoegdheden class
  */
-class ezacVbaDagverslag extends EzacStorage
+class EzacVbaDagverslag extends EzacStorage
 {
 
     //Define vba dagverslagen fields
@@ -51,7 +51,7 @@ class ezacVbaDagverslag extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\ezacvba\Model\ezacVbaDagverslag
+     * @return \Drupal\EzacVba\Model\EzacVbaDagverslag
      *   ID of record created
      */
     public function create()

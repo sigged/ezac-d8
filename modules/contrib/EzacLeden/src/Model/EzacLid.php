@@ -2,7 +2,7 @@
 
 namespace Drupal\EzacLeden\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacLid.php

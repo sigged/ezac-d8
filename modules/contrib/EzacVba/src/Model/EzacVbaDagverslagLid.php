@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\ezacVba\Model;
+namespace Drupal\EzacVba\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacDagverslagenLid.php
@@ -12,9 +12,9 @@ use Drupal\ezac\Model\EzacStorage;
  */
 
 /**
- * Provides the implementation of the ezacVbaDagverslagLid class
+ * Provides the implementation of the EzacVbaDagverslagLid class
  */
-class ezacVbaDagverslagLid extends EzacStorage
+class EzacVbaDagverslagLid extends EzacStorage
 {
 
     //Define vba dagverslagen lid fields
@@ -51,7 +51,7 @@ class ezacVbaDagverslagLid extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\ezacvba\Model\EzacVbaDagverslagen
+     * @return \Drupal\EzacVba\Model\EzacVbaDagverslagen
      *   ID of record created
      */
     public function create()
