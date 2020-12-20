@@ -1,0 +1,54 @@
+ezac_kisten:
+  path: '/ezac/kisten'
+  defaults:
+    _title: 'EZAC kisten administratie'
+    _controller: '\Drupal\ezac_kisten\Controller\EzacKistenController::status'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_kisten_overzicht:
+  path: '/ezac/kisten/overzicht/{actief}'
+  defaults:
+    _title: 'Kistenoverzicht'
+    _controller: '\Drupal\ezac_kisten\Controller\EzacKistenController::overzicht'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_kisten_update:
+  path: '/ezac/kisten/update/{id}'
+  defaults:
+    _title: 'Kist wijzigen'
+    _form: '\Drupal\ezac_kisten\Form\ezac_kistenUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_kisten_create:
+  path: '/ezac/kisten/update'
+  defaults:
+    _title: 'Kist aanmaken'
+    _form: '\Drupal\ezac_kisten\Form\ezac_kistenUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_kisten_export:
+  path: '/ezac/kisten/export/{filename}'
+  defaults:
+    _title: 'EZAC_read'
+    _controller: '\Drupal\ezac_kisten\Controller\EzacKistenController::export'
+  requirements:
+    _permission: 'access content'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_kisten_export_actief:
+  path: '/ezac/kisten/export/{filename}/{actief}'
+  defaults:
+    _title: 'EZAC_read'
+    _controller: '\Drupal\ezac_kisten\Controller\EzacKistenController::export'
+  requirements:
+    _permission: 'access content'
+    _user: ^[a-zA-Z0-9_]+
+

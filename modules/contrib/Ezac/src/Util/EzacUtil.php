@@ -3,8 +3,8 @@
 
 namespace Drupal\ezac\Util;
 
-use Drupal\ezacKisten\Model\EzacKist;
-use Drupal\ezacLeden\Model\EzacLid;
+use Drupal\ezac_kisten\Model\EzacKist;
+use Drupal\ezac_leden\Model\EzacLid;
 
 class EzacUtil
 {
