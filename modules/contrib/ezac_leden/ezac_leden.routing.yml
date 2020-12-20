@@ -2,7 +2,7 @@ ezac_leden:
   path: '/ezac/leden'
   defaults:
     _title: 'EZAC leden administratie'
-    _controller: '\Drupal\EzacLeden\Controller\EzacLedenController::status'
+    _controller: '\Drupal\ezac_leden\Controller\EzacLedenController::status'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -11,7 +11,7 @@ ezac_leden_overzicht:
   path: '/ezac/leden/overzicht'
   defaults:
     _title: 'Ledenoverzicht'
-    _controller: '\Drupal\EzacLeden\Controller\EzacLedenController::overzicht'
+    _controller: '\Drupal\ezac_leden\Controller\EzacLedenController::overzicht'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -20,7 +20,7 @@ ezac_leden_overzicht_code:
   path: '/ezac/leden/overzicht/{code}'
   defaults:
     _title: 'Ledenoverzicht'
-    _controller: '\Drupal\EzacLeden\Controller\EzacLedenController::overzicht'
+    _controller: '\Drupal\ezac_leden\Controller\EzacLedenController::overzicht'
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
