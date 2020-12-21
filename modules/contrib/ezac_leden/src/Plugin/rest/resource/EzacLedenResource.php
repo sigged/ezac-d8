@@ -3,11 +3,11 @@
 
 namespace Drupal\ezac_leden\Plugin\rest\resource;
 
-use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\ezac_leden\Model\EzacLid;
 
   /**
    * Provides a resource for leden table reads
@@ -43,7 +43,7 @@ class EzacLedenResource extends ResourceBase {
     if (isset($id)) {
       $record = (new EzacLid)->read($id);
       if (!empty($record)) {
-        return new ResourceResponse($record);
+        return new ResourceResponse((array) $record);
       }
 
       throw new NotFoundHttpException("Leden entry with ID '$id' was not found");
