@@ -67,7 +67,7 @@ class EzacLedenResource extends ResourceBase {
     if (isset($code)) {
       // read valid CODE values
       $condition = [];
-      $codeIndex = array_unique(EzacLid::index($condition, 'code', 'achternaam'));
+      $codeIndex = array_unique(EzacLid::index($condition, 'code'));
       if (!in_array($code, $codeIndex)) {
         //invalid code value
         throw new BadRequestHttpException("Invalid CODE: $code");
