@@ -65,7 +65,7 @@ class EzacLedenResource extends ResourceBase {
       $ledenIndex = EzacLid::index($condition);
       $result = [];
       foreach ($ledenIndex as $lidIndex) {
-        $result[] = (new EzacLid)->read($lidIndex);
+        $result[] = (array) (new EzacLid)->read($lidIndex);
       }
       return new ResourceResponse((array) $result);
     }
