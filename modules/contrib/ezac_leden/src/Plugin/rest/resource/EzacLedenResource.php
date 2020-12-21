@@ -40,8 +40,7 @@ class EzacLedenResource extends ResourceBase {
    *   Thrown when no leden id was provided.
    */
   public function get($id = NULL) {
-    return new ResourceResponse("ID:[$id]"); //debug
-    if ($id) {
+    if (isset($id)) {
       $record = (new EzacLid)->read($id);
       if (!empty($record)) {
         return new ResourceResponse($record);
