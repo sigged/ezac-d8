@@ -52,13 +52,15 @@ class EzacLedenResource extends ResourceBase {
       'max-age' => 0,
       ],
     ];
+
+    // when id given, read that record
     if (isset($id)) {
       $record = (new EzacLid)->read($id);
       if (!empty($record)) {
         return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
 
-      throw new NotFoundHttpException("Leden entry with ID '$id' was not found");
+      throw new NotFoundHttpException("Invalid ID: $id");
     }
 
     // when no ID is given, either code or afkorting has to be present
@@ -70,8 +72,8 @@ class EzacLedenResource extends ResourceBase {
       }
       $ledenIndex = EzacLid::index($condition);
       $result = [];
-      foreach ($ledenIndex as $lidIndex) {
-        $result[] = (array) (new EzacLid)->read($lidIndex);
+      foreach ($ledenIndex as $id) {
+        $result[] = (array) (new EzacLid)->read($id);
       }
       return (new ResourceResponse($result))->addCacheableDependency($build);
     }
