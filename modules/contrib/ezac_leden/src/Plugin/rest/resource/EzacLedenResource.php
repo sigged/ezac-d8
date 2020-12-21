@@ -74,7 +74,7 @@ class EzacLedenResource extends ResourceBase {
       }
       $condition = ['code' => $code];
       if (isset($actief)) {
-        if ($actief == '1') {
+        if ($actief != '0') {
           $condition['actief'] = 1;
         }
       }
