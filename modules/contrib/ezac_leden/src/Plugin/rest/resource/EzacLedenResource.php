@@ -3,6 +3,7 @@
 
 namespace Drupal\ezac_leden\Plugin\rest\resource;
 
+use Drupal;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -28,18 +29,23 @@ class EzacLedenResource extends ResourceBase {
    *
    * Returns a leden table record for the specified ID.
    *
-   * @param int $id
+   * @param null $id
    *   The ID of the leden record.
+   * @param string $code
+   * @param int $actief
+   * @param null $afkorting
    *
    * @return \Drupal\rest\ResourceResponse
    *   The response containing the leden record.
    *
-   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-   *   Thrown when the leden record was not found.
-   * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-   *   Thrown when no leden id was provided.
    */
   public function get($id = NULL) {
+
+    //get parameters
+    $code = Drupal::request()->query->get('code');
+    $actief = Drupal::request()->query->get('actief');
+    $afkorting = Drupal::request()->query->get('afkorting');
+
     if (isset($id)) {
       $record = (new EzacLid)->read($id);
       if (!empty($record)) {
@@ -49,7 +55,29 @@ class EzacLedenResource extends ResourceBase {
       throw new NotFoundHttpException("Leden entry with ID '$id' was not found");
     }
 
-    throw new BadRequestHttpException('No Leden ID was provided');
+    // when no ID is given, either code or afkorting has to be present
+    if (isset($code)) {
+      //@TODO sanitize $code
+      $condition = ['code' => $code];
+      if (isset($actief)) {
+        $condition['actief'] = $actief;
+      }
+      $ledenIndex = EzacLid::index($condition);
+      $result = [];
+      foreach ($ledenIndex as $lidIndex) {
+        $result[] = (new EzacLid)->read($lidIndex);
+      }
+      return new ResourceResponse((array) $result);
+    }
+
+    if (isset($afkorting)) {
+      //@TODO sanitize $afkorting
+      $record = (new EzacLid)->read(EzacLid::getId($afkorting));
+      return new ResourceResponse((array) $record);
+    }
+
+    // no code or afkorting parameter given
+    throw new BadRequestHttpException('No valid parameter provided');
   }
 
 }
