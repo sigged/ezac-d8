@@ -29,7 +29,7 @@ class EzacStorage
     //$config = \Drupal::config('Ezac.database');
     //Database::setActiveConnection($config->get('name');
 
-    protected const dbName = 'Ezac';
+    protected const dbName = 'ezac';
 
     /**
      *
