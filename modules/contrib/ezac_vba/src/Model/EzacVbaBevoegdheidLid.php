@@ -58,11 +58,10 @@ class EzacVbaBevoegdheidLid extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\EzacVba\Model\EzacVbaBevoegdheidLid
+     * @return \Drupal\ezac_vba\Model\EzacVbaBevoegdheidLid
      *   ID of record created
      */
-    public function create()
-    {
+    public function create(): EzacVbaBevoegdheidLid {
 
         $this->id = $this->ezacCreate('vba_bevoegdheid_lid');
         return $this;
@@ -86,8 +85,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      * @return int
      *   records_updated
      */
-    public function update()
-    {
+    public function update(): int {
         // build $condition
         return $this->ezacUpdate('vba_bevoegdheid_lid');
     }
@@ -98,8 +96,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      * @return int
      *   records_deleted
      */
-    public function delete()
-    {
+    public function delete(): int {
         return $this->ezacDelete('vba_bevoegdheid_lid');
     }
 
@@ -111,8 +108,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      * @return int
      *   number of records
      */
-    public static function counter($condition)
-    {
+    public static function counter($condition): int {
       return EzacStorage::ezacCount('vba_bevoegdheid_lid', $condition);
     }
 
@@ -128,8 +124,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      * @param bool $unique
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum_aan', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
-    {
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum_aan', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
         return EzacStorage::ezacIndex('vba_bevoegdheid_lid', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
 

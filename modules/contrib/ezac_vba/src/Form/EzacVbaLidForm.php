@@ -47,7 +47,7 @@ class EzacVbaLidForm extends FormBase {
    *
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL): array {
     // Wrap the form in a div.
     $form = [
       '#prefix' => '<div id="statusform">',
@@ -135,7 +135,7 @@ class EzacVbaLidForm extends FormBase {
    *
    * @return array|mixed
    */
-  function formPersoonCallback(array $form, FormStateInterface $form_state) {
+  function formPersoonCallback(array $form, FormStateInterface $form_state): array {
 
     $overzicht = TRUE; //@todo temporary fix
     $condition = [

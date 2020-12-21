@@ -51,11 +51,10 @@ class EzacVbaDagverslag extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\EzacVba\Model\EzacVbaDagverslag
+     * @return \Drupal\ezac_vba\Model\EzacVbaDagverslag
      *   ID of record created
      */
-    public function create()
-    {
+    public function create(): EzacVbaDagverslag {
         $this->id = $this->ezacCreate('vba_dagverslagen');
         return $this;
     }
@@ -78,8 +77,7 @@ class EzacVbaDagverslag extends EzacStorage
      * @return int
      *   records_updated
      */
-    public function update()
-    {
+    public function update(): int {
         // build $condition
         return $this->ezacUpdate('vba_dagverslagen');
     }
@@ -90,8 +88,7 @@ class EzacVbaDagverslag extends EzacStorage
      * @return int
      *   records_deleted
      */
-    public function delete()
-    {
+    public function delete(): int {
         return $this->ezacDelete('vba_dagverslagen');
     }
 
@@ -103,8 +100,7 @@ class EzacVbaDagverslag extends EzacStorage
      * @return int
      *   number of records
      */
-    public static function counter($condition)
-    {
+    public static function counter($condition): int {
       return EzacStorage::ezacCount('vba_dagverslagen', $condition);
     }
 
@@ -120,8 +116,7 @@ class EzacVbaDagverslag extends EzacStorage
      * @param bool $unique
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
-    {
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
         return EzacStorage::ezacIndex('vba_dagverslagen', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
 

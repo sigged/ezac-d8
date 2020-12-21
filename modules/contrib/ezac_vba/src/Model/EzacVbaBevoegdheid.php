@@ -63,8 +63,7 @@ class EzacVbaBevoegdheid extends EzacStorage
      * @return EzacVbaBevoegdheid ID of record created
      *   ID of record created
      */
-    public function create()
-    {
+    public function create(): EzacVbaBevoegdheid {
 
         $this->id = $this->ezacCreate('vba_bevoegdheden');
         return $this;
@@ -83,10 +82,10 @@ class EzacVbaBevoegdheid extends EzacStorage
     }
 
     static public function readAll($condition)
+      //@TODO this function is used nowhere? - to be discarded also in EzacStorage
     {
       $condition = []; // select all records
-      $bevoegdheden = EzacStorage::ezacReadAll('vba_bevoegdheden', $condition, __CLASS__);
-      return $bevoegdheden;
+      return EzacStorage::ezacReadAll('vba_bevoegdheden', $condition, __CLASS__);
     }
     /**
      * update - Updates record in the vba table
@@ -94,8 +93,7 @@ class EzacVbaBevoegdheid extends EzacStorage
      * @return int
      *   records_updated
      */
-    public function update()
-    {
+    public function update(): int {
         // build $condition
         return $this->ezacUpdate('vba_bevoegdheden');
     }
@@ -106,8 +104,7 @@ class EzacVbaBevoegdheid extends EzacStorage
      * @return int
      *   records_deleted
      */
-    public function delete()
-    {
+    public function delete(): int {
         return $this->ezacDelete('vba_bevoegdheden');
     }
 
@@ -119,8 +116,7 @@ class EzacVbaBevoegdheid extends EzacStorage
      * @return int
      *   number of records
      */
-    public static function counter($condition)
-    {
+    public static function counter($condition): int {
       return EzacStorage::ezacCount('vba_bevoegdheden', $condition);
     }
 
@@ -136,8 +132,7 @@ class EzacVbaBevoegdheid extends EzacStorage
      * @param bool $unique
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE)
-    {
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'bevoegdheid', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
         return EzacStorage::ezacIndex('vba_bevoegdheden', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
 
