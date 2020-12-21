@@ -29,7 +29,7 @@ class EzacStorage
     //$config = \Drupal::config('Ezac.database');
     //Database::setActiveConnection($config->get('name');
 
-    protected const dbName = 'ezac';
+    protected const DBNAME = 'ezac';
 
     /**
      *
@@ -46,7 +46,7 @@ class EzacStorage
         /*
         // Read all fields from a Ezac table.
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection(self::dbName);
+        Database::setActiveConnection(self::DBNAME);
         $db = Database::getConnection();
 
         $select = $db->select($table); // geen alias gebruikt
@@ -93,7 +93,7 @@ class EzacStorage
 
       // Read unique index from a Ezac table.
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection(self::dbName);
+        Database::setActiveConnection(self::DBNAME);
         $db = Database::getConnection();
 
         $select = $db->select($table, 't');
@@ -170,7 +170,7 @@ class EzacStorage
 
         // EZAC database is outside the Drupal structure
         // select EZAC database outside Drupal structure
-        Database::setActiveConnection(self::dbName);
+        Database::setActiveConnection(self::DBNAME);
         $db = Database::getConnection();
 
         // create record
@@ -216,7 +216,7 @@ class EzacStorage
 
         // Read all fields from a Ezac table.
         // select EZAC database outside Drupal structure
-        Database::setActiveConnection(self::dbName);
+        Database::setActiveConnection(self::DBNAME);
         $db = Database::getConnection();
 
         $select = $db->select($table); // geen alias gebruikt
@@ -245,7 +245,7 @@ class EzacStorage
     {
       // Read all fields from a Ezac table.
       // select EZAC database outside Drupal structure
-      Database::setActiveConnection(self::dbName);
+      Database::setActiveConnection(self::DBNAME);
       $db = Database::getConnection();
 
       $select = $db->select($table); // geen alias gebruikt
@@ -286,7 +286,7 @@ class EzacStorage
         $messenger = Drupal::messenger();
 
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection(self::dbName);
+        Database::setActiveConnection(self::DBNAME);
         $db = Database::getConnection();
 
         // build array from object fields
@@ -324,7 +324,7 @@ class EzacStorage
     public function ezacDelete(string $table): int {
 
         // EZAC database is outside the Drupal structure
-        Database::setActiveConnection(self::dbName);
+        Database::setActiveConnection(self::DBNAME);
         $db = Database::getConnection();
 
         // prepare delete

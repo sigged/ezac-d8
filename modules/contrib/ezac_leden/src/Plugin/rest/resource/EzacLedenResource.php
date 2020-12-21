@@ -17,8 +17,7 @@ use Drupal\ezac_leden\Model\EzacLid;
    *   id = "ezac_leden_resource",
    *   label = @Translation("EZAC leden table"),
    *   uri_paths = {
-   *     "canonical" = "/api/v1/leden/{id}",
-   *     "https://www.drupal.org/link-relations/create" = "/api/v1/leden"
+   *     "canonical" = "/api/v1/leden",
    *   }
    * )
    */
@@ -39,9 +38,10 @@ class EzacLedenResource extends ResourceBase {
    *   The response containing the leden record.
    *
    */
-  public function get($id = NULL) {
+  public function get() {
 
     //get parameters
+    $id = Drupal::request()->query->get('id');
     $code = Drupal::request()->query->get('code');
     $actief = Drupal::request()->query->get('actief');
     $afkorting = Drupal::request()->query->get('afkorting');
