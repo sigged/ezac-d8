@@ -20,7 +20,7 @@
 /**
 * Implements hook_theme()
 */
-function ezacStarts_theme() {
+function ezac_starts_theme() {
  return [
      'ezac_starts_update_form' => [
          'render element'   => 'form',
