@@ -247,7 +247,10 @@ class EzacVbaLidForm extends FormBase {
       }
 
       //toon vluchten dit jaar
-      $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
+      $form['vliegers']['starts'] = EzacStartsController::startOverzicht(
+        $datum_start,
+        $datum_eind,
+        $vlieger_afkorting);
 
       if (!$overzicht) {
         //@todo param $overzicht nog hanteren? of apart form voor maken
