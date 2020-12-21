@@ -46,10 +46,16 @@ class EzacLedenResource extends ResourceBase {
     $actief = Drupal::request()->query->get('actief');
     $afkorting = Drupal::request()->query->get('afkorting');
 
+    // Configure caching settings.
+    $build = [
+      '#cache' => [
+      'max-age' => 0,
+      ],
+    ];
     if (isset($id)) {
       $record = (new EzacLid)->read($id);
       if (!empty($record)) {
-        return new ResourceResponse((array) $record);
+        return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
 
       throw new NotFoundHttpException("Leden entry with ID '$id' was not found");
@@ -67,13 +73,13 @@ class EzacLedenResource extends ResourceBase {
       foreach ($ledenIndex as $lidIndex) {
         $result[] = (array) (new EzacLid)->read($lidIndex);
       }
-      return new ResourceResponse((array) $result);
+      return (new ResourceResponse((array) $result))->addCacheableDependency($build);
     }
 
     if (isset($afkorting)) {
       //@TODO sanitize $afkorting
       $record = (new EzacLid)->read(EzacLid::getId($afkorting));
-      return new ResourceResponse((array) $record);
+      return (new ResourceResponse((array) $record))->addCacheableDependency($build);
     }
 
     // no code or afkorting parameter given
