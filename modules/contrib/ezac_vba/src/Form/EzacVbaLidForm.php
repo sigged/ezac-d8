@@ -6,18 +6,14 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 
 use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_starts\Controller\EzacStartsController;
-use Drupal\ezac_starts\Model\EzacStart;
 use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
 use Drupal\ezac_vba\Model\EzacVbaBevoegdheidLid;
 use Drupal\ezac_vba\Model\EzacVbaDagverslag;
 use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
-
-use Twig\Error\RuntimeError;
 
 /**
  * UI to show status of VBA records
@@ -95,12 +91,6 @@ class EzacVbaLidForm extends FormBase {
 
     // Kies gewenste vlieger voor overzicht dagverslagen
     $overzicht = TRUE; // @todo replace parameter $overzicht
-    //@todo het overzicht van vluchten is initieel voor iedereen ipv leeg en de sortering lijkt willekeurig
-    //@todo het overzicht van vluchten wordt ook niet aangepast nadat een vlieger is geselecteerd
-
-    // D7 code start
-
-    //$datum = $form_state->getValue('datum', date('Y-m-d'));
 
     //maak container voor vliegers
     //[vliegers] form wordt door AJAX opnieuw opgebouwd
@@ -122,7 +112,6 @@ class EzacVbaLidForm extends FormBase {
       '#weight' => 99,
     ];
 
-    // D7 code end
     $form['actions'] = [
       '#type' => 'actions',
     ];
@@ -149,27 +138,11 @@ class EzacVbaLidForm extends FormBase {
     $datum_eind = $form_state->getValue('datum_eind');
 
     if (isset($persoon) && $persoon != '') {
-      //toon vluchten dit jaar
-      $vlieger_afkorting = $form_state->getValue('persoon');
 
+      // lees vlieger gegevens
+      $vlieger_afkorting = $form_state->getValue('persoon');
       $lid = (new EzacLid)->read(EzacLid::getId($vlieger_afkorting));
       $helenaam = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
-
-      // @todo deze routine geeft niet de juiste starts terug
-      $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
-
-      if (!$overzicht) {
-        //@todo param $overzicht nog hanteren? of apart form voor maken
-        // invoeren opmerking
-        $form['vliegers']['opmerking'] = [
-          '#title' => t("Opmerkingen voor $helenaam"),
-          '#type' => 'textarea',
-          '#rows' => 3,
-          '#required' => FALSE,
-          '#weight' => 5,
-          '#tree' => TRUE,
-        ];
-      }
 
       //Toon eerdere verslagen per lid
       // query vba verslag, bevoegdheid records
@@ -270,6 +243,22 @@ class EzacVbaLidForm extends FormBase {
           '#rows' => $rows,
           '#empty' => t('Geen gegevens beschikbaar'),
           '#weight' => 7,
+        ];
+      }
+
+      //toon vluchten dit jaar
+      $form['vliegers']['starts'] = EzacStartsController::startOverzicht($datum_start, $datum_eind, $vlieger_afkorting);
+
+      if (!$overzicht) {
+        //@todo param $overzicht nog hanteren? of apart form voor maken
+        // invoeren opmerking
+        $form['vliegers']['opmerking'] = [
+          '#title' => t("Opmerkingen voor $helenaam"),
+          '#type' => 'textarea',
+          '#rows' => 3,
+          '#required' => FALSE,
+          '#weight' => 5,
+          '#tree' => TRUE,
         ];
       }
 
