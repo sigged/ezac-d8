@@ -2,7 +2,7 @@
 
 namespace Drupal\ezac_vba\Model;
 
-use Drupal\Ezac\Model\EzacStorage;
+use Drupal\ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacDagverslagenLid.php

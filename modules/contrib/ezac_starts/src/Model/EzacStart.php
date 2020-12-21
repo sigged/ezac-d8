@@ -2,7 +2,7 @@
 
 namespace Drupal\ezac_starts\Model;
 
-use Drupal\Ezac\Model\EzacStorage;
+use Drupal\ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacStart.php
