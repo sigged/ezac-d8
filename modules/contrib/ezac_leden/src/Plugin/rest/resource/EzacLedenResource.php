@@ -65,7 +65,13 @@ class EzacLedenResource extends ResourceBase {
 
     // when no ID is given, either code or afkorting has to be present
     if (isset($code)) {
-      //@TODO sanitize $code
+      // read valid CODE values
+      $condition = [];
+      $codeIndex = array_unique(EzacLid::index($condition, 'code'));
+      if (!in_array($code, $codeIndex)) {
+        //invalid code value
+        throw new BadRequestHttpException("Invalid CODE: $code");
+      }
       $condition = ['code' => $code];
       if (isset($actief)) {
         $condition['actief'] = $actief;
