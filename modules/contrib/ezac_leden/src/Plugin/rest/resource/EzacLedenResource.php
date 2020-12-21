@@ -74,7 +74,9 @@ class EzacLedenResource extends ResourceBase {
       }
       $condition = ['code' => $code];
       if (isset($actief)) {
-        $condition['actief'] = $actief;
+        if ($actief == '1') {
+          $condition['actief'] = 1;
+        }
       }
       $ledenIndex = EzacLid::index($condition);
       $result = [];
