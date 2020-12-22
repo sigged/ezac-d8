@@ -31,11 +31,13 @@ class EzacLedenResource extends ResourceBase {
    * @param null $id
    *   The ID of the leden record.
    * @param string $code
+   *    * for all codes or one EzacLid::lidCode value
    * @param int $actief
+   *    non-zero value selects only active Leden records
    * @param null $afkorting
-   *
+   *    select Leden record for afkorting
    * @return \Drupal\rest\ResourceResponse
-   *   The response containing the leden record.
+   *   The response containing the leden record or array of records.
    *
    */
   public function get() {
@@ -65,14 +67,17 @@ class EzacLedenResource extends ResourceBase {
 
     // when no ID is given, either code or afkorting has to be present
     if (isset($code)) {
-      // read valid CODE values
-      $condition = [];
-      $codeIndex = array_unique(EzacLid::index($condition, 'code'));
-      if (!in_array($code, $codeIndex)) {
+      if ($code = '*') {
+        $condition = []; //select all
+      }
+      // test valid CODE values
+      elseif (!in_array($code, EzacLid::$lidCode)) {
         //invalid code value
         throw new BadRequestHttpException("Invalid CODE: $code");
       }
-      $condition = ['code' => $code];
+      else {
+        $condition = ['code' => $code];
+      }
       if (isset($actief)) {
         if ($actief != '0') {
           $condition['actief'] = 1;
