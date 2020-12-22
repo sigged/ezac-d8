@@ -14,7 +14,7 @@ use Drupal\ezac_kisten\Model\EzacKist;
    * Provides a resource for kisten table reads
    *
    * @RestResource(
-   *   id = "ezac_leden_resource",
+   *   id = "ezac_kisten_resource",
    *   label = @Translation("EZAC kisten table"),
    *   uri_paths = {
    *     "canonical" = "/api/v2/kisten"
