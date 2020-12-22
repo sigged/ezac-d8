@@ -204,8 +204,6 @@ class EzacStartsResource extends ResourceBase {
   } //get
 
   /**
-   * Responds to POST requests.
-   *
    * @param $datum
    * @param $registratie
    * @param $gezagvoerder
@@ -217,34 +215,10 @@ class EzacStartsResource extends ResourceBase {
    * @param $duur
    * @param $instructie
    * @param $opmerking
-   *
-   * @return \Drupal\rest\ModifiedResourceResponse
-   *   The HTTP response object.
-   *
    */
-  public function post(): ModifiedResourceResponse {
-
-    // Use current user after pass authentication to validate access.
-    /*
-    if (!$this->currentUser->hasPermission('access content')) {
-      throw new AccessDeniedHttpException();
-    }
-    */
-
-    //get parameters
-    $datum = Drupal::request()->query->get('datum');
-    $registratie = Drupal::request()->query->get('registratie');
-    $gezagvoerder = Drupal::request()->query->get('gezagvoerder');
-    $tweede = Drupal::request()->query->get('tweede');
-    $soort = Drupal::request()->query->get('soort');
-    $startmethode = Drupal::request()->query->get('startmethode');
-    $start = Drupal::request()->query->get('start');
-    $landing = Drupal::request()->query->get('landing');
-    $duur = Drupal::request()->query->get('duur');
-    $instructie = Drupal::request()->query->get('instructie');
-    $opmerking = Drupal::request()->query->get('opmerking');
-
+  private function processStart($datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking) {
     // Build start record
+    $errmsg = '';
     $start_record = new EzacStart();
 
     // datum
@@ -362,10 +336,93 @@ class EzacStartsResource extends ResourceBase {
     if (isset($opmerking)) {
       $start_record->opmerking = substr(trim($start_record->opmerking), 0, 30);
     }
+    return $start_record;
+  } //processStart
 
+  /**
+   * Responds to POST requests.
+   *
+   * @param $datum
+   * @param $registratie
+   * @param $gezagvoerder
+   * @param $tweede
+   * @param $soort
+   * @param $startmethode
+   * @param $start
+   * @param $landing
+   * @param $duur
+   * @param $instructie
+   * @param $opmerking
+   *
+   * @return \Drupal\rest\ModifiedResourceResponse
+   *   The HTTP response object.
+   *
+   */
+  public function post(): ModifiedResourceResponse {
+
+    // Use current user after pass authentication to validate access.
+    /*
+    if (!$this->currentUser->hasPermission('access content')) {
+      throw new AccessDeniedHttpException();
+    }
+    */
+
+    //get parameters
+    $datum = Drupal::request()->query->get('datum');
+    $registratie = Drupal::request()->query->get('registratie');
+    $gezagvoerder = Drupal::request()->query->get('gezagvoerder');
+    $tweede = Drupal::request()->query->get('tweede');
+    $soort = Drupal::request()->query->get('soort');
+    $startmethode = Drupal::request()->query->get('startmethode');
+    $start = Drupal::request()->query->get('start');
+    $landing = Drupal::request()->query->get('landing');
+    $duur = Drupal::request()->query->get('duur');
+    $instructie = Drupal::request()->query->get('instructie');
+    $opmerking = Drupal::request()->query->get('opmerking');
+
+    $start_record = $this->processStart($datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
     // write start record to database
     $record = $start_record->create();
     return new ModifiedResourceResponse($record->id, 200);
   } // post
 
+  /**
+   * Responds to PATCH requests.
+   *
+   * @param $datum
+   * @param $registratie
+   * @param $gezagvoerder
+   * @param $tweede
+   * @param $soort
+   * @param $startmethode
+   * @param $start
+   * @param $landing
+   * @param $duur
+   * @param $instructie
+   * @param $opmerking
+   *
+   * @return \Drupal\rest\ModifiedResourceResponse
+   *   The HTTP response object.
+   *
+   */
+  public function patch(): ModifiedResourceResponse {
+    //get parameters
+    $datum = Drupal::request()->query->get('datum');
+    $registratie = Drupal::request()->query->get('registratie');
+    $gezagvoerder = Drupal::request()->query->get('gezagvoerder');
+    $tweede = Drupal::request()->query->get('tweede');
+    $soort = Drupal::request()->query->get('soort');
+    $startmethode = Drupal::request()->query->get('startmethode');
+    $start = Drupal::request()->query->get('start');
+    $landing = Drupal::request()->query->get('landing');
+    $duur = Drupal::request()->query->get('duur');
+    $instructie = Drupal::request()->query->get('instructie');
+    $opmerking = Drupal::request()->query->get('opmerking');
+
+    $start_record = $this->processStart($datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
+    // write start record to database
+    $nr_affected = $start_record->update();
+    return new ModifiedResourceResponse($nr_affected, 200);
+
+  }  //patch
 }
