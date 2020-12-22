@@ -71,7 +71,7 @@ class EzacLedenResource extends ResourceBase {
         $condition = []; //select all
       }
       // test valid CODE values
-      elseif (!in_array($code, EzacLid::$lidCode)) {
+      elseif (!array_key_exists($code, EzacLid::$lidCode)) {
         //invalid code value
         throw new BadRequestHttpException("Invalid CODE: $code");
       }
