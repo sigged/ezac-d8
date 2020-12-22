@@ -20,7 +20,8 @@ use Drupal\ezac_starts\Model\EzacStart;
    *   id = "ezac_starts_resource",
    *   label = @Translation("EZAC starts table"),
    *   uri_paths = {
-   *     "canonical" = "/api/v2/starts"
+   *     "canonical" = "/api/v2/starts",
+   *     "https://www.drupal.org/link-relations/create" = "/api/v2/starts"
    *   }
    * )
    */
