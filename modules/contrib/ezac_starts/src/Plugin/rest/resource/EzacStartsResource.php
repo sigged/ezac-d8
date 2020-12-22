@@ -322,7 +322,7 @@ class EzacStartsResource extends ResourceBase {
     // opmerking
     //opmerking is optional, max 30 chars
     if (isset($opmerking)) {
-      $start_record->opmerking = substr(trim($start_record->opmerking), 0, 30);
+      $start_record->opmerking = substr(trim($opmerking), 0, 30);
     }
     return $start_record;
   } //processStart
@@ -369,7 +369,19 @@ class EzacStartsResource extends ResourceBase {
     $instructie = Drupal::request()->query->get('instructie');
     $opmerking = Drupal::request()->query->get('opmerking');
 
-    $start_record = $this->processStart($id, $datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
+    $start_record = $this->processStart(
+      $id,
+      $datum,
+      $registratie,
+      $gezagvoerder,
+      $tweede,
+      $soort,
+      $startmethode,
+      $start,
+      $landing,
+      $duur,
+      $instructie,
+      $opmerking);
     // write start record to database
     $record = $start_record->create();
     return new ModifiedResourceResponse($record->id, 200);
