@@ -37,13 +37,14 @@ class EzacStartsResource extends ResourceBase {
   /**
    * {@inheritdoc}
    */
+  /*
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->logger = $container->get('logger.factory')->get('ezac_starts');
     $instance->currentUser = $container->get('current_user');
     return $instance;
   }
-
+  */
   /**
    * @param $datum
    * @param $datumStart
@@ -363,8 +364,8 @@ class EzacStartsResource extends ResourceBase {
     }
 
     // write start record to database
-    $id = $start_record->create();
-    return new ModifiedResourceResponse((array) $id, 200);
+    $record = $start_record->create();
+    return new ModifiedResourceResponse($record->id, 200);
   } // post
 
 }
