@@ -98,23 +98,14 @@ class EzacStartsResource extends ResourceBase {
 
     // when id given, read that record
     if (isset($id)) {
-      if ($id == '') {
-        //return index of id
-        $condition = [];
-        if (isset($actief)) {
-          if ($actief != '0') {
-            $condition['actief'] = 1;
-          }
+      if ($id != '') {
+        // return record for id
+        $record = (new EzacStart)->read($id);
+        if (!empty($record)) {
+          return (new ResourceResponse((array) $record))->addCacheableDependency($build);
         }
-        $startsIndex = EzacStart::index($condition);
-        return (new ResourceResponse((array) $startsIndex))->addCacheableDependency($build);
+        throw new NotFoundHttpException("Invalid ID: $id");
       }
-      // return record for id
-      $record = (new EzacStart)->read($id);
-      if (!empty($record)) {
-        return (new ResourceResponse((array) $record))->addCacheableDependency($build);
-      }
-      throw new NotFoundHttpException("Invalid ID: $id");
     }
 
     //parse $datum
@@ -171,12 +162,20 @@ class EzacStartsResource extends ResourceBase {
     }
 
     if ($condition != []) {
+      // only send response when selection criteria are given
       $startsIndex = EzacStart::index($condition);
-      $result = [];
-      foreach ($startsIndex as $id) {
-        $result[] = (array) (new EzacStart)->read($id);
+      if ($id == '') {
+        // empty id value indicates index request
+        return (new ResourceResponse($startsIndex))->addCacheableDependency($build);
       }
-      return (new ResourceResponse($result))->addCacheableDependency($build);
+      else {
+        // return selected starts records
+        $result = [];
+        foreach ($startsIndex as $id) {
+          $result[] = (array) (new EzacStart)->read($id);
+        }
+        return (new ResourceResponse($result))->addCacheableDependency($build);
+      }
     }
     else {
       // no parameter given
