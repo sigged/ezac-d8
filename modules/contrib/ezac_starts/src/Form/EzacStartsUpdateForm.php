@@ -261,7 +261,7 @@ class EzacStartsUpdateForm extends FormBase
             'ezac_starts_overzicht',
             [
               'datum_start' => $form_state->getValue('datum'),
-              'datum-eind' => $form_state->getValue('datum'),
+              'datum_eind' => $form_state->getValue('datum'),
             ]
         );
         $form_state->setRedirectUrl($redirect);
