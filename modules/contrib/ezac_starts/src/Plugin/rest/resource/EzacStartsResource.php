@@ -364,7 +364,7 @@ class EzacStartsResource extends ResourceBase {
 
     // write start record to database
     $id = $start_record->create();
-    return new ModifiedResourceResponse($id, 200);
+    return new ModifiedResourceResponse((array) $id, 200);
   } // post
 
 }
