@@ -17,7 +17,7 @@ use Drupal\ezac_leden\Model\EzacLid;
    *   id = "ezac_leden_resource",
    *   label = @Translation("EZAC leden table"),
    *   uri_paths = {
-   *     "canonical" = "/api/v1/leden/{id}",
+   *     "canonical" = "/api/v1/leden/",
    *   }
    * )
    */
@@ -40,10 +40,10 @@ class EzacLedenResource extends ResourceBase {
    *   The response containing the leden record or array of records.
    *
    */
-  public function get($id = NULL) {
+  public function get() {
 
     //get parameters
-    //$id = Drupal::request()->query->get('id');
+    $id = Drupal::request()->query->get('id');
     $code = Drupal::request()->query->get('code');
     $actief = Drupal::request()->query->get('actief');
     $afkorting = Drupal::request()->query->get('afkorting');
@@ -57,11 +57,22 @@ class EzacLedenResource extends ResourceBase {
 
     // when id given, read that record
     if (isset($id)) {
+      if ($id == '') {
+        //return index of id
+        $condition = [];
+        if (isset($actief)) {
+          if ($actief != '0') {
+            $condition['actief'] = 1;
+          }
+        }
+        $ledenIndex = EzacLid::index($condition);
+        return (new ResourceResponse((array) $ledenIndex))->addCacheableDependency($build);
+      }
+      // return record for id
       $record = (new EzacLid)->read($id);
       if (!empty($record)) {
         return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
-
       throw new NotFoundHttpException("Invalid ID: $id");
     }
 
