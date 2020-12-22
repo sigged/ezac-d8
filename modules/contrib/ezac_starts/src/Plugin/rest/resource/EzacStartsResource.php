@@ -97,15 +97,13 @@ class EzacStartsResource extends ResourceBase {
     $registratie = Drupal::request()->query->get('registratie');
 
     // when id given, read that record
-    if (isset($id)) {
-      if ($id != '') {
-        // return record for id
-        $record = (new EzacStart)->read($id);
-        if (!empty($record)) {
-          return (new ResourceResponse((array) $record))->addCacheableDependency($build);
-        }
-        throw new NotFoundHttpException("Invalid ID: $id");
+    if (isset($id) && ($id != '')) {
+      // return record for id
+      $record = (new EzacStart)->read($id);
+      if (!empty($record)) {
+        return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
+      throw new NotFoundHttpException("Invalid ID: $id");
     }
 
     //parse $datum
