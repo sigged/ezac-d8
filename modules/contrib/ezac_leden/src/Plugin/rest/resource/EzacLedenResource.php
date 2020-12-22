@@ -17,8 +17,8 @@ use Drupal\ezac_leden\Model\EzacLid;
    *   id = "ezac_leden_resource",
    *   label = @Translation("EZAC leden table"),
    *   uri_paths = {
-   *     "canonical" = "/api/v1/leden/",
-   *     "https://www.drupal.org/link-relations/create" = "/api/v1/leden"
+   *     "canonical" = "/api/v2/leden/",
+   *     "https://www.drupal.org/link-relations/create" = "/api/v2/leden"
    *   }
    * )
    */
