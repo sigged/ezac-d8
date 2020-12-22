@@ -67,7 +67,7 @@ class EzacLedenResource extends ResourceBase {
 
     // when no ID is given, either code or afkorting has to be present
     if (isset($code)) {
-      if ($code = '*') {
+      if ($code == '*') {
         $condition = []; //select all
       }
       // test valid CODE values
