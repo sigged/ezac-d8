@@ -28,24 +28,6 @@ use Drupal\ezac_starts\Model\EzacStart;
 class EzacStartsResource extends ResourceBase {
 
   /**
-   * A current user instance.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
-   * {@inheritdoc}
-   */
-  /*
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->logger = $container->get('logger.factory')->get('ezac_starts');
-    $instance->currentUser = $container->get('current_user');
-    return $instance;
-  }
-  */
-  /**
    * @param $datum
    * @param $datumStart
    * @param $datumEnd
@@ -204,6 +186,7 @@ class EzacStartsResource extends ResourceBase {
   } //get
 
   /**
+   * @param $id
    * @param $datum
    * @param $registratie
    * @param $gezagvoerder
@@ -215,12 +198,17 @@ class EzacStartsResource extends ResourceBase {
    * @param $duur
    * @param $instructie
    * @param $opmerking
+   *
+   * @return \Drupal\ezac_starts\Model\EzacStart
    */
-  private function processStart($datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking) {
+  private function processStart($id, $datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking): EzacStart {
     // Build start record
-    $errmsg = '';
     $start_record = new EzacStart();
 
+    // id
+    if (isset($id)) {
+      $start_record->id = $id; // used for update
+    }
     // datum
     if (isset($datum)) {
       // check datum
@@ -368,6 +356,7 @@ class EzacStartsResource extends ResourceBase {
     */
 
     //get parameters
+    $id = null; // is assigned with POST
     $datum = Drupal::request()->query->get('datum');
     $registratie = Drupal::request()->query->get('registratie');
     $gezagvoerder = Drupal::request()->query->get('gezagvoerder');
@@ -380,7 +369,7 @@ class EzacStartsResource extends ResourceBase {
     $instructie = Drupal::request()->query->get('instructie');
     $opmerking = Drupal::request()->query->get('opmerking');
 
-    $start_record = $this->processStart($datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
+    $start_record = $this->processStart($id, $datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
     // write start record to database
     $record = $start_record->create();
     return new ModifiedResourceResponse($record->id, 200);
@@ -389,6 +378,7 @@ class EzacStartsResource extends ResourceBase {
   /**
    * Responds to PATCH requests.
    *
+   * @param $id
    * @param $datum
    * @param $registratie
    * @param $gezagvoerder
@@ -407,6 +397,7 @@ class EzacStartsResource extends ResourceBase {
    */
   public function patch(): ModifiedResourceResponse {
     //get parameters
+    $id = Drupal::request()->query->get('id');
     $datum = Drupal::request()->query->get('datum');
     $registratie = Drupal::request()->query->get('registratie');
     $gezagvoerder = Drupal::request()->query->get('gezagvoerder');
@@ -419,7 +410,7 @@ class EzacStartsResource extends ResourceBase {
     $instructie = Drupal::request()->query->get('instructie');
     $opmerking = Drupal::request()->query->get('opmerking');
 
-    $start_record = $this->processStart($datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
+    $start_record = $this->processStart($id, $datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
     // write start record to database
     $nr_affected = $start_record->update();
     return new ModifiedResourceResponse($nr_affected, 200);
