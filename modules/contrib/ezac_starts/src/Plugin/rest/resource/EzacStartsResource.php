@@ -164,7 +164,7 @@ class EzacStartsResource extends ResourceBase {
     if ($condition != []) {
       // only send response when selection criteria are given
       $startsIndex = EzacStart::index($condition);
-      if ($id == '') {
+      if (isset($id) && ($id == '')) {
         // empty id value indicates index request
         return (new ResourceResponse($startsIndex))->addCacheableDependency($build);
       }
