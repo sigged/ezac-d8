@@ -17,7 +17,7 @@ use Drupal\ezac_leden\Model\EzacLid;
    *   id = "ezac_leden_resource",
    *   label = @Translation("EZAC leden table"),
    *   uri_paths = {
-   *     "canonical" = "/api/v1/leden",
+   *     "canonical" = "/api/v1/leden/{id}",
    *   }
    * )
    */
@@ -40,10 +40,10 @@ class EzacLedenResource extends ResourceBase {
    *   The response containing the leden record or array of records.
    *
    */
-  public function get() {
+  public function get($id = NULL) {
 
     //get parameters
-    $id = Drupal::request()->query->get('id');
+    //$id = Drupal::request()->query->get('id');
     $code = Drupal::request()->query->get('code');
     $actief = Drupal::request()->query->get('actief');
     $afkorting = Drupal::request()->query->get('afkorting');
@@ -97,7 +97,9 @@ class EzacLedenResource extends ResourceBase {
       return (new ResourceResponse((array) $record))->addCacheableDependency($build);
     }
 
-    // no code or afkorting parameter given
+    // no id code or afkorting parameter given
+    // return index of leden
+
     throw new BadRequestHttpException('No valid parameter provided');
   }
 
