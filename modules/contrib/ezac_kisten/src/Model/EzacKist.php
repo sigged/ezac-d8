@@ -55,7 +55,7 @@ class EzacKist extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            return $this->ezacRead('kisten', __CLASS__);
+            return $this->ezacRead('kisten', get_class($this));
         }
         return $this;
     }
@@ -81,8 +81,23 @@ class EzacKist extends EzacStorage
      */
     public function read($id = NULL)
     {
-        if (isset($id)) $this->id = $id;
-        return $this->ezacRead('kisten');
+      if (isset($id)) {
+        $this->id = $id;
+        $record = $this->ezacRead('kisten', get_class($this));
+        if (is_object($record)) {
+          // cast in EzacKist object
+          $kist = new EzacKist;
+          $vars = get_object_vars($record);
+          foreach ($vars as $var => $value) {
+            $kist->$var = $value;
+          }
+          return $kist;
+        }
+        else {
+          return $record;
+        }
+      }
+      else return null;
     }
 
     /**

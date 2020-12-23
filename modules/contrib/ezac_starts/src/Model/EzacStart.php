@@ -97,18 +97,23 @@ class EzacStart extends EzacStorage
      */
     public function read($id = NULL)
     {
-      if (isset($id)) $this->id = $id;
-      $record = $this->ezacRead('starts', get_class($this));
-      if (is_object($record)) {
-        // cast in EzacStart object
-        $start = new EzacStart;
-        $vars = get_object_vars($record);
-        foreach ($vars as $var => $value) {
-          $start->$var = $value;
+      if (isset($id)) {
+        $this->id = $id;
+        $record = $this->ezacRead('starts', get_class($this));
+        if (is_object($record)) {
+          // cast in EzacStart object
+          $start = new EzacStart;
+          $vars = get_object_vars($record);
+          foreach ($vars as $var => $value) {
+            $start->$var = $value;
+          }
+          return $start;
         }
-        return $start;
+        else {
+          return $record;
+        }
       }
-      else return $record;
+      else return NULL;
     }
 
     /**
