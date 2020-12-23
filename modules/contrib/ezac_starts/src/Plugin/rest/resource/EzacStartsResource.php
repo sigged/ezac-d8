@@ -7,8 +7,6 @@ use Drupal;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\ezac_starts\Model\EzacStart;
@@ -201,7 +199,18 @@ class EzacStartsResource extends ResourceBase {
    *
    * @return \Drupal\ezac_starts\Model\EzacStart
    */
-  private function processStart($id, $datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking): EzacStart {
+  private function processStart($id,
+                                $datum,
+                                $registratie,
+                                $gezagvoerder,
+                                $tweede,
+                                $soort,
+                                $startmethode,
+                                $start,
+                                $landing,
+                                $duur,
+                                $instructie,
+                                $opmerking): EzacStart {
     // Build start record
     $start_record = new EzacStart();
 
@@ -301,6 +310,7 @@ class EzacStartsResource extends ResourceBase {
       }
       $start_record->landing = date('Y-m-d H:i:s',$landing); //construct valid datetime format
       //duur is calculated
+      // @TODO duur is calculated one hour wrong
       $start_record->duur = date('Y-m-d H:i:s', $landing-$start);
     }
     else {
@@ -424,8 +434,33 @@ class EzacStartsResource extends ResourceBase {
 
     $start_record = $this->processStart($id, $datum, $registratie, $gezagvoerder, $tweede, $soort, $startmethode, $start, $landing, $duur, $instructie, $opmerking);
     // write start record to database
-    $nr_affected = $start_record->update();
-    return new ModifiedResourceResponse($nr_affected, 200);
+    $nrAffected = $start_record->update();
+    return new ModifiedResourceResponse($nrAffected, 200);
 
   }  //patch
+
+  /**
+   * @param $id
+   *   id from record to be deleted
+   * @param $datum
+   *   datum value from record to be deleted
+   * @return \Drupal\rest\ModifiedResourceResponse
+   */
+  public function delete(): ModifiedResourceResponse {
+    //get parameters
+    $id = Drupal::request()->query->get('id');
+    $datum = Drupal::request()->query->get('datum');
+    // check validity of datum is record to be deleted - as a protection
+    $record = (new EzacStart)->read($id);
+    if (!isset($record)) {
+      throw new NotFoundHttpException("Invalid ID: $id");
+    }
+    if ($datum != $record->datum) {
+      throw new BadRequestHttpException("Invalid datum: $datum");
+    }
+    // delete record
+    $nrAffected = $record->delete();
+    return new ModifiedResourceResponse($nrAffected, 200);
+  } //delete
+
 }
