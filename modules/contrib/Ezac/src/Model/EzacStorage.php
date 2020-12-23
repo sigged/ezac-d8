@@ -203,12 +203,12 @@ class EzacStorage
    *
    * @param string $table
    *   The EZAC table to be used for the database operation
-   * @param string $className default stdClass
+   * @param string $className default stdClass __CLASS__
    *
    * @return object className
    *   An object containing the loaded entry if found.
    */
-    protected function ezacRead(string $table, $className = "stdClass")
+    protected function ezacRead(string $table, $className = __CLASS__)
     {
 
         // define prefix for EZAC tables
