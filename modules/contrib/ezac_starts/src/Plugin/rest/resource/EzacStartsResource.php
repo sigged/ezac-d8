@@ -459,10 +459,9 @@ class EzacStartsResource extends ResourceBase {
       throw new BadRequestHttpException("Invalid datum: $datum");
     }
     // delete record
+    $record = new EzacStart;
+    $record->id = $id;
     $nrAffected = $record->delete();
-    if ($nrAffected == NULL) {
-      $nrAffected = 0;
-    }
     return new ModifiedResourceResponse($nrAffected, 200);
   } //delete
 
