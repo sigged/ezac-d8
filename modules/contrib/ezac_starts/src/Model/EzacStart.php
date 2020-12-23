@@ -98,7 +98,7 @@ class EzacStart extends EzacStorage
     public function read($id = NULL)
     {
         if (isset($id)) $this->id = $id;
-        return $this->ezacRead('starts', __CLASS__);
+        return $this->ezacRead('starts', get_class($this));
     }
 
     /**
