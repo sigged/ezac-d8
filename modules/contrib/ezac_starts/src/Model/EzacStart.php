@@ -19,7 +19,7 @@ class EzacStart extends EzacStorage
 
     // Define Starts categories (kat field)
     public static $startSoort = array(
-        '    ' => 'Algemeen',
+        '' => 'Algemeen',
         'CLUB' => 'Rekening club',
         'PASS' => 'Passagier',
         'DONA' => 'Donateur',
