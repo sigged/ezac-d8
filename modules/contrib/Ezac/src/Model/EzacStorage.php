@@ -6,6 +6,7 @@ use Drupal;
 use Drupal\Core\Database\Database;
 use Exception;
 use PDO;
+use ReflectionObject;
 
 // use Drupal\Core\Database\Connection;
 
@@ -45,13 +46,44 @@ class EzacStorage {
    * @return mixed a version of the incoming $instance casted as the specified
    *   className
    */
-  public function cast($instance, $className) { //protected
+  public function cast2($instance, $className) { //protected
     return unserialize(sprintf(
       'O:%d:"%s"%s',
-      \strlen($className),
+      strlen($className),
       $className,
       strstr(strstr(serialize($instance), '"'), ':')
     ));
+  }
+
+  /**
+   * Class casting
+   *
+   * @param string|object $destination
+   * @param object $sourceObject
+   *
+   * @return object
+   */
+  function cast($destination, $sourceObject)
+  {
+    if (is_string($destination)) {
+      $destination = new $destination();
+    }
+    $sourceReflection = new ReflectionObject($sourceObject);
+    $destinationReflection = new ReflectionObject($destination);
+    $sourceProperties = $sourceReflection->getProperties();
+    foreach ($sourceProperties as $sourceProperty) {
+      $sourceProperty->setAccessible(true);
+      $name = $sourceProperty->getName();
+      $value = $sourceProperty->getValue($sourceObject);
+      if ($destinationReflection->hasProperty($name)) {
+        $propDest = $destinationReflection->getProperty($name);
+        $propDest->setAccessible(true);
+        $propDest->setValue($destination,$value);
+      } else {
+        $destination->$name = $value;
+      }
+    }
+    return $destination;
   }
 
   /**
@@ -236,7 +268,7 @@ class EzacStorage {
     $record = $select->execute()->fetchObject();
 
     // cast the record to the required className
-    //$record = $this->cast($record, $className);
+    $record = $this->cast($className, $record);
 
     // return to standard Drupal database
     Database::setActiveConnection();
