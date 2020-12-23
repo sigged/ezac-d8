@@ -95,11 +95,9 @@ class EzacStart extends EzacStorage
      * @param int id
      * @return object EZacStart
      */
-    public function read($id = NULL): EzacStart
+    public function read($id = NULL): Drupal\ezac_starts\Model\EzacStart
     {
         if (isset($id)) $this->id = $id;
-        $c = get_class($this);
-        dpm($c, "class"); //debug
         return $this->ezacRead('starts', get_class($this));
     }
 
