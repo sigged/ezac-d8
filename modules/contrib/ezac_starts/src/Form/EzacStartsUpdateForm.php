@@ -69,6 +69,7 @@ class EzacStartsUpdateForm extends FormBase
 
         if ($form_state->getValue('registratie')) {
             // Check op tweezitter via (changed) form element
+          //@TODO bij invoeren nieuwe start komt toch een non-object fout in else tak
             $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
         }
         else {

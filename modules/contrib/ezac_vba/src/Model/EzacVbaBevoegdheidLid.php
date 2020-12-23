@@ -75,8 +75,23 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      */
     public function read($id = NULL)
     {
-        if (isset($id)) $this->id = $id;
-        return $this->ezacRead('vba_bevoegdheid_lid');
+      if (isset($id)) {
+        $this->id = $id;
+        $record = $this->ezacRead('vba_bevoegdheid_lid', get_class($this));
+        if (is_object($record)) {
+          // cast in EzacVbaBevoegdheid object
+          $VbaBevoegdheidLid = new EzacVbaBevoegdheidLid;
+          $vars = get_object_vars($record);
+          foreach ($vars as $var => $value) {
+            $VbaBevoegdheidLid->$var = $value;
+          }
+          return $VbaBevoegdheidLid;
+        }
+        else {
+          return $record;
+        }
+      }
+      else return null;
     }
 
     /**

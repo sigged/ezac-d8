@@ -51,7 +51,7 @@ class EzacVbaDagverslagLid extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\EzacVba\Model\EzacVbaDagverslagen
+     * @return \Drupal\ezac_vba\Model\EzacVbaDagverslagLid
      *   ID of record created
      */
     public function create()
@@ -69,8 +69,23 @@ class EzacVbaDagverslagLid extends EzacStorage
      */
     public function read($id = NULL)
     {
-        if (isset($id)) $this->id = $id;
-        return $this->ezacRead('vba_dagverslagen_lid');
+      if (isset($id)) {
+        $this->id = $id;
+        $record = $this->ezacRead('vba_dagverslagen_lid', get_class($this));
+        if (is_object($record)) {
+          // cast in EzacDagverslagLid object
+          $VbaDagverslagLid = new EzacVbaDagverslagLid;
+          $vars = get_object_vars($record);
+          foreach ($vars as $var => $value) {
+            $VbaDagverslagLid->$var = $value;
+          }
+          return $VbaDagverslagLid;
+        }
+        else {
+          return $record;
+        }
+      }
+      else return null;
     }
 
     /**

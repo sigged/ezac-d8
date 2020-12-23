@@ -67,8 +67,23 @@ class EzacVbaDagverslag extends EzacStorage
      */
     public function read($id = NULL)
     {
-        if (isset($id)) $this->id = $id;
-        return $this->ezacRead('vba_dagverslagen');
+      if (isset($id)) {
+        $this->id = $id;
+        $record = $this->ezacRead('vba_dagverslagen', get_class($this));
+        if (is_object($record)) {
+          // cast in EzacDagverslag object
+          $VbaDagverslag = new EzacVbaDagverslag;
+          $vars = get_object_vars($record);
+          foreach ($vars as $var => $value) {
+            $VbaDagverslag->$var = $value;
+          }
+          return $VbaDagverslag;
+        }
+        else {
+          return $record;
+        }
+      }
+      else return null;
     }
 
     /**
