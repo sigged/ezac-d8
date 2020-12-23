@@ -208,7 +208,7 @@ class EzacStorage
    * @return object className
    *   An object containing the loaded entry if found.
    */
-    protected function ezacRead(string $table, $className = __CLASS__)
+    protected function ezacRead(string $table, $className = null)
     {
 
         // define prefix for EZAC tables
@@ -224,6 +224,9 @@ class EzacStorage
         $select->condition('id', $this->id); // select this record
 
         // Return the result as an object
+        if (!isset($className)) {
+          $className = get_class($this);
+        }
         $select->execute()->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
         $record = $select->execute()->fetchObject();
 
