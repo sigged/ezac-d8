@@ -272,7 +272,7 @@ class EzacStartsController extends ControllerBase {
       else $startSoort = $start->soort;
 
       if (key_exists($start->startmethode, EzacStart::$startMethode)) {
-        $startMethode = EzacStart::$startMethode[$$start->startmethode];
+        $startMethode = EzacStart::$startMethode[$start->startmethode];
       }
       else $startMethode = $start->startmethode;
 
