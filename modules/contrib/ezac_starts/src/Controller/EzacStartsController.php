@@ -266,6 +266,16 @@ class EzacStartsController extends ControllerBase {
       }
       else $tweede = $start->tweede; // un-edited record value
 
+      if (key_exists($start->soort, EzacStart::$startSoort)) {
+        $startSoort = EzacStart::$startSoort[$start->soort];
+      }
+      else $startSoort = $start->soort;
+
+      if (key_exists($start->startmethode, EzacStart::$startMethode)) {
+        $startMethode = EzacStart::$startMethode[$$start->startmethode];
+      }
+      else $startMethode = $start->startmethode;
+
       $rows[] = [
         //link each record to edit route
         $start->datum,
@@ -275,8 +285,8 @@ class EzacStartsController extends ControllerBase {
         $start->registratie,
         $gezagvoerder,
         $tweede,
-        EzacStart::$startSoort[$start->soort],
-        EzacStart::$startMethode[$start->startmethode],
+        $startSoort,
+        $startMethode,
         ($start->instructie) ? 'Ja' :'',
         $start->opmerking,
       ];
