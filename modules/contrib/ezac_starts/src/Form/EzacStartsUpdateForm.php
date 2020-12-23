@@ -54,6 +54,7 @@ class EzacStartsUpdateForm extends FormBase
         if (isset($id)) {
             $start = (new EzacStart)->read($id);
             //$start = new EzacStart($id); // using constructor
+            dpm ($start, "start record"); // debug
             $newRecord = FALSE;
         } else { // prepare new record
             $start = new EzacStart(); // create empty start occurrence
