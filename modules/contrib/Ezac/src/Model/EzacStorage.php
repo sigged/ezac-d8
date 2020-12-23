@@ -45,7 +45,7 @@ class EzacStorage {
    * @return mixed a version of the incoming $instance casted as the specified
    *   className
    */
-  protected function cast($instance, $className) {
+  public function cast($instance, $className) { //protected
     return unserialize(sprintf(
       'O:%d:"%s"%s',
       \strlen($className),
@@ -66,31 +66,6 @@ class EzacStorage {
     // use ezacIndex
     return count(self::ezacIndex($table, $condition));
 
-    /*
-    // Read all fields from a Ezac table.
-    // EZAC database is outside the Drupal structure
-    Database::setActiveConnection(self::DBNAME);
-    $db = Database::getConnection();
-
-    $select = $db->select($table); // geen alias gebruikt
-    $select->fields($table);
-
-    // Add each field and value as a condition to this query.
-    foreach ($condition as $field => $test) {
-        if (is_array($test)) {
-            $value = $test["value"];
-            $operator = $test["operator"];
-            $select->condition($field, $value, $operator);
-        } else $select->condition($field, $test);
-    }
-    // Return the result in object format.
-    $record_count = $select->countQuery()->execute()->fetchField();
-
-    // return to standard Drupal database
-    Database::setActiveConnection();
-
-    return $record_count;
-    */
   } // ezacCount
 
   /**
@@ -261,7 +236,7 @@ class EzacStorage {
     $record = $select->execute()->fetchObject();
 
     // cast the record to the required className
-    $record = $this->cast($record, $className);
+    //$record = $this->cast($record, $className);
 
     // return to standard Drupal database
     Database::setActiveConnection();
