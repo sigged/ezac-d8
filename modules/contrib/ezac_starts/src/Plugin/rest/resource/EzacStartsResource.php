@@ -460,7 +460,7 @@ class EzacStartsResource extends ResourceBase {
     }
     // delete record
     $nrAffected = $record->delete();
-    if (!isset($nrAffected)) {
+    if ($nrAffected == NULL) {
       $nrAffected = 0;
     }
     return new ModifiedResourceResponse($nrAffected, 200);
