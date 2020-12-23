@@ -99,7 +99,7 @@ class EzacStart extends EzacStorage
     {
       if (isset($id)) $this->id = $id;
       $record = $this->ezacRead('starts', get_class($this));
-      if (isset($record)) {
+      if (is_object($record)) {
         // cast in EzacStart object
         $start = new EzacStart;
         $vars = get_object_vars($record);
