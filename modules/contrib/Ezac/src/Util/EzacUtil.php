@@ -105,4 +105,46 @@ class EzacUtil
       // dd maand jaar
       return strftime('%e %B %Y',strtotime($datum));
     }
+
+  /**
+   * @param $datum
+   * @param &$datumStart
+   * @param &$datumEnd
+   *
+   * @return string errmsg
+   */
+  public static function checkDatum($datum, &$datumStart, &$datumEnd): string {
+    $errmsg = '';
+    $datum_delen = explode('-', $datum);
+    switch (strlen($datum)) {
+      case 4: //YYYY
+        if (!checkdate(01, 01, $datum_delen[0])) {
+          $errmsg = 'Invalid value parameter datum YYYY [' .$datum .']';
+        }
+        $datumStart = $datum .'-01-01';
+        $datumEnd   = $datum .'-12-31';
+        break;
+      case 7: //YYYY-MM
+        if (!checkdate($datum_delen[1], 01, $datum_delen[0])) {
+          $errmsg = 'Invalid value parameter datum YYYY-MM [' .$datum .']';
+        }
+        $datumStart = $datum .'-01';
+        if     (checkdate($datum_delen[1], 31, $datum_delen[0])) $datumEnd = $datum .'-31';
+        elseif (checkdate($datum_delen[1], 30, $datum_delen[0])) $datumEnd = $datum .'-30';
+        elseif (checkdate($datum_delen[1], 29, $datum_delen[0])) $datumEnd = $datum .'-29';
+        elseif (checkdate($datum_delen[1], 28, $datum_delen[0])) $datumEnd = $datum .'-28';
+        break;
+      case 10: //YYYY-MM-DD
+        if (!checkdate($datum_delen[1], $datum_delen[2], $datum_delen[0])) { //mm dd yyyy
+          $errmsg = 'Invalid value parameter datum YYYY-MM-DD [' .$datum .']';
+        }
+        $datumStart = $datum; // .' 00:00:00');
+        $datumEnd   = $datum; // .' 23:59:59');
+        break;
+      default: //invalid
+        $errmsg = 'Invalid length parameter datum [' .$datum .']';
+    }
+    return $errmsg;
+  }
+
 }

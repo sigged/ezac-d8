@@ -10,6 +10,7 @@ use Drupal\rest\ResourceResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\ezac_starts\Model\EzacStart;
+use Drupal\ezac\Util\EzacUtil;
 
   /**
    * Provides a resource for starts table reads
@@ -24,47 +25,6 @@ use Drupal\ezac_starts\Model\EzacStart;
    * )
    */
 class EzacStartsResource extends ResourceBase {
-
-  /**
-   * @param $datum
-   * @param $datumStart
-   * @param $datumEnd
-   *
-   * @return string
-   */
-  private function check_datum($datum, &$datumStart, &$datumEnd): string {
-    $errmsg = '';
-    $datum_delen = explode('-', $datum);
-    switch (strlen($datum)) {
-      case 4: //YYYY
-        if (!checkdate(01, 01, $datum_delen[0])) {
-          $errmsg = 'Invalid value parameter datum YYYY [' .$datum .']';
-        }
-        $datumStart = $datum .'-01-01';
-        $datumEnd   = $datum .'-12-31';
-        break;
-      case 7: //YYYY-MM
-        if (!checkdate($datum_delen[1], 01, $datum_delen[0])) {
-          $errmsg = 'Invalid value parameter datum YYYY-MM [' .$datum .']';
-        }
-        $datumStart = $datum .'-01';
-        if     (checkdate($datum_delen[1], 31, $datum_delen[0])) $datumEnd = $datum .'-31';
-        elseif (checkdate($datum_delen[1], 30, $datum_delen[0])) $datumEnd = $datum .'-30';
-        elseif (checkdate($datum_delen[1], 29, $datum_delen[0])) $datumEnd = $datum .'-29';
-        elseif (checkdate($datum_delen[1], 28, $datum_delen[0])) $datumEnd = $datum .'-28';
-        break;
-      case 10: //YYYY-MM-DD
-        if (!checkdate($datum_delen[1], $datum_delen[2], $datum_delen[0])) { //mm dd yyyy
-          $errmsg = 'Invalid value parameter datum YYYY-MM-DD [' .$datum .']';
-        }
-        $datumStart = $datum; // .' 00:00:00');
-        $datumEnd   = $datum; // .' 23:59:59');
-        break;
-      default: //invalid
-        $errmsg = 'Invalid length parameter datum [' .$datum .']';
-    }
-    return $errmsg;
-  }
 
   /**
    * Responds to GET requests.
@@ -119,20 +79,20 @@ class EzacStartsResource extends ResourceBase {
       // eerste datum is $datum_range[0]
       // tweede datum is [1]
       // take datumStart from first date
-      $errmsg = self::check_datum($datum_range[0], $datumStart, $de);
+      $errmsg = EzacUtil::checkDatum($datum_range[0], $datumStart, $de);
       if ($errmsg != '') {
         // invalid date
         throw new NotFoundHttpException($errmsg);
       }
       //take datumEnd from second date
-      $errmsg = self::check_datum($datum_range[1], $ds, $datumEnd);
+      $errmsg = EzacUtil::checkDatum($datum_range[1], $ds, $datumEnd);
       if ($errmsg != '') {
         // invalid date
         throw new NotFoundHttpException($errmsg);
       }
     }
     else { // single date
-      $errmsg = self::check_datum($datum, $datumStart, $datumEnd);
+      $errmsg = EzacUtil::checkDatum($datum, $datumStart, $datumEnd);
       if ($errmsg != '') {
         // invalid date
         throw new NotFoundHttpException($errmsg);
