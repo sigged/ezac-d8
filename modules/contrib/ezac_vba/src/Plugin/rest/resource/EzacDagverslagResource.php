@@ -157,7 +157,7 @@ class EzacDagverslagResource extends ResourceBase {
         throw new BadRequestHttpException("Invalid datum provided: $datum");
       }
       //$timezone = new DateTimeZone("Europe/Amsterdam");
-      $datetime = strtotime('Y-m-d', $datum);
+      $datetime = strtotime($datum);
       $dagverslagRecord->datum = $datetime;
     }
     else {
