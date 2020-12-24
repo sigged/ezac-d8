@@ -3,6 +3,7 @@
 
 namespace Drupal\ezac_vba\Plugin\rest\resource;
 
+use DateTimeZone;
 use Drupal;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -155,7 +156,9 @@ class EzacDagverslagResource extends ResourceBase {
       if (!checkdate($dc[1], $dc[2], $dc[0])) {
         throw new BadRequestHttpException("Invalid datum provided: $datum");
       }
-      $dagverslagRecord->datum = $datum;
+      $timezone = new DateTimeZone("Europe/Amsterdam");
+      $datetime = date_create_from_format('Y-m-d', $datum, $timezone);
+      $dagverslagRecord->datum = $datetime;
     }
     else {
       throw new BadRequestHttpException('No datum parameter provided');
