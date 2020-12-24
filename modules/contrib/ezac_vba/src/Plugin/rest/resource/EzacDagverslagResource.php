@@ -217,7 +217,7 @@ class EzacDagverslagResource extends ResourceBase {
       // create failed
       return new ModifiedResourceResponse($record, 200);
     }
-    return new ModifiedResourceResponse($record->instructeur, 201);
+    return new ModifiedResourceResponse($record->id, 201);
   } // post
 
   /**
