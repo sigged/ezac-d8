@@ -179,14 +179,14 @@ class EzacDagverslagResource extends ResourceBase {
       $dagverslagRecord->verslag = htmlentities($verslag);
     }
 
-    // mutatie
+    // mutatie is automatic
+
     return $dagverslagRecord;
   } //processDagverslag
 
   /**
    * Responds to POST requests.
    *
-   * @param $id
    * @param $datum
    * @param $instructeur
    * @param $weer
@@ -198,15 +198,8 @@ class EzacDagverslagResource extends ResourceBase {
    */
   public function post(): ModifiedResourceResponse {
 
-    // Use current user after pass authentication to validate access.
-    /*
-    if (!$this->currentUser->hasPermission('access content')) {
-      throw new AccessDeniedHttpException();
-    }
-    */
-
     //get parameters
-    $id = null; // is assigned with POST
+    $id = null; // is assigned with create
     $datum = Drupal::request()->query->get('datum');
     $instructeur = Drupal::request()->query->get('instructeur');
     $weer = Drupal::request()->query->get('weer');
@@ -220,7 +213,7 @@ class EzacDagverslagResource extends ResourceBase {
       $verslag);
     // write dagverslag record to database
     $record = $dagverslagRecord->create();
-    return new ModifiedResourceResponse($record->id, 200);
+    return new ModifiedResourceResponse($record->id, 201);
   } // post
 
   /**

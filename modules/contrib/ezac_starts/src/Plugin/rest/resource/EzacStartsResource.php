@@ -318,13 +318,6 @@ class EzacStartsResource extends ResourceBase {
    */
   public function post(): ModifiedResourceResponse {
 
-    // Use current user after pass authentication to validate access.
-    /*
-    if (!$this->currentUser->hasPermission('access content')) {
-      throw new AccessDeniedHttpException();
-    }
-    */
-
     //get parameters
     $id = null; // is assigned with POST
     $datum = Drupal::request()->query->get('datum');
