@@ -182,7 +182,7 @@ class EzacDagverslagResource extends ResourceBase {
     }
 
     // set mutatie
-    $dagverslagRecord->mutatie = strtotime('now');
+    $dagverslagRecord->mutatie = date('Y-m-d H:i:s',strtotime('now'));
 
     return $dagverslagRecord;
   } //processDagverslag
