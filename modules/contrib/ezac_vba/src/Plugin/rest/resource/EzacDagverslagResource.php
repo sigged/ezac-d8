@@ -214,6 +214,10 @@ class EzacDagverslagResource extends ResourceBase {
       $instructeur,
       $weer,
       $verslag);
+
+    // set mutatie
+    $dagverslagRecord->mutatie = strtotime('now');
+
     // write dagverslag record to database
     $record = $dagverslagRecord->create();
     if (!$record) {
