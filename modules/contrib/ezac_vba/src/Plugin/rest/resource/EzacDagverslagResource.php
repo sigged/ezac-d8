@@ -157,8 +157,7 @@ class EzacDagverslagResource extends ResourceBase {
         throw new BadRequestHttpException("Invalid datum provided: $datum");
       }
       //$timezone = new DateTimeZone("Europe/Amsterdam");
-      $datetime = strtotime($datum);
-      $dagverslagRecord->datum = $datetime;
+      $dagverslagRecord->datum = date('Y-m-d H:i:s', strtotime($datum));
     }
     else {
       throw new BadRequestHttpException('No datum parameter provided');
@@ -182,7 +181,8 @@ class EzacDagverslagResource extends ResourceBase {
       $dagverslagRecord->verslag = htmlentities($verslag);
     }
 
-    // mutatie is automatic
+    // set mutatie
+    $dagverslagRecord->mutatie = strtotime('now');
 
     return $dagverslagRecord;
   } //processDagverslag
@@ -214,9 +214,6 @@ class EzacDagverslagResource extends ResourceBase {
       $instructeur,
       $weer,
       $verslag);
-
-    // set mutatie
-    $dagverslagRecord->mutatie = strtotime('now');
 
     // write dagverslag record to database
     $record = $dagverslagRecord->create();
