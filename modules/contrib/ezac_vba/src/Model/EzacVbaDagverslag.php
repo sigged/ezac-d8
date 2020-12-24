@@ -33,7 +33,7 @@ class EzacVbaDagverslag extends EzacStorage
     public $instructeur = '';
     public $weer = '';
     public $verslag = '';
-    public $mutatie = 0;
+    public $mutatie = null;
 
     /**
      * constructor for vba_bevoegdheden
