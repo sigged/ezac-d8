@@ -17,7 +17,7 @@ use Drupal\ezac\Util\EzacUtil;
    *
    * @RestResource(
    *   id = "ezac_dagverslagen_resource",
-   *   label = @Translation("EZAC starts table"),
+   *   label = @Translation("EZAC dagverslagen"),
    *   uri_paths = {
    *     "canonical" = "/api/v2/dagverslagen",
    *     "create" = "/api/v2/dagverslagen"
