@@ -217,11 +217,7 @@ class EzacDagverslagResource extends ResourceBase {
 
     // write dagverslag record to database
     $record = $dagverslagRecord->create();
-    if (!$record) {
-      // create failed
-      return new ModifiedResourceResponse($record, 200);
-    }
-    return new ModifiedResourceResponse($record->id, 201);
+    return new ModifiedResourceResponse($record->id, 200);
   } // post
 
   /**
