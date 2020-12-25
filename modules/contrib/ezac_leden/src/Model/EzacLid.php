@@ -2,6 +2,7 @@
 
 namespace Drupal\ezac_leden\Model;
 
+use Drupal\Core\Database\DatabaseNotFoundException;
 use Drupal\ezac\Model\EzacStorage;
 
 /**
@@ -142,7 +143,7 @@ class EzacLid extends EzacStorage
         try {
           $this->ezacRead('leden', get_class($this));
         }
-        catch (Exception $e) {
+        catch (DatabaseNotFoundException $e) {
           dpm($e->getMessage(),"error");
         }
         if ($this->id == null) {
