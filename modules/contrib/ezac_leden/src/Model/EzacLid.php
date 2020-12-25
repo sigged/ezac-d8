@@ -139,6 +139,8 @@ class EzacLid extends EzacStorage
     {
       if (isset($id)) {
         $this->id = $id;
+        $this->ezacRead('leden', get_class($this));
+        /*
         $record = $this->ezacRead('leden', get_class($this));
         if (is_object($record)) {
           // cast in EzacLid object
@@ -152,8 +154,9 @@ class EzacLid extends EzacStorage
         else {
           return $record;
         }
+        */
       }
-      else return null;
+      // else return null;
     }
 
     /**

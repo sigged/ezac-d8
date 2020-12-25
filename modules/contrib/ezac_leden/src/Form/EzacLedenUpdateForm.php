@@ -89,7 +89,6 @@ class EzacLedenUpdateForm extends FormBase
         // Query for items to display.
         // if $id is set, perform UPDATE else CREATE
         if (isset($id)) {
-            //$lid = (new EzacLid)->read($id);
             $lid = new EzacLid($id); // using constructor
             $newRecord = FALSE;
         } else { // prepare new record
