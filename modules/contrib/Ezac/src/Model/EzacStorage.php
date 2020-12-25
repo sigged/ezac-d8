@@ -188,7 +188,7 @@ class EzacStorage {
    *   The EZAC table to be used for the database operation
    * @param string $className default stdClass __CLASS__
    *
-   * @return object className
+   * @return object|void
    *   An object containing the loaded entry if found.
    */
   protected function ezacRead(string $table, $className = NULL) {
@@ -209,11 +209,15 @@ class EzacStorage {
     if (!isset($className)) {
       $className = get_class($this);
     }
-    $select->execute()
-      //->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
-      ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
-    $record = $select->execute()->fetchObject();
-
+    try {
+      $select->execute()
+        //->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
+        ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
+      $record = $select->execute()->fetchObject();
+    } catch (Exception $e) {
+        Database::setActiveConnection();
+        $this->id = null; //signal read error
+    }
     // return to standard Drupal database
     Database::setActiveConnection();
 
