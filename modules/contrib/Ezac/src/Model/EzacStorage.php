@@ -209,23 +209,20 @@ class EzacStorage {
     if (!isset($className)) {
       $className = get_class($this);
     }
-    try {
       $select->execute()
         //->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
         ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
       $record = $select->execute()->fetchObject();
-    } catch (Exception $e) {
-        Database::setActiveConnection();
-        $this->id = null; //signal read error
-    }
     // return to standard Drupal database
     Database::setActiveConnection();
 
-    // cast record in $this
-    foreach (get_object_vars($record) as $var => $value) {
-      $this->$var = $value;
+    if (intval($record->errorCode()) == 0) { //read succesful
+      // cast record in $this
+      foreach (get_object_vars($record) as $var => $value) {
+        $this->$var = $value;
+      }
+      return $record;
     }
-    return $record;
 
   } //ezacRead
 
