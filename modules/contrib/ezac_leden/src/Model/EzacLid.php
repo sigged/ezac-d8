@@ -139,7 +139,12 @@ class EzacLid extends EzacStorage
     {
       if (isset($id)) {
         $this->id = $id;
-        $this->ezacRead('leden', get_class($this));
+        try {
+          $this->ezacRead('leden', get_class($this));
+        }
+        catch (Exception $e) {
+          dpm($e->getMessage(),"error");
+        }
         if ($this->id == null) {
           // read failed
           return null;
