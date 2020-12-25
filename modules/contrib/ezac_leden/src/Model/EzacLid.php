@@ -156,7 +156,7 @@ class EzacLid extends EzacStorage
         }
         */
       }
-      // else return null;
+      else return null;
     }
 
     /**
