@@ -140,6 +140,10 @@ class EzacLid extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         $this->ezacRead('leden', get_class($this));
+        if ($this->id == null) {
+          // read failed
+          return null;
+        }
         /*
         $record = $this->ezacRead('leden', get_class($this));
         if (is_object($record)) {
