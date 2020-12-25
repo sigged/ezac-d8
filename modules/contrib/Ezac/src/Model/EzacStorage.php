@@ -216,14 +216,13 @@ class EzacStorage {
     // return to standard Drupal database
     Database::setActiveConnection();
 
-    if (intval($record->errorCode()) == 0) { //read succesful
+    if ($record != FALSE) { //read succesful
       // cast record in $this
       foreach (get_object_vars($record) as $var => $value) {
         $this->$var = $value;
       }
       return $record;
     }
-
   } //ezacRead
 
   /**
