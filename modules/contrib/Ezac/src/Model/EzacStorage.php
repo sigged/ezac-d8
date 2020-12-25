@@ -223,6 +223,10 @@ class EzacStorage {
       }
       return $record;
     }
+    else {
+      // read failed
+      $this->id = null;
+    }
   } //ezacRead
 
   /**
