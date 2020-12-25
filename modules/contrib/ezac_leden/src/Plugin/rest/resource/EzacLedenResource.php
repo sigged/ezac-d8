@@ -69,7 +69,7 @@ class EzacLedenResource extends ResourceBase {
         return (new ResourceResponse((array) $ledenIndex))->addCacheableDependency($build);
       }
       // return record for id
-      $record = (new EzacLid)->read($id);
+      $record = new EzacLid($id);
       if (!empty($record)) {
         return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
