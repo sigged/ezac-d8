@@ -210,12 +210,17 @@ class EzacStorage {
       $className = get_class($this);
     }
     $select->execute()
-      ->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
+      //->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
+      ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
     $record = $select->execute()->fetchObject();
 
     // return to standard Drupal database
     Database::setActiveConnection();
 
+    // cast record in $this
+    foreach (get_object_vars($record) as $var => $value) {
+      $this->$var = $value;
+    }
     return $record;
 
   } //ezacRead

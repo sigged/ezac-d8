@@ -114,6 +114,7 @@ class EzacLid extends EzacStorage
         if (isset($id)) {
             $this->id = $id;
             $this->ezacRead('leden', get_class($this));
+            dpm($this, "this [$id]");
         }
     }
 
