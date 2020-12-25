@@ -70,7 +70,7 @@ class EzacLedenResource extends ResourceBase {
       }
       // return record for id
       $record = new EzacLid($id);
-      if (is_object($record)) {
+      if ($record->id == null) {
         return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
       throw new NotFoundHttpException("Invalid ID: $id");
