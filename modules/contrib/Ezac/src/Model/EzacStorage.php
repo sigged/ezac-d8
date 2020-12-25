@@ -226,8 +226,8 @@ class EzacStorage {
     }
     else {
       // read failed
-      $this->id = null;
-      throw new BadRequestHttpException("record $this->id not found");
+      // $this->id = null;
+      throw new Exception("record $this->id not found");
     }
   } //ezacRead
 
