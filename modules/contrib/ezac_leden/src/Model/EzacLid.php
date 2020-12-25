@@ -109,7 +109,7 @@ class EzacLid extends EzacStorage
      * constructor for EzacLid
      * @param null $id
      */
-    function __construct($id = NULL)
+    public function __construct($id = NULL)
     {
         if (isset($id)) {
             $this->id = $id;
