@@ -7,6 +7,7 @@ use Drupal\Core\Database\Database;
 use Exception;
 use PDO;
 use ReflectionObject;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 // use Drupal\Core\Database\Connection;
 
@@ -226,6 +227,7 @@ class EzacStorage {
     else {
       // read failed
       $this->id = null;
+      throw new BadRequestHttpException("record $this->id not found");
     }
   } //ezacRead
 
