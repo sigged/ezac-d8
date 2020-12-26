@@ -20,7 +20,7 @@ ezac_kisten_update:
   path: '/ezac/kisten/update/{id}'
   defaults:
     _title: 'Kist wijzigen'
-    _form: '\Drupal\ezac_kisten\Form\ezac_kistenUpdateForm'
+    _form: '\Drupal\ezac_kisten\Form\EzacKistenUpdateForm'
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
@@ -29,7 +29,7 @@ ezac_kisten_create:
   path: '/ezac/kisten/update'
   defaults:
     _title: 'Kist aanmaken'
-    _form: '\Drupal\ezac_kisten\Form\ezac_kistenUpdateForm'
+    _form: '\Drupal\ezac_kisten\Form\EzacKistenUpdateForm'
   requirements:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
@@ -48,6 +48,7 @@ ezac_kisten_export_actief:
   defaults:
     _title: 'EZAC_read'
     _controller: '\Drupal\ezac_kisten\Controller\EzacKistenController::export'
+
   requirements:
     _permission: 'access content'
     _user: ^[a-zA-Z0-9_]+
