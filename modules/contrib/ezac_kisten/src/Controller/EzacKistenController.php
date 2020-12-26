@@ -128,7 +128,7 @@ class EzacKistenController extends ControllerBase {
     
     $kistenIndex = EzacKist::index($condition, $field, $sortkey, $sortdir, $from, $range);
     foreach ($kistenIndex as $id) {
-      $kist = (new EzacKist)->read($id);
+      $kist = new EzacKist($id);
       $urlString = Url::fromRoute(
         'ezac_kisten_update',  // edit kisten record
         ['id' => $kist->id]
@@ -200,7 +200,7 @@ class EzacKistenController extends ControllerBase {
     
     // export all records
     foreach ($records as $id) {
-      $kist = (new EzacKist)->read($id);
+      $kist = new EzacKist($id);
       // add all fields
       foreach (EzacKist::$fields as $field => $description) {
         $output .= sprintf('"%s";',$kist->$field);

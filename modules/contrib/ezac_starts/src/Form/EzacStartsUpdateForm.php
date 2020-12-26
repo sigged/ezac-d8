@@ -68,14 +68,15 @@ class EzacStartsUpdateForm extends FormBase
         ];
 
         if ($form_state->getValue('registratie')) {
-            // Check op tweezitter via (changed) form element
+          // Check op tweezitter via (changed) form element
           //@TODO bij invoeren nieuwe start komt toch een non-object fout in else tak
-            $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
+          $kist = new EzacKist(EzacKist::getID($form_state->getValue('registratie')));
         }
         else {
-            // Check op tweezitter via start record
-            $tweezitter = ((new EzacKist)->read(EzacKist::getID($start->registratie))->inzittenden == 2);
+          // Check op tweezitter via start record
+          $kist = new EzacKist(EzacKist::getID($start->registratie));
         }
+        $tweezitter = ($kist->inzittenden == 2);
         $form['tweezitter'] = [
             '#prefix' => '<div id="tweezitter">',
             '#type' => 'checkbox',
@@ -178,17 +179,18 @@ class EzacStartsUpdateForm extends FormBase
    */
   function formTweedeCallback(array $form, FormStateInterface $form_state)
     {
-        // Check op tweezitter
-        $tweezitter = ((new EzacKist)->read(EzacKist::getID($form_state->getValue('registratie')))->inzittenden == 2);
-        $form['tweezitter'] = [
-          '#prefix' => '<div id="tweezitter">',
-          '#type' => 'checkbox',
-          '#title' => 'Tweezitter',
-          '#value' => $tweezitter,
-          '#checked' => $tweezitter,
-          '#attributes' => ['name' => 'tweezitter'],
-        ];
-        return $form["tweezitter"];
+      // Check op tweezitter
+      $kist = new EzacKist(EzacKist::getID($form_state->getValue('registratie')));
+      $tweezitter = ($kist->inzittenden == 2);
+      $form['tweezitter'] = [
+        '#prefix' => '<div id="tweezitter">',
+        '#type' => 'checkbox',
+        '#title' => 'Tweezitter',
+        '#value' => $tweezitter,
+        '#checked' => $tweezitter,
+        '#attributes' => ['name' => 'tweezitter'],
+      ];
+      return $form["tweezitter"];
     }
 
     /**
@@ -196,7 +198,6 @@ class EzacStartsUpdateForm extends FormBase
      */
     public function validateForm(array &$form, FormStateInterface $form_state)
     {
-
         // perform validate for edit of record
 
         // gezagvoerder

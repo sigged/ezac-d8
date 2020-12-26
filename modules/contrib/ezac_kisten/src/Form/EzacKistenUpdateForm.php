@@ -39,7 +39,7 @@ class EzacKistenUpdateForm extends FormBase
         // Query for items to display.
         // if $id is set, perform UPDATE else CREATE
         if (isset($id)) {
-            $kist = (new EzacKist)->read($id);
+            $kist = new EzacKist($id);
             //$lid = new EzacLid($id); // using constructor
             $newRecord = FALSE;
         } else { // prepare new record

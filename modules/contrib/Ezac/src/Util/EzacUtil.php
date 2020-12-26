@@ -69,7 +69,7 @@ class EzacUtil
         $leden = [];
         $leden[''] = "Onbekend";
         foreach ($ledenIndex as $id) {
-            $lid = (new EzacLid)->read($id);
+            $lid = new EzacLid($id);
             $leden[$lid->afkorting] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
         }
         return $leden;
@@ -92,7 +92,7 @@ class EzacUtil
         $kisten = [];
         $kisten[''] = "Onbekend";
         foreach ($kistenIndex as $id) {
-            $kist = (new EzacKist)->read($id);
+            $kist = new EzacKist($id);
             $kisten[$kist->registratie] = "$kist->registratie $kist->callsign ($kist->inzittenden)";
         }
         return $kisten;

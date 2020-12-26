@@ -134,7 +134,6 @@ class EzacLid extends EzacStorage
      * read - Reads record from the leden table in $this
      *
      * @param int id
-     * @return object DloLid
      */
     public function read($id = NULL)
     {

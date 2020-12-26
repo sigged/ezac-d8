@@ -74,28 +74,21 @@ class EzacKist extends EzacStorage
     }
 
     /**
-     * read - Reads record from the leden table
+     * read - Reads record from the kisten table
      *
      * @param int id
-     * @return object DloLid
      */
     public function read($id = NULL)
     {
       if (isset($id)) {
         $this->id = $id;
-        $record = $this->ezacRead('kisten', get_class($this));
-        if (is_object($record)) {
-          // cast in EzacKist object
-          $kist = new EzacKist;
-          $vars = get_object_vars($record);
-          foreach ($vars as $var => $value) {
-            $kist->$var = $value;
-          }
-          return $kist;
+        //@todo className parameter is overbodig
+        $this->ezacRead('kisten', get_class($this));
+        if ($this->id == null) {
+          // read failed
+          return null;
         }
-        else {
-          return $record;
-        }
+        // object is put in $this
       }
       else return null;
     }

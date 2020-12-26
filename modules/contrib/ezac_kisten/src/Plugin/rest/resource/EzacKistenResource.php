@@ -66,7 +66,7 @@ class EzacKistenResource extends ResourceBase {
         return (new ResourceResponse((array) $kistenIndex))->addCacheableDependency($build);
       }
       // return record for id
-      $record = (new EzacKist)->read($id);
+      $record = new EzacKist($id);
       if (!empty($record)) {
         return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
@@ -90,7 +90,7 @@ class EzacKistenResource extends ResourceBase {
       $kistenIndex = EzacKist::index($condition);
       $result = [];
       foreach ($kistenIndex as $id) {
-        $result[] = (array) (new EzacKist)->read($id);
+        $result[] = (array) new EzacKist($id);
       }
       return (new ResourceResponse($result))->addCacheableDependency($build);
     }
