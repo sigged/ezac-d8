@@ -87,11 +87,13 @@ class EzacStart extends EzacStorage
         return $this;
     }
 
-    /**
-     * read - Reads record from the starts table
-     *
-     * @param int id
-     */
+  /**
+   * read - Reads record from the starts table
+   *
+   * @param int id
+   *
+   * @return null
+   */
     public function read($id = NULL)
     {
       $this->id = $id;

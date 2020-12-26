@@ -71,7 +71,7 @@ class EzacVbaController extends ControllerBase {
     $rows = array();
 
     foreach ($dagverslagIndex as $id) {
-      $dagverslag = (new EzacVbaDagverslag)->read($id);
+      $dagverslag = new EzacVbaDagverslag($id);
       $p_weer = nl2br($dagverslag->weer);
       $p_verslag = nl2br($dagverslag->verslag);
       $p_instructeur = $namen[$dagverslag->instructeur];
@@ -82,7 +82,7 @@ class EzacVbaController extends ControllerBase {
     //verwerk dagverslagen_lid
 
     foreach ($dagverslagLidIndex as $id) {
-      $dl = (new EzacVbaDagverslagLid)->read($id);
+      $dl = new EzacVbaDagverslagLid($id);
       $p_naam  = $namen[$dl->afkorting];
       $p_instr = $namen[$dl->instructeur];
       $p_verslag = nl2br($dl->verslag);
@@ -92,7 +92,7 @@ class EzacVbaController extends ControllerBase {
 
     //verwerk bevoegdheid_lid
     foreach ($bevoegdheidLidIndex as $id) {
-      $bl = (new EzacVbaBevoegdheidLid)->read($id);
+      $bl = new EzacVbaBevoegdheidLid($id);
       $p_naam  = $namen[$bl->afkorting];
       $p_instr = $namen[$bl->instructeur];
       $p_onderdeel = nl2br($bl->onderdeel);

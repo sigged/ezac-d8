@@ -60,7 +60,7 @@ class EzacDagverslagResource extends ResourceBase {
     // when id given, read that record
     if (isset($id) && ($id != '')) {
       // return record for id
-      $record = (new EzacVbaDagverslag)->read($id);
+      $record = new EzacVbaDagverslag($id);
       if (!empty($record)) {
         return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
@@ -117,7 +117,7 @@ class EzacDagverslagResource extends ResourceBase {
         // return selected dagverslagen records
         $result = [];
         foreach ($dagverslagenIndex as $id) {
-          $result[] = (array) (new EzacVbaDagverslag)->read($id);
+          $result[] = (array) new EzacVbaDagverslag($id);
         }
         return (new ResourceResponse($result))->addCacheableDependency($build);
       }
@@ -260,7 +260,7 @@ class EzacDagverslagResource extends ResourceBase {
     $id = Drupal::request()->query->get('id');
     $datum = Drupal::request()->query->get('datum');
     // check validity of datum is record to be deleted - as a protection
-    $record = (new EzacVbaDagverslag())->read($id);
+    $record = new EzacVbaDagverslag($id);
     if ($record == FALSE) {
       throw new NotFoundHttpException("Invalid ID: $id");
     }

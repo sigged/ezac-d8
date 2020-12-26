@@ -177,7 +177,7 @@ class EzacVbaLidForm extends FormBase {
 
         $rows = [];
         foreach ($verslagenIndex as $id) {
-          $verslag = (new EzacVbaDagverslagLid)->read($id);
+          $verslag = new EzacVbaDagverslagLid($id);
           $rows[] = [
             EzacUtil::showDate($verslag->datum),
             $namen[$verslag->instructeur],
@@ -198,7 +198,7 @@ class EzacVbaLidForm extends FormBase {
       $bv_list[0] = '<Geen wijziging>';
       if (isset($bevoegdhedenIndex)) {
         foreach ($bevoegdhedenIndex as $id) {
-          $bevoegdheid = (new EzacVbaBevoegdheid)->read($id);
+          $bevoegdheid = new EzacVbaBevoegdheid($id);
           $bv_list[$bevoegdheid->bevoegdheid] = $bevoegdheid->naam;
         }
       }
@@ -228,7 +228,7 @@ class EzacVbaLidForm extends FormBase {
           '#tree' => TRUE,
         ];
         foreach ($vlieger_bevoegdhedenIndex as $id) {
-          $bevoegdheid = (new EzacVbaBevoegdheidLid)->read($id);
+          $bevoegdheid = new EzacVbaBevoegdheidLid($id);
           $rows[] = [
             EzacUtil::showDate($bevoegdheid->datum_aan),
             $namen[$bevoegdheid->instructeur],
