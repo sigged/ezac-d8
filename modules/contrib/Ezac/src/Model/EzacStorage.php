@@ -207,11 +207,11 @@ class EzacStorage {
     $select->condition('id', $this->id); // select this record
 
     // Return the result as an object
+    //@todo className is mogelijk overbodig met gebruik van PDO::FETCH_CLASSTYPE
     if (!isset($className)) {
       $className = get_class($this);
     }
       $select->execute()
-        //->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
         ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
       $record = $select->execute()->fetchObject();
     // return to standard Drupal database
@@ -222,12 +222,13 @@ class EzacStorage {
       foreach (get_object_vars($record) as $var => $value) {
         $this->$var = $value;
       }
+      //@todo return kan vervallen, record is in $this ingelezen
       return $record;
     }
     else {
       // read failed
-      // $this->id = null;
-      throw new Drupal\Core\Database\DatabaseNotFoundException("record $this->id not found");
+      $this->id = null;
+      //throw new Drupal\Core\Database\DatabaseNotFoundException("record $this->id not found");
     }
   } //ezacRead
 

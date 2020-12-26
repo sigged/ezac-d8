@@ -131,7 +131,7 @@ class EzacLid extends EzacStorage
     }
 
     /**
-     * read - Reads record from the leden table
+     * read - Reads record from the leden table in $this
      *
      * @param int id
      * @return object DloLid
@@ -140,31 +140,13 @@ class EzacLid extends EzacStorage
     {
       if (isset($id)) {
         $this->id = $id;
-        try {
-          $this->ezacRead('leden', get_class($this));
-        }
-        catch (DatabaseNotFoundException $e) {
-          dpm($e->getMessage(),"error");
-        }
+        //@todo className parameter is overbodig
+        $this->ezacRead('leden', get_class($this));
         if ($this->id == null) {
           // read failed
           return null;
         }
-        /*
-        $record = $this->ezacRead('leden', get_class($this));
-        if (is_object($record)) {
-          // cast in EzacLid object
-          $lid = new EzacLid;
-          $vars = get_object_vars($record);
-          foreach ($vars as $var => $value) {
-            $lid->$var = $value;
-          }
-          return $lid;
-        }
-        else {
-          return $record;
-        }
-        */
+        // object is put in $this
       }
       else return null;
     }
