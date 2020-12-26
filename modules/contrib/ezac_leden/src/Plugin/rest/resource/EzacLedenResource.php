@@ -97,14 +97,14 @@ class EzacLedenResource extends ResourceBase {
       $ledenIndex = EzacLid::index($condition);
       $result = [];
       foreach ($ledenIndex as $id) {
-        $result[] = (array) (new EzacLid)->read($id);
+        $result[] = (array) new EzacLid($id);
       }
       return (new ResourceResponse($result))->addCacheableDependency($build);
     }
 
     if (isset($afkorting)) {
       //@TODO sanitize $afkorting
-      $record = (new EzacLid)->read(EzacLid::getId($afkorting));
+      $record = new EzacLid(EzacLid::getId($afkorting));
       return (new ResourceResponse((array) $record))->addCacheableDependency($build);
     }
 

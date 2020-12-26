@@ -31,7 +31,6 @@ class EzacLedenUpdateForm extends FormBase
      * @param FormStateInterface $form_state
      * @param null $id
      * @return array
-     * @TODO build switch to choose between actief and not actief leden
      */
     public function buildForm(array $form, FormStateInterface $form_state, $id = NULL)
     {
@@ -40,9 +39,6 @@ class EzacLedenUpdateForm extends FormBase
             '#prefix' => '<div id="updateform">',
             '#suffix' => '</div>',
         ];
-
-        // apply the form theme
-        //$form['#theme'] = 'ezac_leden_update_form';
 
         // Query for items to display.
         // if $id is set, perform UPDATE else CREATE

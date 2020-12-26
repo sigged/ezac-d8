@@ -141,7 +141,7 @@ class EzacVbaLidForm extends FormBase {
 
       // lees vlieger gegevens
       $vlieger_afkorting = $form_state->getValue('persoon');
-      $lid = (new EzacLid)->read(EzacLid::getId($vlieger_afkorting));
+      $lid = new EzacLid(EzacLid::getId($vlieger_afkorting));
       $helenaam = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
 
       //Toon eerdere verslagen per lid
