@@ -249,7 +249,7 @@ class EzacStartsController extends ControllerBase {
 
     $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $limit, $unique);
     foreach ($startsIndex as $id) {
-      $start = (new EzacStart)->read($id);
+      $start = new EzacStart($id);
 
       $urlString = Url::fromRoute(
         'ezac_starts_update',  // edit starts record
@@ -366,7 +366,7 @@ class EzacStartsController extends ControllerBase {
     
     // export all records
     foreach ($records as $id) {
-      $start = (new EzacStart)->read($id);
+      $start = new EzacStart($id);
       // add all fields
       foreach (EzacStart::$fields as $field => $description) {
         $output .= sprintf('"%s";',$start->$field);

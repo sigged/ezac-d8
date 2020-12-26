@@ -61,7 +61,7 @@ class EzacStartsResource extends ResourceBase {
     // when id given, read that record
     if (isset($id) && ($id != '')) {
       // return record for id
-      $record = (new EzacStart)->read($id);
+      $record = new EzacStart($id);
       if (!empty($record)) {
         return (new ResourceResponse((array) $record))->addCacheableDependency($build);
       }
@@ -132,7 +132,7 @@ class EzacStartsResource extends ResourceBase {
         // return selected starts records
         $result = [];
         foreach ($startsIndex as $id) {
-          $result[] = (array) (new EzacStart)->read($id);
+          $result[] = (array) new EzacStart($id);
         }
         return (new ResourceResponse($result))->addCacheableDependency($build);
       }
@@ -404,7 +404,7 @@ class EzacStartsResource extends ResourceBase {
     $id = Drupal::request()->query->get('id');
     $datum = Drupal::request()->query->get('datum');
     // check validity of datum is record to be deleted - as a protection
-    $record = (new EzacStart)->read($id);
+    $record = new EzacStart($id);
     if ($record == FALSE) {
       throw new NotFoundHttpException("Invalid ID: $id");
     }

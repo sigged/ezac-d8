@@ -71,9 +71,8 @@ class EzacStart extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            return $this->ezacRead('starts', get_class($this));
+            $this->ezacRead('starts', get_class($this));
         }
-        return $this;
     }
 
     /**
@@ -92,27 +91,17 @@ class EzacStart extends EzacStorage
      * read - Reads record from the starts table
      *
      * @param int id
-     * @return object EZacStart
      */
     public function read($id = NULL)
     {
-      if (isset($id)) {
-        $this->id = $id;
-        $record = $this->ezacRead('starts', get_class($this));
-        if (is_object($record)) {
-          // cast in EzacStart object
-          $start = new EzacStart;
-          $vars = get_object_vars($record);
-          foreach ($vars as $var => $value) {
-            $start->$var = $value;
-          }
-          return $start;
-        }
-        else {
-          return $record;
-        }
+      $this->id = $id;
+      //@todo className parameter is overbodig
+      $this->ezacRead('starts', get_class($this));
+      if ($this->id == null) {
+        // read failed
+        return null;
       }
-      else return NULL;
+      // object is put in $this
     }
 
     /**

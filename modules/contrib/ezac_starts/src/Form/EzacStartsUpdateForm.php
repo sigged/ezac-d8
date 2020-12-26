@@ -52,7 +52,7 @@ class EzacStartsUpdateForm extends FormBase
         // Query for items to display.
         // if $id is set, perform UPDATE else CREATE
         if (isset($id)) {
-            $start = (new EzacStart)->read($id);
+            $start = new EzacStart($id);
             //$start = new EzacStart($id); // using constructor
             dpm ($start, "start record"); // debug
             $newRecord = FALSE;
