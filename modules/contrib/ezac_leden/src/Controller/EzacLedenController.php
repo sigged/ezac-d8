@@ -142,7 +142,6 @@ class EzacLedenController extends ControllerBase {
     
     $ledenIndex = EzacLid::index($condition, $field, $sortkey, $sortdir, $from, $range);
     foreach ($ledenIndex as $id) {
-      //$lid = (new EzacLid)->read($id);
       $lid = new EzacLid($id);
       $urlString = Url::fromRoute(
         'ezac_leden_update',  // edit leden record
@@ -218,7 +217,6 @@ class EzacLedenController extends ControllerBase {
     
     // export all records
     foreach ($records as $id) {
-      //$lid = (new EzacLid)->read($id);
       $lid = new EzacLid($id);
       // add all fields
       foreach (EzacLid::$fields as $field => $description) {
