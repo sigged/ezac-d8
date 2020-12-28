@@ -2,6 +2,7 @@
 
 namespace Drupal\ezac_rooster\Form;
 
+use Drupal;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -10,8 +11,7 @@ use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_rooster\Model\EzacRooster;
 
 /**
- * UI to update leden record
- * tijdelijke aanpassing
+ * UI to update rooster record
  */
 
 class EzacRoosterUpdateForm extends FormBase
@@ -57,50 +57,59 @@ class EzacRoosterUpdateForm extends FormBase
             '#value' => $newRecord, // TRUE or FALSE
         ];
 
-        $options_yn = [t('Nee'), t('Ja')];
+      // get names of leden
+      $condition = [
+        'actief' => TRUE,
+        'code' => 'VL',
+      ];
+      $leden = EzacUtil::getLeden($condition);
+      //set up diensten
+      $diensten = Drupal::config('ezac_rooster.settings')->get('rooster.diensten');
+      //set up periode
+      $periodes = Drupal::config('ezac_rooster.settings')->get('rooster.periodes');
+      //Naam Type Omvang
+      //DATUM date 11
+      $form = EzacUtil::addField($form,'datum', 'date','Datum', 'Datum', $rooster->datum, 11, 11, TRUE, 1);
+      //PERIODE Tekst 1
+      $form = EzacUtil::addField($form,'periode', 'select','Periode', 'Periode', $rooster->periode, 20, 1, TRUE, 2, $periodes);
+      //DIENST Tekst 1
+      $form = EzacUtil::addField($form,'dienst', 'select','Dienst', 'Dienst', $rooster->dienst, 1, 1, TRUE, 3, $diensten);
+      //NAAM Tekst 13
+      $form = EzacUtil::addField($form,'naam', 'select', 'Naam', 'Naam', $rooster->naam, 20, 1, TRUE, 4, $leden);
+      //GERUILD Tekst 20
+      $form = EzacUtil::addField($form,'geruild', 'select', 'Geruild met', 'Geruild met', $rooster->geruild, 20, 1, TRUE, 6, $leden);
+      //MUTATIE
+      //@TODO mutatie is datetime, form is voor date
+      $form = EzacUtil::addField($form,'mutatie', 'date','Mutatie', 'Mutatie', $rooster->mutatie, 11, 11, FALSE, 5);
 
-        //Naam Type Omvang
-        //DATUM date 11
-        $form = EzacUtil::addField($form,'datum', 'date','Datum', 'Datum', $rooster->datum, 11, 11, TRUE, 1);
-        //PERIODE Tekst 1
-        $form = EzacUtil::addField($form,'periode', 'textfield','Periode', 'Periode', $rooster->periode, 1, 1, TRUE, 2);
-        //DIENST Tekst 1
-        $form = EzacUtil::addField($form,'dienst', 'textfield','Dienst', 'Dienst', $rooster->dienst, 1, 1, TRUE, 3);
-        //VOORNAAM Tekst 13
-        $form = EzacUtil::addField($form,'naam', 'textfield','Naam', 'Naam', $rooster->naam, 20, 20, TRUE, 4);
-        //MUTATIE
-        $form = EzacUtil::addField($form,'mutatie', 'date','Mutatie', 'Mutatie', $rooster->mutatie, 11, 11, FALSE, 5);
-        //GERUILD Tekst 26
-        $form = EzacUtil::addField($form,'geruild', 'textfield','Geruild met', 'Geruild', $rooster->geruild, 20, 20, FALSE, 6);
+      //Mutatie timestamp
+      //maak tekstlabel met datum laatste wijziging (wordt automatisch bijgewerkt)
 
-        //Mutatie timestamp
-        //maak tekstlabel met datum laatste wijziging (wordt automatisch bijgewerkt)
+      //Id
+      //Toon het het Id nummer van het record
+      $form = EzacUtil::addField($form,'id', 'hidden','Record nummer (Id)', '', $rooster->id, 8, 8, FALSE, 28);
 
-        //Id
-        //Toon het het Id nummer van het record
-        $form = EzacUtil::addField($form,'id', 'hidden','Record nummer (Id)', '', $rooster->id, 8, 8, FALSE, 28);
+      $form['actions'] = [
+          '#type' => 'actions',
+      ];
 
-        $form['actions'] = [
-            '#type' => 'actions',
-        ];
+      $form['actions']['submit'] = [
+          '#type' => 'submit',
+          '#value' => $newRecord ? t('Invoeren') : t('Update'),
+          '#weight' => 31
+      ];
 
-        $form['actions']['submit'] = [
-            '#type' => 'submit',
-            '#value' => $newRecord ? t('Invoeren') : t('Update'),
-            '#weight' => 31
-        ];
-
-        //insert Delete button  gevaarlijk ivm dependencies
-        if (\Drupal::currentUser()->hasPermission('EZAC_delete')) {
-            if (!$newRecord) {
-                $form['actions']['delete'] = [
-                    '#type' => 'submit',
-                    '#value' => t('Verwijderen'),
-                    '#weight' => 32
-                ];
-            }
-        }
-        return $form;
+      //insert Delete button  gevaarlijk ivm dependencies
+      if (Drupal::currentUser()->hasPermission('EZAC_delete')) {
+          if (!$newRecord) {
+              $form['actions']['delete'] = [
+                  '#type' => 'submit',
+                  '#value' => t('Verwijderen'),
+                  '#weight' => 32
+              ];
+          }
+      }
+      return $form;
     }
 
     /**
@@ -149,11 +158,11 @@ class EzacRoosterUpdateForm extends FormBase
      */
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
-        $messenger = \Drupal::messenger();
+        $messenger = Drupal::messenger();
 
         // delete record
         if ($form_state->getValue('op') == 'Verwijderen') {
-            if (!\Drupal::currentUser()->hasPermission('DLO_delete')) {
+            if (!Drupal::currentUser()->hasPermission('DLO_delete')) {
                 $messenger->addMessage('Verwijderen niet toegestaan', $messenger::TYPE_ERROR);
                 return;
             }

@@ -2,6 +2,7 @@
 
 namespace Drupal\ezac_rooster\Controller;
 
+use Drupal;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -23,12 +24,12 @@ class EzacRoosterController extends ControllerBase {
   public function status() {
     $content = [];
 
-      //$schema = drupal_get_module_schema('Ezac', 'rooster');
+    //$schema = drupal_get_module_schema('Ezac', 'rooster');
 
     // show record count for each Jaar
     $headers = [
       t("Jaar"),
-      t("Aantal diensten"), 
+      t("Aantal dagen"),
       t("Uitvoer"),
     ];
 
@@ -95,16 +96,18 @@ class EzacRoosterController extends ControllerBase {
     /**
      * Render a list of entries in the database.
      * @param string
-     *  $code - categorie (optional)
+     *  $datum - categorie (optional)
      * @return array
      */
   public function overzicht($datum = NULL) {
-    $content = array();
+
+    // selecteer vliegende leden
     $condition = [
-      'code' => 'VL',
-      //'actief' -> TRUE,
+      //'code' => 'VL',
+      //'actief' => TRUE,
     ];
     $leden = EzacUtil::getLeden($condition);
+
     $rows = [];
     $headers = [
       t('datum'),
@@ -115,22 +118,24 @@ class EzacRoosterController extends ControllerBase {
       t('mutatie'),
     ];
 
+    $condition = [];
     // select rooster dates
     if (isset($datum)) {
-      $condition =
-        [
-          'datum' => $datum,
-        ];
+      EzacUtil::checkDatum($datum, $datumStart, $datumEnd);
+      $condition = [
+        'datum' => [
+          'value' => [$datumStart, $datumEnd],
+          'operator' => 'BETWEEN',
+        ]
+      ];
     }
-    else $condition = [];
-    
     // prepare pager
     $total = EzacRooster::counter($condition);
     $field = 'id';
     $sortkey = 'datum';
     $sortdir = 'ASC';
     $range = 50;
-    $pager = \Drupal::service('pager.manager')
+    $pager = Drupal::service('pager.manager')
       ->createPager($total, $range);
     $page = $pager
       ->getCurrentPage();
@@ -145,7 +150,7 @@ class EzacRoosterController extends ControllerBase {
         ['id' => $rooster->id]
       )->toString();
       $naam = $leden[$rooster->naam];
-      $geruild = (isset($rooster->geruild)) ? $leden[$rooster->geruild] : '';
+      $geruild = ($rooster->geruild != '') ? $leden[$rooster->geruild] : '';
       $rows[] = [
         //link each record to edit route
         t("<a href=$urlString>$rooster->datum</a>"),
@@ -211,7 +216,7 @@ class EzacRoosterController extends ControllerBase {
 
     // prepare pager
     $range = 120;
-    $pager = \Drupal::service('pager.manager')
+    $pager = Drupal::service('pager.manager')
       ->createPager($total, $range);
     $page = $pager
       ->getCurrentPage();
@@ -223,7 +228,6 @@ class EzacRoosterController extends ControllerBase {
 
     $roosterDates = EzacRooster::index($condition, $field, $sortkey, $sortdir);
     $roosterIndex = array_unique($roosterDates);
-
     $dagen = [];
     foreach ($roosterDates as $datum) {
       if (isset($dagen[$datum])) $dagen[$datum]++;
@@ -232,10 +236,10 @@ class EzacRoosterController extends ControllerBase {
 
     foreach ($roosterIndex as $datum) {
       $urlString = Url::fromRoute(
-        'ezac_rooster_overzicht',  // show rooster for datum
+        //'ezac_rooster_overzicht',  // show rooster for datum
+        'ezac_rooster_table',  // show rooster for datum
         [
-          'datum_start' => $datum,
-          'datum_eind' => $datum,
+          'datum' => $datum,
         ]
       )->toString();
 
@@ -272,13 +276,13 @@ class EzacRoosterController extends ControllerBase {
      * Output via html headers naar attachment
      *
      * @param string $filename
-     * @param null $code
+     * @param null $datum
      * @return mixed Response output text in csv format
      *   output text in csv format
      */
   public function export($filename = 'Ezac.txt', $datum = NULL) {
 
-    $messenger = \Drupal::messenger();
+    $messenger = Drupal::messenger();
 
     if ($filename == '') $filename = 'Ezac.txt';
 

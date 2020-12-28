@@ -281,7 +281,7 @@ class EzacStorage {
    * @return int
    *   The number of updated rows.
    *
-   * @see db_update()
+   *
    */
   public function ezacUpdate(string $table): int {
     $messenger = Drupal::messenger();
@@ -294,7 +294,7 @@ class EzacStorage {
     $entry = get_object_vars($this);
 
     try {
-      // db_update()...->execute() returns the number of rows updated.
+      // update()...->execute() returns the number of rows updated.
       $update = $db->update($table)
         ->fields($entry);
       $update->condition('id', $entry['id']);
@@ -308,7 +308,8 @@ class EzacStorage {
     Database::setActiveConnection();
 
     /** @var int $count */
-    return $count;
+    //@todo null returned (at failed update?)
+    return $count ?? 0; // return zero if $count = null
 
   }  // ezacUpdate
 

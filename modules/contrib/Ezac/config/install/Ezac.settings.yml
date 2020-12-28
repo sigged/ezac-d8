@@ -1,4 +1,6 @@
 database:
   external: '1'
-  name: 'Ezac'
-  prefix: 'ezac_'
+  name: 'ezac'
+  prefix: ''
+
+langcode: 'nl'
