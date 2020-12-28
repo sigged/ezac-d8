@@ -1,0 +1,71 @@
+ezac_rooster:
+  path: '/ezac/rooster'
+  defaults:
+    _title: 'EZAC rooster administratie'
+    _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::status'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_rooster_overzicht:
+  path: '/ezac/rooster/overzicht'
+  defaults:
+    _title: 'Rooster overzicht'
+    _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::overzicht'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_rooster_overzicht_jaar:
+  path: '/ezac/rooster/overzicht/{jaar}'
+  defaults:
+    _title: 'Rooster overzicht'
+    _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::overzicht'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_rooster_update:
+  path: '/ezac/rooster/update/{id}'
+  defaults:
+    _title: 'Rooster wijzigen'
+    _form: '\Drupal\ezac_rooster\Form\EzacRoosterUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_rooster_create:
+  path: '/ezac/rooster/update'
+  defaults:
+    _title: 'Rooster aanmaken'
+    _form: '\Drupal\ezac_rooster\Form\EzacRoosterUpdateForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_rooster_export_form:
+  path: '/ezac/rooster/export/form'
+  defaults:
+    _title: 'Rooster export'
+    _form: '\Drupal\ezac_rooster\Form\EzacRoosterExportForm'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_rooster_export:
+  path: '/ezac/rooster/export/{filename}'
+  defaults:
+    _title: 'Rooster export'
+    _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::export'
+  requirements:
+    _permission: 'access content'
+    _user: ^[a-zA-Z0-9_]+
+
+ezac_rooster_export_jaar:
+  path: '/ezac/rooster/export/{filename}/{jaar}'
+  defaults:
+    _title: 'Rooster export'
+    _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::export'
+  requirements:
+    _permission: 'access content'
+    _user: ^[a-zA-Z0-9_]+

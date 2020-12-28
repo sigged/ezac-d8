@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains ezac_rooster.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ezac_rooster_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ezac_rooster module.
+    case 'help.page.ezac_rooster':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('EZAC Rooster') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ezac_rooster_theme() {
+  return [
+    'ezac_rooster' => [
+      'render element' => 'children',
+    ],
+  ];
+}

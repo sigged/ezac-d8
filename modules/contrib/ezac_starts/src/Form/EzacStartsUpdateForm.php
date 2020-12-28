@@ -46,9 +46,6 @@ class EzacStartsUpdateForm extends FormBase
             '#suffix' => '</div>',
         ];
 
-        // apply the form theme
-        // $form['#theme'] = 'ezac_starts_update_form';
-
         // Query for items to display.
         // if $id is set, perform UPDATE else CREATE
         if (isset($id)) {
