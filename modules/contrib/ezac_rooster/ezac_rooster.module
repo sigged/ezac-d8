@@ -26,6 +26,7 @@ function ezac_rooster_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Implements hook_theme().
  */
+/*
 function ezac_rooster_theme() {
   return [
     'ezac_rooster' => [
@@ -33,3 +34,4 @@ function ezac_rooster_theme() {
     ],
   ];
 }
+*/
