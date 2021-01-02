@@ -226,7 +226,7 @@ class EzacRoosterController extends ControllerBase {
       'user' => $user_name,
     ];
     $id = EzacLid::index($condition);
-    if (isset($id)) {
+    if (count($id) == 1) {
       $lid = new EzacLid($id);
       $zelf = $lid->afkorting;
     }
