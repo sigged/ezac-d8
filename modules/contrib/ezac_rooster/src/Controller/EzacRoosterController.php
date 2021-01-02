@@ -221,7 +221,7 @@ class EzacRoosterController extends ControllerBase {
     $may_edit = $user->hasPermission('EZAC_edit');
 
     // read own leden record
-    $user_name = $user->getAccountName()
+    $user_name = $user->getAccountName();
     $condition = [
       'user' => $user_name,
     ];
