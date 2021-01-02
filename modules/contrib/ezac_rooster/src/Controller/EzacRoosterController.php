@@ -305,7 +305,10 @@ class EzacRoosterController extends ControllerBase {
       // @todo check op may_edit
       $row['datum'] = t("<a href=$urlString>$d</a>");
       foreach ($periodes as $periode) {
-        $row[$periode] = t($dienst[$periode]);
+        if ($dienst[$periode] != '') {
+          $row[$periode] = t($dienst[$periode]);
+        }
+        else $row[$periode] = '';
       }
       $rows[] = $row;
     }
