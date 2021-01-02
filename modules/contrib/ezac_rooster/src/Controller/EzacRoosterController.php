@@ -308,7 +308,8 @@ class EzacRoosterController extends ControllerBase {
         // als EZAC_edit permission of eigen dienst dan is ruilen toegestaan
         if ($may_edit == TRUE or $rooster->naam == $zelf) {
           // add edit link
-          $t .= ("<a href=$urlSwitchString>$rooster->naam</a>");
+          $l = "<a href=$urlSwitchString>" .$leden[$rooster->naam] ."</a>";
+          $t .= t($l);
         }
         else $t .= $leden[$rooster->naam];
         $t .= "<br>";
