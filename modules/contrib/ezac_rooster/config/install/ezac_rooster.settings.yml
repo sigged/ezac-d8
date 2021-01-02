@@ -12,5 +12,15 @@ rooster:
     K: 'kader'
     C: 'dagcoordinator'
     O: 'opmerking'
+  kader:
+    'L'
+    'P'
+    'B'
+    'K'
+    'C'
+    'O'
+  instructie:
+    'D'
+    'I'
 
 langcode: 'nl'
