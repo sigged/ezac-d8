@@ -221,13 +221,14 @@ class EzacRoosterController extends ControllerBase {
     $may_edit = $user->hasPermission('EZAC_edit');
 
     // read own leden record
+    $user_name = $user->getAccountName()
     $condition = [
-      'user' => $user->getAccountName(),
+      'user' => $user_name,
     ];
     $lid = new EzacLid(EzacLid::getId($condition));
     $zelf = $lid->afkorting;
 
-    //dpm($user, 'user');
+    dpm($user_name, 'user_name');
     dpm($lid, 'lid');
     dpm($zelf, 'zelf');//debug
     // initialize page content
