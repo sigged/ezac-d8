@@ -226,8 +226,11 @@ class EzacRoosterController extends ControllerBase {
       'user' => $user_name,
     ];
     $id = EzacLid::index($condition);
-    $lid = new EzacLid($id);
-    $zelf = $lid->afkorting;
+    if (isset($id)) {
+      $lid = new EzacLid($id);
+      $zelf = $lid->afkorting;
+    }
+    else $zelf = ''; // geen lid gevonden
 
     // initialize page content
     $content = array();
