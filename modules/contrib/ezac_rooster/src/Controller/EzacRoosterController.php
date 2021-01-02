@@ -304,7 +304,7 @@ class EzacRoosterController extends ControllerBase {
       //link each record to overzicht , use new FormattableMarkup()
       // @todo check op may_edit
       $row['datum'] = t("<a href=$urlString>$d</a>");
-      foreach ($periodes as $periode) {
+      foreach ($periodes as $periode => $omschrijving) {
         if ($dienst[$periode] != '') {
           $row[$periode] = t($dienst[$periode]);
         }
