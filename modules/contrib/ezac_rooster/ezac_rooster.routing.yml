@@ -52,6 +52,15 @@ ezac_rooster_table:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
 
+ezac_rooster_switch:
+  path: '/ezac/rooster/switch/{id}'
+  defaults:
+    _title: 'Dienst ruilen'
+    _form: '\Drupal\ezac_rooster\Form\EzacRoosterSwitchForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
 ezac_rooster_export_form:
   path: '/ezac/rooster/export/form'
   defaults:

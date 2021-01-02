@@ -210,7 +210,7 @@ class EzacRoosterController extends ControllerBase {
     );
 
     // selecteer vliegende leden
-    $condition = [
+    $condition = [ // selecteer ook oud-leden
       //'code' => 'VL',
       //'actief' => TRUE,
     ];
@@ -239,6 +239,8 @@ class EzacRoosterController extends ControllerBase {
     }
 
     // select all diensten dates for selected year
+    //@todo build java buttons voor eigen diensten en diensten vanaf vandaag
+    // @todo ombouwen voor datum range met checkDate
     $condition = [
       'datum' => [
         'value' => ["$jaar-01-01", "$jaar-12-31"],
@@ -294,8 +296,22 @@ class EzacRoosterController extends ControllerBase {
         // add dienst to table for datum
         $rooster = new EzacRooster($id);
 
-        $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
         //@todo if edit access or own afkorting add link for switching
+        // build link to rooster edit
+        $urlSwitchString = Url::fromRoute(
+          'ezac_rooster_switch',  // show rooster for datum
+          [
+            'id' => $rooster->id,
+          ]
+        )->toString();
+        $t = $diensten[$rooster->dienst] .':';
+        // als EZAC_edit permission of eigen dienst dan is ruilen toegestaan
+        if ($may_edit == TRUE or $rooster->naam == $zelf) {
+          // add edit link
+          $t .= ("a href=$urlSwitchString>$rooster->naam</a>");
+        }
+        else $t .= $leden[$rooster->naam];
+        $t .= "<br>";
         $dienst[$rooster->periode] .= $t;
       }
 
@@ -312,7 +328,7 @@ class EzacRoosterController extends ControllerBase {
       }
       $rows[] = $row;
     }
-    $caption = "Overzicht EZAC rooster data voor $jaar";
+    $caption = "Overzicht EZAC rooster voor $jaar";
     $content['table'] = [
       '#type' => 'table',
       '#caption' => $caption,
