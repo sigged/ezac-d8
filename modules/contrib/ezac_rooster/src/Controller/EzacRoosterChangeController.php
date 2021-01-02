@@ -3,7 +3,6 @@
 namespace Drupal\ezac_rooster\Controller;
 
 use Drupal;
-use Drupal\ezac_leden\Model\EzacLid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -16,7 +15,7 @@ use Drupal\ezac\Util\EzacUtil;
 /**
  * Controller for EZAC administration.
  */
-class EzacRoosterController extends ControllerBase {
+class EzacRoosterChangeController extends ControllerBase {
 
     /**
      * Display the status of the EZAC rooster table
@@ -190,57 +189,15 @@ class EzacRoosterController extends ControllerBase {
    * @return array
    */
   public function overzichtJaar($jaar) {
-    // read settings
-    $settings = Drupal::config('ezac_rooster.settings');
-    //set up diensten
-    $diensten = $settings->get('rooster.diensten');
-    //ezac_rooster_diensten Id Dienst Omschrijving
-    $diensten['-'] = '-'; //placeholder voor lege dienst
-    $form['diensten'] = array(
-      '#type' => 'value',
-      '#value' => $diensten,
-    );
-
-    //set up periode
-    $periodes = $settings->get('rooster.periodes');
-    //store header info for periodes reference in submit function
-    $form['periodes'] = array(
-      '#type' => 'value',
-      '#value' => $periodes,
-    );
-
-    // selecteer vliegende leden
-    $condition = [ // selecteer ook oud-leden
-      //'code' => 'VL',
-      //'actief' => TRUE,
-    ];
-    $leden = EzacUtil::getLeden($condition);
-
-    //get current user details
-    $user = $this->currentUser();
-    $may_edit = $user->hasPermission('EZAC_edit');
-
-    // read own leden record
-    $condition = [
-      'user' => $user->getAccountName(),
-    ];
-    $lid = new EzacLid(EzacLid::getId($condition));
-    $zelf = $lid->afkorting;
-
-    // initialize page content
     $content = array();
-    $rows = [];
 
-    //prepare header
-    $header = array(t('Datum'));
-    // voeg een kolom per periode toe
-    foreach ($periodes as $periode => $omschrijving) {
-      array_push($header, t($omschrijving));
-    }
+    $rows = [];
+    $headers = [
+      t('datum'),
+      t('aantal diensten'),
+    ];
 
     // select all diensten dates for selected year
-    //@todo build java buttons voor eigen diensten en diensten vanaf vandaag
-    // @todo ombouwen voor datum range met checkDate
     $condition = [
       'datum' => [
         'value' => ["$jaar-01-01", "$jaar-12-31"],
@@ -255,8 +212,7 @@ class EzacRoosterController extends ControllerBase {
     $unique = TRUE; // return unique results only
 
     // bepaal aantal dagen
-    $roosterDates = EzacRooster::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
-    $total = count($roosterDates);
+    $total = count(EzacRooster::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique));
 
     // prepare pager
     $range = 120;
@@ -270,8 +226,15 @@ class EzacRoosterController extends ControllerBase {
     $sortkey = 'datum';
     $sortdir = 'ASC';
 
+    $roosterDates = EzacRooster::index($condition, $field, $sortkey, $sortdir);
+    $roosterIndex = array_unique($roosterDates);
+    $dagen = [];
     foreach ($roosterDates as $datum) {
-      // build link to rooster edit
+      if (isset($dagen[$datum])) $dagen[$datum]++;
+      else $dagen[$datum] = 1;
+    }
+
+    foreach ($roosterIndex as $datum) {
       $urlString = Url::fromRoute(
         //'ezac_rooster_overzicht',  // show rooster for datum
         'ezac_rooster_table',  // show rooster for datum
@@ -280,59 +243,18 @@ class EzacRoosterController extends ControllerBase {
         ]
       )->toString();
 
-      // build periode columns for diensten
-
-      // intialize columns for diensten
-      $dienst = [];
-      foreach ($periodes as $periode => $omschrijving) {
-        $dienst[$periode] = '';
-      }
-      // lees alle diensten voor rooster_dag
-      $condition = [
-        'datum' => $datum,
-      ];
-      $roosterIndex = EzacRooster::index($condition);
-      foreach ($roosterIndex as $id) {
-        // add dienst to table for datum
-        $rooster = new EzacRooster($id);
-
-        //@todo if edit access or own afkorting add link for switching
-        // build link to rooster edit
-        $urlSwitchString = Url::fromRoute(
-          'ezac_rooster_switch',  // show rooster for datum
-          [
-            'id' => $rooster->id,
-          ]
-        )->toString();
-        $t = $diensten[$rooster->dienst] .':';
-        // als EZAC_edit permission of eigen dienst dan is ruilen toegestaan
-        if ($may_edit == TRUE or $rooster->naam == $zelf) {
-          // add edit link
-          $t .= ("<a href=$urlSwitchString>$rooster->naam</a>");
-        }
-        else $t .= $leden[$rooster->naam];
-        $t .= "<br>";
-        $dienst[$rooster->periode] .= $t;
-      }
-
       $d = EzacUtil::showDate($datum);
-      $row = [];
-      //link each record to overzicht , use new FormattableMarkup()
-      // @todo check op may_edit
-      $row['datum'] = t("<a href=$urlString>$d</a>");
-      foreach ($periodes as $periode => $omschrijving) {
-        if ($dienst[$periode] != '') {
-          $row[$periode] = t($dienst[$periode]);
-        }
-        else $row[$periode] = '';
-      }
-      $rows[] = $row;
+      $rows[] = [
+        //link each record to overzicht route
+        t("<a href=$urlString>$d"),
+        $dagen[$datum],
+      ];
     }
-    $caption = "Overzicht EZAC rooster voor $jaar";
+    $caption = "Overzicht EZAC rooster data voor $jaar";
     $content['table'] = [
       '#type' => 'table',
       '#caption' => $caption,
-      '#header' => $header,
+      '#header' => $headers,
       '#rows' => $rows,
       '#empty' => t('Geen gegevens beschikbaar.'),
       '#sticky' => TRUE,

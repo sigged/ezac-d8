@@ -17,3 +17,8 @@ EZAC_delete:
   title: 'Verwijderen EZAC gegevens'
   description: 'Verwijderen records (alleen bij uitzondering gebruiken)'
   restrict access: true
+
+EZAC_edit:
+  title: 'Wijzigen EZAC gegevens'
+  description: 'Wijzigen records'
+  restrict access: true
