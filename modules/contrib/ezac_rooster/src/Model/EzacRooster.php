@@ -115,7 +115,7 @@ class EzacRooster extends EzacStorage
     }
 
   /***
-   * index - Gets the index of starts records
+   * index - Gets the index of rooster records
    *
    * @param null $condition
    * @param string $field

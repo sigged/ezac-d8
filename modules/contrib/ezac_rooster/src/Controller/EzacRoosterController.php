@@ -269,6 +269,7 @@ class EzacRoosterController extends ControllerBase {
     $sortdir = 'ASC';
 
     foreach ($roosterDates as $datum) {
+      // build link to rooster edit
       $urlString = Url::fromRoute(
         //'ezac_rooster_overzicht',  // show rooster for datum
         'ezac_rooster_table',  // show rooster for datum
@@ -278,6 +279,7 @@ class EzacRoosterController extends ControllerBase {
       )->toString();
 
       // build periode columns for diensten
+
       // intialize columns for diensten
       $dienst = [];
       foreach ($periodes as $periode => $omschrijving) {
@@ -291,18 +293,21 @@ class EzacRoosterController extends ControllerBase {
       foreach ($roosterIndex as $id) {
         // add dienst to table for datum
         $rooster = new EzacRooster($id);
+
         $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
         //@todo if edit access or own afkorting add link for switching
         $dienst[$rooster->periode] .= $t;
       }
 
       $d = EzacUtil::showDate($datum);
-      $rows[] = [
-        //link each record to overzicht route
-        // @todo check op may_edit
-        t("<a href=$urlString>$d"),
-        $dienst, // diensten for datum
-      ];
+      $row = [];
+      //link each record to overzicht , use new FormattableMarkup()
+      // @todo check op may_edit
+      $row['datum'] = t("<a href=$urlString>$d</a>");
+      foreach ($periodes as $periode) {
+        $row[$periode] = t($dienst[$periode]);
+      }
+      $rows[] = $row;
     }
     $caption = "Overzicht EZAC rooster data voor $jaar";
     $content['table'] = [
