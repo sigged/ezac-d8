@@ -227,6 +227,9 @@ class EzacRoosterController extends ControllerBase {
     $lid = new EzacLid(EzacLid::getId($condition));
     $zelf = $lid->afkorting;
 
+    dpm($user, 'user');
+    dpm($lid, 'lid');
+    dpm($zelf, 'zelf');//debug
     // initialize page content
     $content = array();
     $rows = [];
