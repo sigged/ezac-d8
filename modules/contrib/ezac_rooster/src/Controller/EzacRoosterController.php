@@ -3,6 +3,7 @@
 namespace Drupal\ezac_rooster\Controller;
 
 use Drupal;
+use Drupal\ezac_leden\Model\EzacLid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -189,13 +190,53 @@ class EzacRoosterController extends ControllerBase {
    * @return array
    */
   public function overzichtJaar($jaar) {
-    $content = array();
+    // read settings
+    $settings = Drupal::config('ezac_rooster.settings');
+    //set up diensten
+    $diensten = $settings->get('rooster.diensten');
+    //ezac_rooster_diensten Id Dienst Omschrijving
+    $diensten['-'] = '-'; //placeholder voor lege dienst
+    $form['diensten'] = array(
+      '#type' => 'value',
+      '#value' => $diensten,
+    );
 
-    $rows = [];
-    $headers = [
-      t('datum'),
-      t('aantal diensten'),
+    //set up periode
+    $periodes = $settings->get('rooster.periodes');
+    //store header info for periodes reference in submit function
+    $form['periodes'] = array(
+      '#type' => 'value',
+      '#value' => $periodes,
+    );
+
+    // selecteer vliegende leden
+    $condition = [
+      //'code' => 'VL',
+      //'actief' => TRUE,
     ];
+    $leden = EzacUtil::getLeden($condition);
+
+    //get current user details
+    $user = $this->currentUser();
+    $may_edit = $user->hasPermission('EZAC_edit');
+
+    // read own leden record
+    $condition = [
+      'user' => $user->getAccountName(),
+    ];
+    $lid = new EzacLid(EzacLid::getId($condition));
+    $zelf = $lid->afkorting;
+
+    // initialize page content
+    $content = array();
+    $rows = [];
+
+    //prepare header
+    $header = array(t('Datum'));
+    // voeg een kolom per periode toe
+    foreach ($periodes as $periode => $omschrijving) {
+      array_push($header, t($omschrijving));
+    }
 
     // select all diensten dates for selected year
     $condition = [
@@ -212,7 +253,8 @@ class EzacRoosterController extends ControllerBase {
     $unique = TRUE; // return unique results only
 
     // bepaal aantal dagen
-    $total = count(EzacRooster::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique));
+    $roosterDates = EzacRooster::index($condition, $field, $sortkey, $sortdir, $from, $range, $unique);
+    $total = count($roosterDates);
 
     // prepare pager
     $range = 120;
@@ -226,15 +268,7 @@ class EzacRoosterController extends ControllerBase {
     $sortkey = 'datum';
     $sortdir = 'ASC';
 
-    $roosterDates = EzacRooster::index($condition, $field, $sortkey, $sortdir);
-    $roosterIndex = array_unique($roosterDates);
-    $dagen = [];
     foreach ($roosterDates as $datum) {
-      if (isset($dagen[$datum])) $dagen[$datum]++;
-      else $dagen[$datum] = 1;
-    }
-
-    foreach ($roosterIndex as $datum) {
       $urlString = Url::fromRoute(
         //'ezac_rooster_overzicht',  // show rooster for datum
         'ezac_rooster_table',  // show rooster for datum
@@ -243,18 +277,38 @@ class EzacRoosterController extends ControllerBase {
         ]
       )->toString();
 
+      // build periode columns for diensten
+      // intialize columns for diensten
+      $dienst = [];
+      foreach ($periodes as $periode => $omschrijving) {
+        $dienst[$periode] = '';
+      }
+      // lees alle diensten voor rooster_dag
+      $condition = [
+        'datum' => $datum,
+      ];
+      $roosterIndex = EzacRooster::index($condition);
+      foreach ($roosterIndex as $id) {
+        // add dienst to table for datum
+        $rooster = new EzacRooster($id);
+        $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
+        //@todo if edit access or own afkorting add link for switching
+        $dienst[$rooster->periode] .= $t;
+      }
+
       $d = EzacUtil::showDate($datum);
       $rows[] = [
         //link each record to overzicht route
+        // @todo check op may_edit
         t("<a href=$urlString>$d"),
-        $dagen[$datum],
+        $dienst, // diensten for datum
       ];
     }
     $caption = "Overzicht EZAC rooster data voor $jaar";
     $content['table'] = [
       '#type' => 'table',
       '#caption' => $caption,
-      '#header' => $headers,
+      '#header' => $header,
       '#rows' => $rows,
       '#empty' => t('Geen gegevens beschikbaar.'),
       '#sticky' => TRUE,

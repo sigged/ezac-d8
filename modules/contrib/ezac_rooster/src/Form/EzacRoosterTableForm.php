@@ -221,7 +221,7 @@ class EzacRoosterTableForm extends FormBase
     $diensten = $form_state->getValue('diensten');
     $table = $form_state->getValue('table');
 
-    // plaats ingevulde rij voor nieuwe rooster entry in table voor verwerking
+    // NEW rooster entry is added in table for processing
     // check last element select on change
     $dienst_toegevoegd = end($table); // 'NEW' key
     if ($dienst_toegevoegd == null) return; // table is empty
