@@ -3,7 +3,6 @@
 namespace Drupal\ezac_rooster\Controller;
 
 use Drupal;
-use Drupal\ezac_leden\Model\EzacLid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -12,6 +11,7 @@ use Drupal\Core\Url;
 
 use Drupal\ezac_rooster\Model\EzacRooster;
 use Drupal\ezac\Util\EzacUtil;
+use Drupal\ezac_leden\Model\EzacLid;
 
 /**
  * Controller for EZAC administration.
@@ -225,9 +225,14 @@ class EzacRoosterController extends ControllerBase {
     $condition = [
       'user' => $user_name,
     ];
-    $id = EzacLid::getId($condition);
+    $id = EzacLid::index($condition);
+    //$id = EzacLid::getId($condition);
     $lid = new EzacLid($id);
     $zelf = $lid->afkorting;
+
+    dpm($id, 'id');
+    dpm($lid,'lid');
+    dpm($zelf, 'zelf');
 
     // initialize page content
     $content = array();
