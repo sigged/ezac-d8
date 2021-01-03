@@ -197,7 +197,7 @@ class EzacRoosterSwitchForm extends FormBase {
           'operator' => 'IN',
         ],
         'naam' => [ // toon niet de eigen diensten
-          'value' => $zelf,
+          'value' => $rooster1->naam,
           'operator' => '!=',
         ]
       ];
