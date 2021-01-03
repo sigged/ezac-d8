@@ -179,7 +179,7 @@ class EzacRoosterSwitchForm extends FormBase {
       foreach ($periodes as $periode => $omschrijving) {
         $form['table'][$rooster_dag][$periode] = [
           '#type' => 'markup',
-          '#markup' => $dienstPeriodes[$periode],
+          '#markup' => t($dienstPeriodes[$periode]),
         ];
       }
 
