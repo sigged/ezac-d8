@@ -62,9 +62,9 @@ class EzacRoosterSwitchForm extends FormBase {
     );
 
     // selecteer vliegende leden
-    $condition = [
-      'code' => 'VL',
-      'actief' => TRUE,
+    $condition = [ // selecteer alle leden
+      //'code' => 'VL',
+      //'actief' => TRUE,
     ];
     $leden = EzacUtil::getLeden($condition);
     unset($leden['']); // remove 'Onbekend' lid
@@ -135,7 +135,7 @@ class EzacRoosterSwitchForm extends FormBase {
     $caption = t("Rooster voor " .EzacUtil::showDate($year));
     //show table with dienst entry field for each periode record per naam
 
-    //vul tabel alleen voor actieve diensten, met veld voor toevoegen nieuwe dienst (naam, periodes)
+    //vul tabel alleen voor te ruilen diensten
     $form['table'] = array(
       // Theme this part of the form as a table.
       '#type' => 'table',
@@ -166,6 +166,10 @@ class EzacRoosterSwitchForm extends FormBase {
       // lees alle diensten voor rooster_dag
       $condition = [
         'datum' => $rooster_dag,
+        'dienst' => [ // toon alleen ruilbare diensten
+          'value' => $dienstSoort,
+          'operator' => 'IN',
+        ]
       ];
       $roosterIndex = EzacRooster::index($condition);
       foreach ($roosterIndex as $roosterId) {
