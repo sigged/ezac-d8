@@ -82,8 +82,8 @@ class EzacRoosterSwitchForm extends FormBase {
     $condition = [
       'user' => $user_name,
     ];
-    $id = EzacLid::index($condition);
-    if (count($id) == 1) {
+    $lidId = EzacLid::index($condition);
+    if (count($lidId) == 1) {
       $lid = new EzacLid($id);
       $zelf = $lid->afkorting;
     }
