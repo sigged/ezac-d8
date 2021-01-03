@@ -131,7 +131,7 @@ class EzacRoosterSwitchForm extends FormBase {
     $dat = EzacUtil::showDate($rooster1->datum);
     $form['intro'] = [
       '#type' => 'markup',
-      '#markup' => "<H2>Ruil $naam $d dienst op $dat in $rooster1->periode periode</H2>",
+      '#markup' => "<H2>Ruil $naam's $d dienst op $dat in $rooster1->periode periode</H2>",
     ];
     $form['intro2'] = [
       '#type' => 'markup',
@@ -174,7 +174,7 @@ class EzacRoosterSwitchForm extends FormBase {
       // initialize periodes
       $dienstPeriodes = [];
       foreach ($periodes as $periode => $omschrijving) {
-        $dienstPeriodes[$periode] = '';
+        $dienstPeriodes[$periode] = [];
       }
 
       // lees alle diensten voor rooster_dag
@@ -195,15 +195,21 @@ class EzacRoosterSwitchForm extends FormBase {
         $rooster = new EzacRooster($roosterId);
         $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
         //@todo add selection button for switching
-        $dienstPeriodes[$rooster->periode] .= $t;
+        $dienstPeriodes[$rooster->periode][] = $t;
       }
 
       // fill columns for diensten
-      foreach ($periodes as $periode => $omschrijving) {
-        if ($dienstPeriodes[$periode] != '') {
+      foreach ($dienstPeriodes as $periode) {
+        if ($periode != []) {
+          $options = [];
+          foreach ($periode as $item) {
+            // add dienst as checkbox item
+            $options[$roosterId] = $item;
+          }
+
           $form['table'][$rooster_dag][$periode] = [
-            '#type' => 'markup',
-            '#markup' => t($dienstPeriodes[$periode]),
+            '#type' => 'checkboxes',
+            '#options' => $options,
           ];
         }
         else {
