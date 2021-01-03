@@ -255,6 +255,8 @@ class EzacRoosterController extends ControllerBase {
       ],
     ];
 
+    dpm($content['select'], 'select'); //debug
+
     //prepare header
     $header = array(t('Datum'));
     // voeg een kolom per periode toe
