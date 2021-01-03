@@ -204,11 +204,11 @@ class EzacRoosterSwitchForm extends FormBase {
         if ($dienstPeriodes[$periode] != []) {
           // er zijn te ruilen diensten in deze periode
           $options = [];
-          foreach ($dienstPeriodes[$periode] as $roosterId) {
+          foreach ($dienstPeriodes[$periode] as $roosterId => $t) {
             // plaats dienst beschrijving als radios item
-            $options[$roosterId] = $dienstPeriodes[$periode][$roosterId];
+            $options[$roosterId] = $t;
           }
-          dpm($options, 'options'); //debug
+          //dpm($options, 'options'); //debug
           $form['table'][$rooster_dag][$periode] = [
             '#type' => 'radios',
             '#options' => $options,
