@@ -114,7 +114,12 @@ class EzacRoosterSwitchForm extends FormBase {
         'operator' => 'IN',
       ],
     ];
+    dpm($rooster1,'rooster1');
+    dpm($year,'year');
+    dpm($datumStart,'datumStart');
     dpm($condition, 'condition'); //debug
+    dpm($dienstSoort,'dienstSoort');
+
     // read index of rooster datum
     $roosterData = array_unique(EzacRooster::index($condition, 'datum'));
     if (!isset($roosterData)) {
