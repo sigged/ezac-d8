@@ -98,6 +98,18 @@ class EzacRoosterSwitchForm extends FormBase {
       $messenger->addError("dienst $id is niet gevonden");
       return [];
     }
+
+    // bewaar te ruilen rooster id in form
+    $form['ruilen_van'] = [
+      '#type' => 'value',
+      'value' => $id,
+    ];
+    // placeholder voor te ruilen met id in form - gevuld in validatie
+    $form['ruilen_met'] = [
+      '#type' => 'value',
+      'value' => null,
+    ];
+
     // prepare dienstSoort for rooster select
     if (in_array($rooster1->dienst, $instructieDiensten))
       $dienstSoort = $instructieDiensten;
@@ -258,7 +270,8 @@ class EzacRoosterSwitchForm extends FormBase {
         $form_state->setError($table, 'Geen dienst geselecteerd');
         break;
       case 1:
-        // 1 dienst geselecteerd: OK
+        // 1 dienst geselecteerd: Ok
+        $form_state->setValue('ruilen_met', $check);
         break;
       default:
         // meer dan 1 dienst geselecteerd
@@ -269,6 +282,11 @@ class EzacRoosterSwitchForm extends FormBase {
   function submitForm(array &$form, FormStateInterface $form_state) {
     // @TODO: Implement submitForm() method.
     // switch diensten
+    $messenger = Drupal::messenger();
+    $ruilen_van = $form_state->getValue('ruilen_van');
+    $ruilen_met = $form_state->getValue('ruilen_met');
+    $messenger->addMessage("Ruilen dienst $ruilen_van met dienst $ruilen_met");
+
   }
 
 /*
