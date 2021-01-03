@@ -126,10 +126,11 @@ class EzacRoosterSwitchForm extends FormBase {
       return NULL; // no entries for datum
     }
 
-
+    $d = $diensten[$rooster1->dienst];
+    $dat = EzacUtil::showDate($rooster1->datum);
     $form['intro'] = [
       '#type' => 'markup',
-      '#markup' => "<H2>Ruil $rooster1->dienst op $rooster1->datum in $rooster1->periode periode</H2>",
+      '#markup' => "<H2>Ruil $d dienst op $dat in $rooster1->periode periode</H2>",
     ];
 
     //toon tabel met datum en diensten per periode
