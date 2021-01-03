@@ -133,6 +133,10 @@ class EzacRoosterSwitchForm extends FormBase {
       '#type' => 'markup',
       '#markup' => "<H2>Ruil $naam $d dienst op $dat in $rooster1->periode periode</H2>",
     ];
+    $form['intro2'] = [
+      '#type' => 'markup',
+      '#markup' => "Selecteer hieronder de te ruilen dienst",
+    ];
 
     //toon tabel met datum en diensten per periode
     //prepare header
