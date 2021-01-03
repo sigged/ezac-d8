@@ -102,12 +102,12 @@ class EzacRoosterSwitchForm extends FormBase {
     // bewaar te ruilen rooster id in form
     $form['ruilen_van'] = [
       '#type' => 'value',
-      'value' => $id,
+      '#value' => $id,
     ];
     // placeholder voor te ruilen met id in form - gevuld in validatie
     $form['ruilen_met'] = [
       '#type' => 'value',
-      'value' => null,
+      '#value' => null,
     ];
 
     // prepare dienstSoort for rooster select
@@ -260,7 +260,10 @@ class EzacRoosterSwitchForm extends FormBase {
     foreach ($table as $datum => $diensten) {
       foreach ($periodes as $periode => $omschrijving) {
         foreach ($table[$datum][$periode] as $dienst => $check) {
-          if ($check != 0) $checked[$check] = $check;
+          if ($check != 0) {
+            $checked[$check] = $check;
+            $last_check = $check;
+          }
         }
       }
     }
@@ -271,7 +274,7 @@ class EzacRoosterSwitchForm extends FormBase {
         break;
       case 1:
         // 1 dienst geselecteerd: Ok
-        $form_state->setValue('ruilen_met', $check);
+        $form_state->setValue('ruilen_met', $last_check);
         break;
       default:
         // meer dan 1 dienst geselecteerd
