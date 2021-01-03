@@ -290,265 +290,50 @@ class EzacRoosterSwitchForm extends FormBase {
     $ruilen_met = $form_state->getValue('ruilen_met');
     $messenger->addMessage("Ruilen dienst $ruilen_van met dienst $ruilen_met");
 
+    // ruil diensten
+    $rooster1 = new EzacRooster($ruilen_van);
+    $naam1 = $rooster1->naam;
+    $lid1 = new EzacLid(EzacLid::getId($naam1));
+
+    $rooster2 = new EzacRooster($ruilen_met);
+    $naam2 = $rooster2->naam;
+    $lid2 = new EzacLid(EzacLid::getId($naam2));
+
+    // verwissel namen en update diensten
+    $rooster1->naam = $naam2;
+    $rooster1->mutatie = date('Y-m-d h:m:s');
+    $rooster1->geruild = $naam1;
+    $nr_updated = $rooster1->update();
+    if ($nr_updated != 1) {
+      // update 1 mislukt
+      $messenger->addError("Ruilen van dienst $ruilen_van is niet gelukt");
+      return;
+    }
+    $rooster2->naam = $naam1;
+    $rooster2->mutatie = date('Y-m-d h:m:s');
+    $rooster2->geruild = $naam2;
+    $nr_updated = $rooster2->update();
+    if ($nr_updated != 1) {
+      // update 2 mislukt
+      $messenger->addError("Ruilen met dienst $ruilen_met is niet gelukt");
+      // draai wijziging in rooster1 terug
+      $rooster1->naam = $naam1;
+      $rooster1->geruild = '';
+      $nr_updated = $rooster1->update();
+    }
+
+    // @todo mail bericht over ruil aan iedereen die op die dag een dienst heeft
+
+    // redirect naar rooster overzicht
+    //go back to rooster overzicht
+    $redirect = Url::fromRoute(
+      'ezac_rooster_overzicht_jaar',
+      ['jaar' => substr($rooster1->datum, 0, 4)]
+    );
+    $form_state->setRedirectUrl($redirect);
+
   }
 
-/*
-    // read rooster for datum or datum range
-    EzacUtil::checkDatum($datum, $datumStart, $datumEnd);
-    $condition = [
-      'datum' => [
-        'value' => [$datumStart, $datumEnd],
-        'operator' => 'BETWEEN',
-      ]
-    ];
-    // @todo add further selection criteria for instructie only display
-    // read index of datum values
-    $roosterData = array_unique(EzacRooster::index($condition, 'datum'));
-
-    //if (!isset($roosterIndex)) return NULL; // no entries for datum
-
-    //toon tabel met datum en diensten per periode
-    //prepare header
-    $header = array(t('Datum'));
-    // voeg een kolom per periode toe
-    foreach ($periodes as $periode => $omschrijving) {
-      array_push($header, t($omschrijving));
-    }
-
-    $caption = t("Rooster voor " .EzacUtil::showDate($datum));
-    //show table with dienst entry field for each periode record per naam
-
-    //vul tabel alleen voor actieve diensten, met veld voor toevoegen nieuwe dienst (naam, periodes)
-    $form['table'] = array(
-      // Theme this part of the form as a table.
-      '#type' => 'table',
-      '#header' => $header,
-      '#caption' => $caption,
-      '#sticky' => TRUE,
-      '#weight' => 5,
-      '#prefix' => '<div id="table-div">',
-      '#suffix' => '</div>',
-    );
-
-    // build table rows
-    foreach ($roosterData as $rooster_dag) {
-
-      // prepare table row
-      $form['table'][$datum] = [];
-      $form['table'][$datum]['datum'] = [
-        '#type' => 'markup',
-        '#markup' => $rooster_dag, // @todo format datum
-      ];
-      // intialize columns for diensten
-      foreach ($periodes as $periode => $omschrijving) {
-        $form['table'][$datum][$periode] = '';
-      }
-
-      // lees alle diensten voor rooster_dag
-      $condition = [
-        'datum' => $rooster_dag,
-      ];
-      $roosterIndex = EzacRooster::index($condition);
-      foreach ($roosterIndex as $id) {
-        // add dienst to table for datum
-        $rooster = new EzacRooster($id);
-        $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
-        //@todo if edit access or own afkorting add link for switching
-        $form['table'][$datum][$rooster->periode] .= $t;
-      }
-    }
-
-    // @TODO -- HIER VERDER **************
-
-    // D7 code
-    // printing HTML result
-    // Table tag attributes
-
-    //return theme('table', $header, $row, $attributes);
-    $build = array(
-      'content' => array(
-        '#theme' => 'table',
-        '#rows' => $row,
-        '#header' => $header,
-        '#attributes' => $attributes,
-        '#empty' => 't(Geen gegevens beschikbaar)'
-      ),
-    );
-    return $build;
-  }
-
-  /**
-   * Called when user goes to example.com/?q=rooster/select
-   * Selecteer van een dienst om te ruilen
-   * de te ruilen dienst heeft Id = ednr
-   */
-  function ezacroo_select($ednr, $Owner) {
-
-    //global $user;
-    //$Owner = $user->name;
-
-    //Vul $Zelf met Code van $Owner...
-    //$query  = 'SELECT CONCAT_WS(" ",VOORNAAM,VOORVOEG,ACHTERNAAM) wNaam, ';
-    $query  = 'SELECT ';
-    $query .= 'AFKORTING Naam ';
-    $query .= 'FROM {ezac_Leden} WHERE User = :Owner'; //"' . $Owner . '"';
-    $result = db_query($query, array(':Owner'=>$Owner)); // or ("Query failed: <" . $query . ">");
-
-    $line = $result->fetchAssoc(); // fetch as an associative array
-    $Zelf = $line["Naam"];
-
-    (isset($ednr)) or ("Geen te ruilen dienst opgegeven");
-    drupal_set_message(t('Kies de dienst waarmee wordt geruild'));
-
-    $query  = 'SELECT r.*, d.Omschrijving, ';
-    $query .= "CONCAT_WS(' ',w1.VOORNAAM,w1.VOORVOEG,w1.ACHTERNAAM) wNaam ";
-    $query .= 'FROM {ezac_Rooster} r, {ezac_Leden} w1, {ezac_Rooster_Diensten} d ';
-    $query .= 'WHERE r.Id = :ednr '; // . $ednr . ' ';
-    $query .= 'AND r.Naam = w1.AFKORTING ';
-    $query .= 'AND r.Dienst = d.Dienst ';
-
-    $result = db_query($query, array(':ednr'=>$ednr)); // or ("Query failed: <" . $query . ">");
-    $line = $result->fetchAssoc();
-
-    $Dat1 = $line["Datum"];
-    $Dat = explode(" ", $Dat1);
-    $YYMMDD = explode("-", $Dat[0]);
-    $Dat2 = $YYMMDD[2] . '-' . $YYMMDD[1] . '-' . $YYMMDD[0];
-    $Naam1 = $line["Naam"];
-
-    $output  = '<h3>Ruil op ' . $Dat2 . ' in de ' . $line['Periode'] . '-periode de ';
-    $output .= $line['Omschrijving'] . '-dienst van ' . $line['wNaam'] . '</h3>';
-
-    $build['tekst'] = array(
-      '#type' => 'markup',
-      '#markup' => $output
-    );
-    $AlleDienst = FALSE; // toegevoegd om fout te voorkomen
-    if (($Naam1 <> $Zelf) and ($AlleDienst <> 1)) {
-      die("Niet toegestaan");
-    }
-
-    //Toon aanwezige diensten vanaf vandaag
-    $today  = date("Y-m-d", mktime());
-    $query  = 'SELECT r.*, d.Omschrijving, ';
-    $query .= "CONCAT_WS(' ',w1.VOORNAAM,w1.VOORVOEG,w1.ACHTERNAAM) wNaam ";
-    $query .= ', w1.TELEFOON '; // tbv zwevend helpveld boven dienst
-    $query .= 'FROM {ezac_Rooster} r, {ezac_Leden} w1, {ezac_Rooster_Diensten} d ';
-    //$query .= 'WHERE Datum >= "' .$today .'" ';
-    $query .= 'WHERE Datum <> :Datum '; // >= "' .$today .'" '; //VOOR TEST ALLE DATA GESELECTEERD
-    $query .= 'AND r.Naam = w1.AFKORTING ';
-    $query .= 'AND r.Dienst = d.Dienst ';
-    if (isset($Instructie)) { // Toon alleen instructie diensten
-      $query .= 'AND r.Dienst = "I" OR r.Dienst = "T" OR r.Dienst = "D" ';
-    }
-    if (isset($Overig)) { // Toon geen instructie diensten
-      $query .= 'AND r.Dienst = "P" OR r.Dienst = "L" OR r.Dienst = "B" ';
-    }
-    $query .= 'ORDER by Datum, Periode, Dienst ';
-    //$query .= 'LIMIT 0,30';
-
-    $result = db_query($query, array(':Datum'=>'')); // or ("Query failed: -" . $query . "-");
-
-    // printing HTML result
-    // Table tag attributes
-    $attributes = array(
-      'border' => 1,
-      'cellspacing' => 0,
-      'cellpadding' => 5,
-      //    'class' => 'example',
-      'width' => '90%',
-    );
-    // Header line
-    $header = array(
-      array('data' => t('Datum')),
-      array('data' => t('A')),
-      array('data' => t('B')),
-      array('data' => t('C')),
-    );
-
-    $ActDatum = ""; // Indicator voor overgang op nieuwe rij
-    $ActPeriode = "A"; // Indicator voor overgang op nieuwe kolom
-    $row_field = array(
-      'A' => '',
-      'B' => '',
-      'C' => '',
-    );
-
-    while ($line = $result->fetchAssoc()) {
-      $Dat1 = $line["Datum"];
-      $Dat = explode(" ", $Dat1);
-      $YYMMDD = explode("-", $Dat[0]);
-      $Datum = $YYMMDD[2] . '-' . $YYMMDD[1] . '-' . $YYMMDD[0];
-      $Periode = $line["Periode"];
-      $Naam = $line["Naam"]; // AFKORTING van lid
-      $wNaam = $line["wNaam"]; //Volledige naam van lid
-      $Id = $line["Id"]; //record nummer van rooster entry
-      $Dienst = $line["Omschrijving"];
-
-      if ($Datum <> $ActDatum) {
-        if ($ActDatum <> "") { // einde vorige rij
-          $row[] = array(
-            $ActDatum,
-            $row_field['A'],
-            $row_field['B'],
-            $row_field['C'],
-          );
-        } //if
-        $row_field['A'] = '';
-        $row_field['B'] = '';
-        $row_field['C'] = '';
-        // print "<tr><td>" .$Datum ."</td>\n\t"; // nieuwe rij
-        $ActDatum = $Datum;
-        $ActPeriode = "A";
-        //print "<td>";
-      }
-      if ($Periode <> $ActPeriode) {
-        //print "</td><td>"; // volgende kolom
-        if ($ActPeriode == "A") {
-          $ActPeriode = "B";
-        }
-        else if ($ActPeriode == "B") {
-          $ActPeriode = "C";
-        }
-      }
-      if ($Periode <> $ActPeriode) {
-        //print "</td><td>"; // skip kolom
-        if ($ActPeriode == "A") {
-          $ActPeriode = "B";
-        }
-        else if ($ActPeriode == "B") {
-          $ActPeriode = "C";
-        }
-      }
-      $row_field[$Periode] .= $Dienst . ":";
-      if (($Naam <> $Zelf) or isset($AlleDienst)) {
-        $row_field[$Periode] .= '<a href="?q=rooster/confirm/' . $ednr . '/' . $Id . '">'; //use form to confirm change
-      }
-      $row_field[$Periode] .= $wNaam;
-      if (($Naam <> $Zelf) or isset($AlleDienst)) {
-        $row_field[$Periode] .= "</a>";
-      }
-      $row_field[$Periode] .= "<br>";
-
-    } // while
-
-    // Produce last line
-    $row[] = array(
-      $ActDatum,
-      $row_field['A'],
-      $row_field['B'],
-      $row_field['C'],
-    );
-
-    $build['content'] = array(
-      '#theme' => 'table',
-      '#rows' => $row,
-      '#header' => $header,
-      '#attributes' => $attributes,
-      '#empty' => 't(Geen gegevens beschikbaar)'
-    );
-    return $build;
-  }
 
   /**
    * Called when user goes to example.com/?q=rooster/change

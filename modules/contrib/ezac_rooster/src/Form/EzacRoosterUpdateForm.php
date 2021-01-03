@@ -187,7 +187,7 @@ class EzacRoosterUpdateForm extends FormBase
                 $messenger->addMessage("$count record updated", $messenger::TYPE_STATUS);
             }
         }
-        //go back to leden overzicht
+        //go back to rooster overzicht
         $redirect = Url::fromRoute(
             'ezac_rooster'
         );
