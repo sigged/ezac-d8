@@ -160,7 +160,7 @@ class EzacRoosterSwitchForm extends FormBase {
       // initialize periodes
       $dienstPeriodes = [];
       foreach ($periodes as $periode) {
-        $dienstPeriodes[$periode] = ' ';
+        $dienstPeriodes[$periode] = '';
       }
 
       // lees alle diensten voor rooster_dag
@@ -177,10 +177,18 @@ class EzacRoosterSwitchForm extends FormBase {
       }
       // fill columns for diensten
       foreach ($periodes as $periode => $omschrijving) {
-        $form['table'][$rooster_dag][$periode] = [
-          '#type' => 'markup',
-          '#markup' => t($dienstPeriodes[$periode]),
-        ];
+        if ($dienstPeriodes[$periode] != '') {
+          $form['table'][$rooster_dag][$periode] = [
+            '#type' => 'markup',
+            '#markup' => t($dienstPeriodes[$periode]),
+          ];
+        }
+        else {
+          $form['table'][$rooster_dag][$periode] = [
+            '#type' => 'markup',
+            '#markup' => '',
+          ];
+        }
       }
 
     }
