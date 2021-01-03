@@ -180,7 +180,8 @@ class EzacRoosterSwitchForm extends FormBase {
         if ($dienstPeriodes[$periode] != '') {
           $form['table'][$rooster_dag][$periode] = [
             '#type' => 'markup',
-            '#markup' => t($dienstPeriodes[$periode]),
+            '#markup' => t("$periode"),
+            //'#markup' => t($dienstPeriodes[$periode]),
           ];
         }
         else {
