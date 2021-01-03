@@ -86,11 +86,10 @@ class EzacRoosterSwitchForm extends FormBase {
     if (count($lidId) == 1) {
       $lid = new EzacLid($lidId);
       $zelf = $lid->afkorting;
-      $messenger->addMessage("lid $lid->achternaam gevonden voor $user_name");
     }
     else {
       $zelf = ''; // geen lid gevonden
-      $messenger->addMessage("geen lid gevonden voor $user_name");
+      $messenger->addMessage("geen leden record gevonden voor gebruiker $user_name");
     }
 
     // read dienst to be switched in rooster1
