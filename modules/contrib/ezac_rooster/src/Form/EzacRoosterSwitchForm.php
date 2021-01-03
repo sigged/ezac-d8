@@ -172,7 +172,7 @@ class EzacRoosterSwitchForm extends FormBase {
         ],
         'naam' => [ // toon niet de eigen diensten
           'value' => $zelf,
-          'operator' => '<>',
+          'operator' => '!=',
         ]
       ];
       $roosterIndex = EzacRooster::index($condition);
