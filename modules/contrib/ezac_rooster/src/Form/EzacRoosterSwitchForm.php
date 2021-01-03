@@ -116,14 +116,6 @@ class EzacRoosterSwitchForm extends FormBase {
         'operator' => 'IN',
       ],
     ];
-    dpm($id, 'id');
-    dpm($rooster1,'rooster1');
-    dpm($year,'year');
-    dpm($datumStart,'datumStart');
-    dpm($condition, 'condition'); //debug
-    dpm($instructieDiensten,'instructieDiensten');
-    dpm($kaderDiensten, 'kaderDiensten');
-    dpm($dienstSoort,'dienstSoort');
 
     // read index of rooster datum
     $roosterData = array_unique(EzacRooster::index($condition, 'datum'));
@@ -164,9 +156,11 @@ class EzacRoosterSwitchForm extends FormBase {
         '#type' => 'markup',
         '#markup' => $rooster_dag, // @todo format datum
       ];
-      // intialize columns for diensten
-      foreach ($periodes as $periode => $omschrijving) {
-        $form['table'][$rooster_dag][$periode] = '';
+
+      // initialize periodes
+      $dienstPeriodes = [];
+      foreach ($periodes as $periode) {
+        $dienstPeriodes[$periode] = '';
       }
 
       // lees alle diensten voor rooster_dag
@@ -179,8 +173,16 @@ class EzacRoosterSwitchForm extends FormBase {
         $rooster = new EzacRooster($id);
         $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
         //@todo if edit access or own afkorting add link for switching
-        $form['table'][$rooster_dag][$rooster->periode] .= $t;
+        $dienstPeriodes[$periode] .= $t;
       }
+      // fill columns for diensten
+      foreach ($periodes as $periode => $omschrijving) {
+        $form['table'][$rooster_dag][$periode] = [
+          '#type' => 'markup',
+          '#markup' => $dienstPeriodes[$periode],
+        ];
+      }
+
     }
     // @todo implement submit button
 
