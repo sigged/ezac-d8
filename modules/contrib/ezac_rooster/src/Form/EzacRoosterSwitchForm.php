@@ -198,7 +198,7 @@ class EzacRoosterSwitchForm extends FormBase {
         // zet beschrijving in tabel met als index dienst id
         $dienstPeriodes[$rooster->periode][$rooster->id] = $t;
       }
-      dpm($dienstPeriodes,'dienstPeriodes'); //debug
+
       // fill columns for diensten
       foreach ($periodes as $periode => $omschrijving) {
         if ($dienstPeriodes[$periode] != []) {
@@ -208,6 +208,7 @@ class EzacRoosterSwitchForm extends FormBase {
             // plaats dienst beschrijving als radios item
             $options[$roosterId] = $dienstPeriodes[$periode][$roosterId];
           }
+          dpm($options, 'options'); //debug
           $form['table'][$rooster_dag][$periode] = [
             '#type' => 'radios',
             '#options' => $options,
