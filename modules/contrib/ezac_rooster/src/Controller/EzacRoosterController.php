@@ -383,6 +383,11 @@ class EzacRoosterController extends ControllerBase {
         break;
     }
     // return $content['table']
+    $build[] = array(
+      '#type' => 'markup',
+      '#markup' => '<p>Demo text content</p>',
+    );
+    return new Response(render($build));
   }// datumCallback
 
     /**
