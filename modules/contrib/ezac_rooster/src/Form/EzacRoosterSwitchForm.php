@@ -183,7 +183,7 @@ class EzacRoosterSwitchForm extends FormBase {
         // add dienst to table for datum
         $rooster = new EzacRooster($roosterId);
         $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
-        //@todo if edit access or own afkorting add link for switching
+        //@todo add selection button for switching
         $dienstPeriodes[$rooster->periode] .= $t;
       }
 
@@ -215,6 +215,7 @@ class EzacRoosterSwitchForm extends FormBase {
 
   function submitForm(array &$form, FormStateInterface $form_state) {
     // @TODO: Implement submitForm() method.
+    // switch diensten
   }
 
 /*

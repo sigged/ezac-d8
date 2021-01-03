@@ -236,6 +236,19 @@ class EzacRoosterController extends ControllerBase {
     $content = array();
     $rows = [];
 
+    //set up ajax selection
+    //@todo build java buttons voor eigen diensten en diensten vanaf vandaag
+    $content['select'] = [
+      '#type' => 'select',
+      '#options' => [
+        'E' => 'Eigen diensten',
+        'A' => 'Alle diensten',
+        'V' => 'Vanaf vandaag',
+      ],
+      '#default_value' => 'V',
+      '#weight' => 0, // top
+    ];
+
     //prepare header
     $header = array(t('Datum'));
     // voeg een kolom per periode toe
@@ -244,7 +257,6 @@ class EzacRoosterController extends ControllerBase {
     }
 
     // select all diensten dates for selected year
-    //@todo build java buttons voor eigen diensten en diensten vanaf vandaag
     // @todo ombouwen voor datum range met checkDate
     $condition = [
       'datum' => [
