@@ -175,7 +175,7 @@ class EzacRoosterSwitchForm extends FormBase {
         //@todo if edit access or own afkorting add link for switching
         $dienstPeriodes[$rooster->periode] .= $t;
       }
-      dpm($dienstPeriodes,'dienstPeriodes'); //debug
+
       // fill columns for diensten
       foreach ($periodes as $periode => $omschrijving) {
         if ($dienstPeriodes[$periode] != '') {
