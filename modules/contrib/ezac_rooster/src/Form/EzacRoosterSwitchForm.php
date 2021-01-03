@@ -84,7 +84,7 @@ class EzacRoosterSwitchForm extends FormBase {
     ];
     $lidId = EzacLid::index($condition);
     if (count($lidId) == 1) {
-      $lid = new EzacLid($id);
+      $lid = new EzacLid($lidId);
       $zelf = $lid->afkorting;
       $messenger->addMessage("lid $lid->achternaam gevonden voor $user_name");
     }
