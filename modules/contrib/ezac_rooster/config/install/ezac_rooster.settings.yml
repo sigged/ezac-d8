@@ -13,14 +13,14 @@ rooster:
     C: 'dagcoordinator'
     O: 'opmerking'
   kader:
-    L
-    P
-    B
-    K
-    C
-    O
+    L:
+    P:
+    B:
+    K:
+    C:
+    O:
   instructie:
-    D
-    I
+    D:
+    I:
 
 langcode: 'nl'
