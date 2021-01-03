@@ -118,6 +118,8 @@ class EzacRoosterSwitchForm extends FormBase {
     dpm($year,'year');
     dpm($datumStart,'datumStart');
     dpm($condition, 'condition'); //debug
+    dpm($instructieDiensten,'instructieDiensten');
+    dpm($kaderDiensten, 'kaderDiensten');
     dpm($dienstSoort,'dienstSoort');
 
     // read index of rooster datum
