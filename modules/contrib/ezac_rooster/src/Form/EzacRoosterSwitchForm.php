@@ -114,6 +114,7 @@ class EzacRoosterSwitchForm extends FormBase {
         'operator' => 'IN',
       ],
     ];
+    dpm($id, 'id');
     dpm($rooster1,'rooster1');
     dpm($year,'year');
     dpm($datumStart,'datumStart');
