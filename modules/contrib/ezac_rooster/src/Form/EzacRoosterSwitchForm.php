@@ -160,7 +160,7 @@ class EzacRoosterSwitchForm extends FormBase {
       // initialize periodes
       $dienstPeriodes = [];
       foreach ($periodes as $periode) {
-        $dienstPeriodes[$periode] = '';
+        $dienstPeriodes[$periode] = ' ';
       }
 
       // lees alle diensten voor rooster_dag
