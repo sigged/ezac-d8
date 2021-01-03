@@ -306,7 +306,7 @@ class EzacRoosterController extends ControllerBase {
         $urlSwitchString = Url::fromRoute(
           'ezac_rooster_switch',  // show rooster for datum
           [
-            'id' => $rooster->id,
+            'id' => (int) $rooster->id,
           ]
         )->toString();
         $t = $diensten[$rooster->dienst] .':';
