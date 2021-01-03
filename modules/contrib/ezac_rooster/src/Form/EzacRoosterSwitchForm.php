@@ -23,12 +23,14 @@ class EzacRoosterSwitchForm extends FormBase {
 
   /**
    * Create rooster entries
+   *
    * @param array $form
    * @param FormStateInterface $form_state
-   * @param null $datum
+   * @param null $id
+   *
    * @return array
-   **/
-  function buildForm(array $form, FormStateInterface $form_state, $id = null) {
+   */
+  function buildForm(array $form, FormStateInterface $form_state, int $id = null) {
     // @todo bouw om voor ruilen van dienst
     // dienst id moet worden geruild
     // zoek vervangende dienst van niet zelf
