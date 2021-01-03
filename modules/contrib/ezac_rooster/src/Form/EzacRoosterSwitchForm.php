@@ -168,20 +168,20 @@ class EzacRoosterSwitchForm extends FormBase {
         'datum' => $rooster_dag,
       ];
       $roosterIndex = EzacRooster::index($condition);
-      foreach ($roosterIndex as $id) {
+      foreach ($roosterIndex as $roosterId) {
         // add dienst to table for datum
-        $rooster = new EzacRooster($id);
+        $rooster = new EzacRooster($roosterId);
         $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
         //@todo if edit access or own afkorting add link for switching
         $dienstPeriodes[$periode] .= $t;
       }
+      dpm($dienstPeriodes,'dienstPeriodes'); //debug
       // fill columns for diensten
       foreach ($periodes as $periode => $omschrijving) {
         if ($dienstPeriodes[$periode] != '') {
           $form['table'][$rooster_dag][$periode] = [
             '#type' => 'markup',
-            '#markup' => t("$periode"),
-            //'#markup' => t($dienstPeriodes[$periode]),
+            '#markup' => t($dienstPeriodes[$periode]),
           ];
         }
         else {
