@@ -255,8 +255,6 @@ class EzacRoosterController extends ControllerBase {
       ],
     ];
 
-    dpm($content['select'], 'select'); //debug
-
     //prepare header
     $header = array(t('Datum'));
     // voeg een kolom per periode toe
@@ -372,7 +370,6 @@ class EzacRoosterController extends ControllerBase {
   } // overzichtJaar
 
   private function datumCallback($select) {
-    dpm($select, 'select'); //debug
     switch ($select) {
       case 'A':
         // select alle dagen
