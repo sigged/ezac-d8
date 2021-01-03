@@ -247,6 +247,12 @@ class EzacRoosterController extends ControllerBase {
       ],
       '#default_value' => 'V',
       '#weight' => 0, // top
+      '#ajax' => [
+        'callback' => '::datumCallback',
+        'wrapper' => 'table-div',
+        'effect' => 'fade',
+        'progress' => ['type' => 'throbber'],
+      ],
     ];
 
     //prepare header
@@ -349,6 +355,8 @@ class EzacRoosterController extends ControllerBase {
       '#rows' => $rows,
       '#empty' => t('Geen gegevens beschikbaar.'),
       '#sticky' => TRUE,
+      '#prefix' => '<div id="table-div">',
+      '#suffix' => '</div>',
     ];
     // add pager
     $content['pager'] = [
@@ -360,7 +368,23 @@ class EzacRoosterController extends ControllerBase {
 
     return $content;
   } // overzichtJaar
-  
+
+  private function datumCallback($select) {
+    dpm($select, 'select'); //debug
+    switch ($select) {
+      case 'A':
+        // select alle dagen
+        break;
+      case 'E':
+        // select eigen diensten
+        break;
+      case 'V':
+        // select vanaf vandaag
+        break;
+    }
+    // return $content['table']
+  }// datumCallback
+
     /**
      * Maak exportbestand uit Leden tabel
      * geformatteerd voor input in bestand (csv)
