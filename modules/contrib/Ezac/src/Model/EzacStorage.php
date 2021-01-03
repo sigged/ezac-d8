@@ -222,7 +222,7 @@ class EzacStorage {
       foreach (get_object_vars($record) as $var => $value) {
         $this->$var = $value;
       }
-      //@todo return kan vervallen, record is in $this ingelezen
+      //@todo return kan vervallen, record is in $this ingelezen, kan cast ook vervallen?
       return $record;
     }
     else {

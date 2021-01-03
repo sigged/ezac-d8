@@ -290,14 +290,21 @@ class EzacRoosterSwitchForm extends FormBase {
     $ruilen_met = $form_state->getValue('ruilen_met');
     $messenger->addMessage("Ruilen dienst $ruilen_van met dienst $ruilen_met");
 
+    $diensten = $form_state->getValue('diensten');
+    $leden = $form_state->getValue('leden');
+
     // ruil diensten
     $rooster1 = new EzacRooster($ruilen_van);
     $naam1 = $rooster1->naam;
     $lid1 = new EzacLid(EzacLid::getId($naam1));
+    $datum1 = EzacUtil::showDate($rooster1->datum);
+    $dienst1 = $diensten[$rooster1->dienst];
 
     $rooster2 = new EzacRooster($ruilen_met);
     $naam2 = $rooster2->naam;
     $lid2 = new EzacLid(EzacLid::getId($naam2));
+    $datum2 = EzacUtil::showDate($rooster2->datum);
+    $dienst2 = $diensten[$rooster2->dienst];
 
     // verwissel namen en update diensten
     $rooster1->naam = $naam2;
@@ -321,6 +328,11 @@ class EzacRoosterSwitchForm extends FormBase {
       $rooster1->geruild = '';
       $nr_updated = $rooster1->update();
     }
+
+    $message = "De $dienst1 dienst van $leden[$naam1] in de $rooster1->periode periode op $datum1 ";
+    $message .= "is geruild met ";
+    $message = "de $dienst2 dienst van $leden[$naam2] in de $rooster2->periode periode op $datum2 ";
+    $messenger->addMessage($message);
 
     // @todo mail bericht over ruil aan iedereen die op die dag een dienst heeft
 
