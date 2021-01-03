@@ -336,6 +336,7 @@ class EzacRoosterSwitchForm extends FormBase {
     /* recipients */
     $recipient = $lid1->e_mail ."; " .$lid2->e_mail;
     $recipient .= "; webmaster@ezac.nl"; //ter controle
+    $recipient = "evert@efekkes.nl"; //debug
 
     /* subject */
     $subject = "Wijziging EZAC Dienstrooster op " . $datum1;
@@ -418,7 +419,7 @@ class EzacRoosterSwitchForm extends FormBase {
 
     //mail alleen als er ook recipients zijn...
     if (isset($recipient)) {
-      //mail($recipient, $subject, $message, $headers); //mail even uitgezet voor test DEBUG
+      mail($recipient, $subject, $message, $headers); //mail even uitgezet voor test DEBUG
     }
     $messenger->addMessage($print); // debug - toon verzonden bericht
 
