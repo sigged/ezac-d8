@@ -173,7 +173,7 @@ class EzacRoosterSwitchForm extends FormBase {
         $rooster = new EzacRooster($roosterId);
         $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
         //@todo if edit access or own afkorting add link for switching
-        $dienstPeriodes[$periode] .= $t;
+        $dienstPeriodes[$rooster->dienst] .= $t;
       }
       dpm($dienstPeriodes,'dienstPeriodes'); //debug
       // fill columns for diensten
