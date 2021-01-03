@@ -288,7 +288,6 @@ class EzacRoosterSwitchForm extends FormBase {
     $messenger = Drupal::messenger();
     $ruilen_van = $form_state->getValue('ruilen_van');
     $ruilen_met = $form_state->getValue('ruilen_met');
-    $messenger->addMessage("Ruilen dienst $ruilen_van met dienst $ruilen_met");
 
     $diensten = $form_state->getValue('diensten');
     $leden = $form_state->getValue('leden');
@@ -331,7 +330,7 @@ class EzacRoosterSwitchForm extends FormBase {
 
     $message = "De $dienst1 dienst van $leden[$naam1] in de $rooster1->periode periode op $datum1 ";
     $message .= "is geruild met ";
-    $message = "de $dienst2 dienst van $leden[$naam2] in de $rooster2->periode periode op $datum2 ";
+    $message .= "de $dienst2 dienst van $leden[$naam2] in de $rooster2->periode periode op $datum2 ";
     $messenger->addMessage($message);
 
     // @todo mail bericht over ruil aan iedereen die op die dag een dienst heeft
