@@ -177,7 +177,7 @@ class EzacRoosterSwitchForm extends FormBase {
         $dienstPeriodes[$periode] = [];
       }
 
-      // lees alle diensten voor rooster_dag
+      // lees alle te ruilen diensten voor rooster_dag
       $condition = [
         'datum' => $rooster_dag,
         'dienst' => [ // toon alleen ruilbare diensten
@@ -193,22 +193,23 @@ class EzacRoosterSwitchForm extends FormBase {
       foreach ($roosterIndex as $roosterId) {
         // add dienst to table for datum
         $rooster = new EzacRooster($roosterId);
+        //opmaken dienst beschrijving voor tabel
         $t = $diensten[$rooster->dienst] .':' .$leden[$rooster->naam] .'<br>';
-        //@todo add selection button for switching
-        $dienstPeriodes[$rooster->periode][] = $t;
+        // zet beschrijving in tabel met als index dienst id
+        $dienstPeriodes[$rooster->periode][$rooster->id] = $t;
       }
 
       // fill columns for diensten
-      foreach ($dienstPeriodes as $periode) {
-        if ($periode != []) {
+      foreach ($periodes as $periode => $omschrijving) {
+        if ($dienstPeriodes[$periode] != []) {
+          // er zijn te ruilen diensten in deze periode
           $options = [];
-          foreach ($periode as $item) {
-            // add dienst as checkbox item
-            $options[$roosterId] = $item;
+          foreach ($dienstPeriodes[$periode] as $roosterId) {
+            // plaats dienst beschrijving als radios item
+            $options[$roosterId] = $dienstPeriodes[$periode][$roosterId];
           }
-
           $form['table'][$rooster_dag][$periode] = [
-            '#type' => 'checkboxes',
+            '#type' => 'radios',
             '#options' => $options,
           ];
         }
