@@ -243,6 +243,27 @@ class EzacRoosterSwitchForm extends FormBase {
     // check op meer dan 1 geselecteerde checkbox
     $table = $form_state->getValue('table');
     dpm($table, 'table'); //debug
+    $periodes = $form_state->getValue('periodes');
+    $checked = [];
+    foreach ($table as $datum => $diensten) {
+      foreach ($periodes as $periode => $omschrijving) {
+        foreach ($table[$datum][$periode] as $dienst => $check) {
+          if ($check != 0) $checked[$check] = $check;
+        }
+      }
+    }
+    switch (count($checked)) {
+      case 0:
+        // geen dienst geselecteerd
+        $form_state->setError($table, 'Geen dienst geselecteerd');
+        break;
+      case 1:
+        // 1 dienst geselecteerd: OK
+        break;
+      default:
+        // meer dan 1 dienst geselecteerd
+        $form_state->setError($table, "Meer dan 1 dienst geselecteerd");
+    }
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
