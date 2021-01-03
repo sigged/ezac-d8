@@ -76,7 +76,6 @@ class EzacRoosterSwitchForm extends FormBase {
 
     //get current user details
     $user = $this->currentUser();
-    $may_edit = $user->hasPermission('EZAC_edit');
     // read own leden record
     $user_name = $user->getAccountName();
     $condition = [
@@ -85,10 +84,8 @@ class EzacRoosterSwitchForm extends FormBase {
     $lidId = EzacLid::index($condition);
     if (count($lidId) == 1) {
       $lid = new EzacLid($lidId);
-      $zelf = $lid->afkorting;
     }
     else {
-      $zelf = ''; // geen lid gevonden
       $messenger->addMessage("geen leden record gevonden voor gebruiker $user_name");
     }
 
@@ -334,143 +331,35 @@ class EzacRoosterSwitchForm extends FormBase {
     $messenger->addMessage($message);
 
     // @todo mail bericht over ruil aan iedereen die op die dag een dienst heeft
-
-    // redirect naar rooster overzicht
-    //go back to rooster overzicht
-    $redirect = Url::fromRoute(
-      'ezac_rooster_overzicht_jaar',
-      ['jaar' => substr($rooster1->datum, 0, 4)]
-    );
-    $form_state->setRedirectUrl($redirect);
-
-  }
-
-
-  /**
-   * Called when user goes to example.com/?q=rooster/change
-   * Ruilen van de diensten
-   * params $ednr en $ednr2 verwijzen naar de record nummers van de te ruilen diensten
-   * Deze worden omgeruild in de database waarbij de mutatie wordt vastgelegd
-   */
-  function ezacroo_change($ednr = 0, $ednr2 = 0) {
-
-    if (isset($ednr)) {
-      //    drupal_set_message(t('Te ruilen dienst'));
-
-      $query  = 'SELECT r.*, d.Omschrijving, w1.E_mail, ';
-      $query .= "CONCAT_WS(' ',w1.VOORNAAM,w1.VOORVOEG,w1.ACHTERNAAM) wNaam ";
-      $query .= 'FROM {ezac_Rooster} r, {ezac_Leden} w1, {ezac_Rooster_Diensten} d ';
-      $query .= 'WHERE r.Id = :ednr '; // . $ednr . ' ';
-      $query .= 'AND r.Naam = w1.AFKORTING ';
-      $query .= 'AND r.Dienst = d.Dienst ';
-
-      $result = db_query($query, array(':ednr' => $ednr)); // or ("Query failed: <" . $query . ">");
-      $line = $result->fetchAssoc();
-
-      $Dat1 = $line["Datum"];
-      $Datum1 = $Dat1; // vasthouden 1e datum
-      $Dat = explode(" ", $Dat1); //verwijderen tijd
-      $YYMMDD = explode("-", $Dat[0]);
-      $Dat2 = $YYMMDD[2] . '-' . $YYMMDD[1] . '-' . $YYMMDD[0]; //omzetten naar dd-mm-jjjj
-
-      $EersteDatum = $Dat2; // tbv roo_mail
-      $EersteNaam  = $line["wNaam"];
-      $Naam1       = $line["Naam"];
-      $Periode1    = $line["Periode"];
-      $Dienst1     = $line["Omschrijving"];
-      $E_mail1	 = $line["E_mail"];
-
-    } //if isset($ednr)
-
-    if (isset($ednr2)) {
-      $query  = 'SELECT r.*, d.Omschrijving, w1.E_mail, ';
-      $query .= "CONCAT_WS(' ',w1.VOORNAAM,w1.VOORVOEG,w1.ACHTERNAAM) wNaam ";
-      $query .= 'FROM {ezac_Rooster} r, {ezac_Leden} w1, {ezac_Rooster_Diensten} d ';
-      $query .= 'WHERE r.Id = :ednr2 '; //' . $ednr2 . ' ';
-      $query .= 'AND r.Naam = w1.AFKORTING ';
-      $query .= 'AND r.Dienst = d.Dienst ';
-
-      $result = db_query($query, array(':ednr2' => $ednr2)); // or ("Query failed: <" . $query . ">");
-      $line = $result->fetchAssoc();
-
-      $Dat1 = $line["Datum"];
-      $Datum2 = $Dat1; // vasthouden 2e datum
-      $Dat = explode(" ", $Dat1);
-      $YYMMDD = explode("-", $Dat[0]);
-      $Dat2 = $YYMMDD[2] . '-' . $YYMMDD[1] . '-' . $YYMMDD[0];
-
-      $TweedeDatum = $Dat2; // tbv roo_mail
-      $TweedeNaam  = $line["wNaam"];
-      $Naam2       = $line["Naam"];
-      $Periode2    = $line["Periode"];
-      $Dienst2     = $line["Omschrijving"];
-      $E_mail2	 = $line["E_mail"];
-    } //if
-
-    $Mutatie = date("Y-m-d H:i:s"); //Huidige datum en tijd
-
-    //Plaats het 1e record in de database - TODO NOG TE WIJZIGEN IN DYNAMIC DB CALL
-    $query  = 'UPDATE {ezac_Rooster} ';
-    $query .= 'SET Naam = :Naam2, ';
-    $query .= 'Geruild = :Naam1, ';
-    $query .= 'Mutatie = :Mutatie ';
-    $query .= 'WHERE Id = :ednr';
-    $result = db_query($query,array(
-      ':Naam2'    => $Naam2,
-      ':Naam1' 	=> $Naam1,
-      ':Mutatie' 	=> $Mutatie,
-      ':ednr'    	=> $ednr
-    ))
-    or ("Update 1 failed <" . $result . ">:" . $query);
-
-    //Plaats het 2e record in de database
-    $query  = 'UPDATE {ezac_Rooster} ';
-    $query .= 'SET Naam = :Naam1, ';
-    $query .= 'Geruild = :Naam2, ';
-    $query .= 'Mutatie = :Mutatie ';
-    $query .= 'WHERE Id = :ednr2';
-    $result = db_query($query,array(
-      ':Naam1'    => $Naam1,
-      ':Naam2' 	=> $Naam2,
-      ':Mutatie' 	=> $Mutatie,
-      ':ednr2'    => $ednr2
-    ))
-
-    or ("Update 2 failed <" . $result . ">:" . $query);
-
     //Verstuur mail berichten voor EZAC roosterwijzigingen
-    //Database EZAC
-    //Tables Rooster, Dienst, Periode
-    //Records met Id = ednr en ednr2
-    //User  $Zelf
 
     /* recipients */
-    $recipient = $E_mail1 ."; " .$E_mail2;
+    $recipient = $lid1->e_mail ."; " .$lid2->e_mail;
     $recipient .= "; webmaster@ezac.nl"; //ter controle
 
     /* subject */
-    $subject = "Wijziging EZAC Dienstrooster op " . $EersteDatum;
-    if ($EersteDatum <> $TweedeDatum) {
-      $subject .= " en " . $TweedeDatum;
+    $subject = "Wijziging EZAC Dienstrooster op " . $datum1;
+    if ($datum1 != $datum2) {
+      $subject .= " en " . $datum2;
     }
 
     /* message */
     $message  = "";
     $message .= "<H1>Geruild:</H1>\n";
-    $message .= $EersteNaam  . " heeft de ";
-    $message .= $Dienst1     . " dienst in de ";
-    $message .= $Periode1    . " periode van ";
-    $message .= $EersteDatum . " geruild met ";
-    $message .= $TweedeNaam  . "'s ";
-    $message .= $Dienst2     . " dienst in de ";
-    $message .= $Periode2    . "  periode ";
-    if ($Datum1 <> $Datum2) {
-      $message .= "van " . $TweedeDatum . "<p>\n";
+    $message .= $leden[$naam1] . " heeft de ";
+    $message .= $dienst1     . " dienst in de ";
+    $message .= $rooster1->periode    . " periode van ";
+    $message .= $datum1 . " geruild met ";
+    $message .= $leden[$naam2]  . "'s ";
+    $message .= $dienst2     . " dienst in de ";
+    $message .= $rooster2->periode    . "  periode ";
+    if ($datum1 != $datum2) {
+      $message .= "van " . $datum2 . "<p>\n";
     }
 
-    $message .= "<H1>Overzicht van de diensten op " . $EersteDatum;
-    if ($EersteDatum <> $TweedeDatum) {
-      $message .= " en " . $TweedeDatum;
+    $message .= "<H1>Overzicht van de diensten op " . $datum1;
+    if ($datum1 <> $datum2) {
+      $message .= " en " . $datum2;
     }
     $message .= "</H1>\n";
     $message .= "<TABLE border=1>\n";
@@ -481,26 +370,25 @@ class EzacRoosterSwitchForm extends FormBase {
     $message .=     "<TD>Naam</TD>\t";
     $message .= "</TR></b></THEAD>\n";
 
-    $query  = 'SELECT r.*, d.Omschrijving, ';
-    $query .= "CONCAT_WS(' ',w.VOORNAAM,w.VOORVOEG,w.ACHTERNAAM) wNaam ";
-    $query .= 'FROM {ezac_Rooster} r, {ezac_Leden} w, {ezac_Rooster_Diensten} d ';
-    $query .= 'WHERE r.Naam = w.AFKORTING ';
-    $query .= 'AND r.Dienst = d.Dienst ';
-    $query .= 'AND (Datum = :Datum1'; //"' . $Datum1 . '"';
-    if ($Datum1 <> $Datum2) {
-      $query .= ' OR Datum = :Datum2'; // . $Datum2 . '"';
+    $condition = [
+      'datum' => [
+        'value' => [$datum1, $datum2],
+        'operator' => 'BETWEEN',
+      ],
+    ];
+    $roosterIndex = EzacRooster::index($condition);
+    foreach ($roosterIndex as $roosterId) {
+      $r = new EzacRooster($roosterId);
+      $rooster[$r->datum] = $r;
     }
-    $query .= ') ORDER BY Datum, Periode, Omschrijving';
-    $result = db_query($query, array(':Datum1'=>$Datum1,':Datum2'=>$Datum2)); // or ("Query failed:" . $query);
-
-
-    while ($line = $result->fetchAssoc()) {
-      $Dat1 = explode(" ", $line["Datum"]);
+    foreach ($rooster as $datum => $r) {
+    //while ($line = $result->fetchAssoc()) {
+      $Dat1 = explode(" ", $r->datum);
       $Dat  = explode("-", $Dat1[0]);
       $message .= "<TR><TD>" . $Dat[2] . "-" . $Dat[1] . "-" . $Dat[0] . "</TD>\t";
-      $message .= "<TD>" . $line["Periode"] . "</TD>\t";
-      $message .= "<TD>" . $line["Omschrijving"] . "</TD>\t";
-      $message .= "<TD>" . $line["wNaam"] . "</TD>\t";
+      $message .= "<TD>" . $r->pPeriode . "</TD>\t";
+      $message .= "<TD>" . $diensten[$r->dienst] . "</TD>\t";
+      $message .= "<TD>" . $leden[$r->naam] . "</TD>\t";
       $message .= "</TR>\n";
     }
     $message .= "</TABLE>\n";
@@ -526,132 +414,22 @@ class EzacRoosterSwitchForm extends FormBase {
     $print .= "<p>To: " . $recipient . "<br>\n";
     $print .= "Subject: " . $subject . "<br>\n";
     $print .= "<p>" . $message . "<br>\n";
-    //  $print .= "<p>Headers: " . $headers . "\n";
+    $print .= "<p>Headers: " . $headers . "\n";
 
     //mail alleen als er ook recipients zijn...
     if (isset($recipient)) {
-      mail($recipient, $subject, $message, $headers); //mail even uitgezet voor test DEBUG
+      //mail($recipient, $subject, $message, $headers); //mail even uitgezet voor test DEBUG
     }
+    $messenger->addMessage($print); // debug - toon verzonden bericht
 
-    return $print;
+    // redirect naar rooster overzicht
+    //go back to rooster overzicht
+    $redirect = Url::fromRoute(
+      'ezac_rooster_overzicht_jaar',
+      ['jaar' => substr($rooster1->datum, 0, 4)]
+    );
+    $form_state->setRedirectUrl($redirect);
+
   }
-
-  /**
-   * Use a form to confirm the rooster change requested
-   * called from ezample.com/?q=rooster/confirm
-   * params $ednr and $ednr2 indicate the records to be switched
-   **/
-  function ezacroo_confirm($ednr = 0, $ednr2 = 0) {
-    $output = drupal_get_form('ezacroo_confirm_form',$ednr, $ednr2);
-    return $output;
-  }
-
-  /**
-   * form to confirm the rooster change
-   * params $ednr and $ednr2 indicate the records to be switched
-   **/
-  function ezacroo_confirm_form($form, &$form_state, $ednr, $ednr2) { //$form added
-
-    if (isset($ednr)) {
-      //    drupal_set_message(t('Te ruilen dienst'));
-
-      $query  = 'SELECT r.*, d.Omschrijving, w1.E_mail, ';
-      $query .= "CONCAT_WS(' ',w1.VOORNAAM,w1.VOORVOEG,w1.ACHTERNAAM) wNaam ";
-      $query .= 'FROM {ezac_Rooster} r, {ezac_Leden} w1, {ezac_Rooster_Diensten} d ';
-      $query .= 'WHERE r.Id = :ednr '; // . $ednr . ' ';
-      $query .= 'AND r.Naam = w1.AFKORTING ';
-      $query .= 'AND r.Dienst = d.Dienst ';
-
-      $result = db_query($query, array(':ednr' => $ednr));
-      $line = $result->fetchAssoc();
-
-      $Dat1 = $line["Datum"];
-      $Datum1 = $Dat1; // vasthouden 1e datum
-      $Dat = explode(" ", $Dat1); //verwijderen tijd
-      $YYMMDD = explode("-", $Dat[0]);
-      $Dat2 = $YYMMDD[2] . '-' . $YYMMDD[1] . '-' . $YYMMDD[0]; //omzetten naar dd-mm-jjjj
-
-      $EersteDatum = $Dat2; // tbv roo_mail
-      $EersteNaam  = $line["wNaam"];
-      $Naam1       = $line["Naam"];
-      $Periode1    = $line["Periode"];
-      $Dienst1     = $line["Omschrijving"];
-      $E_mail1	 = $line["E_mail"];
-
-    } //if isset($ednr)
-
-    if (isset($ednr2)) {
-      $query  = 'SELECT r.*, d.Omschrijving, w1.E_mail, ';
-      $query .= "CONCAT_WS(' ',w1.VOORNAAM,w1.VOORVOEG,w1.ACHTERNAAM) wNaam ";
-      $query .= 'FROM {ezac_Rooster} r, {ezac_Leden} w1, {ezac_Rooster_Diensten} d ';
-      $query .= 'WHERE r.Id = :ednr2 '; //' . $ednr2 . ' ';
-      $query .= 'AND r.Naam = w1.AFKORTING ';
-      $query .= 'AND r.Dienst = d.Dienst ';
-
-      $result = db_query($query, array(':ednr2' => $ednr2)); // or ("Query failed: <" . $query . ">");
-      $line = $result->fetchAssoc();
-
-      $Dat1 = $line["Datum"];
-      $Datum2 = $Dat1; // vasthouden 2e datum
-      $Dat = explode(" ", $Dat1);
-      $YYMMDD = explode("-", $Dat[0]);
-      $Dat2 = $YYMMDD[2] . '-' . $YYMMDD[1] . '-' . $YYMMDD[0];
-
-      $TweedeDatum = $Dat2; // tbv roo_mail
-      $TweedeNaam  = $line["wNaam"];
-      $Naam2       = $line["Naam"];
-      $Periode2    = $line["Periode"];
-      $Dienst2     = $line["Omschrijving"];
-      $E_mail2	 = $line["E_mail"];
-      //  drupal_set_messsage(t('met ' .$TweedeDatum
-      //                      .' in de ' .$Periode2
-      //                      .'-periode de ' .$Dienst2 .'-dienst'
-      //                      .' van ' .$TweedeNaam));
-    } //if
-
-    // Build the form
-    $form['Naam1'] = array(
-      '#title' => $EersteNaam . t(' ruilt op ')
-        .$EersteDatum .t(' in de ')
-        .$Periode1 .t(' periode de ')
-        .$Dienst1 .t(' dienst met de'),
-      '#type' => 'item');
-    $form['ednr'] = array(
-      '#type' => 'value',
-      '#value' => $ednr); //store first record id
-    $form['Naam2'] = array(
-      '#title' => $Dienst2 .t(' dienst van ')
-        .$TweedeNaam .t(' op ')
-        .$TweedeDatum .t(' in de ')
-        .$Periode2 .t(' periode.'),
-      '#type' => 'item');
-    $form['ednr2'] = array(
-      '#type' => 'value',
-      '#value' => $ednr2); //store second record id
-    $form['submit'] = array(
-      '#type' => 'submit',
-      '#value' => t('Ruil deze diensten'));
-
-    return $form;
-
-  } //ezacroo_confirm_form
-
-  /**
-   * validate the form
-   * placeholder as there is nothing to validate
-   **/
-  function ezacroo_confirm_form_validate($form, &$form_state) {
-    // nothing to validate, just confirm
-  } //ezacroo_confirm_form_validate
-
-  /**
-   * Handle post-validation form submission
-   **/
-  function ezacroo_confirm_form_submit($form, &$form_state) {
-    $ednr = $form_state['values']['ednr'];
-    $ednr2 = $form_state['values']['ednr2'];
-    $form_state['redirect'] = 'rooster/change/' .$ednr .'/' .$ednr2;
-    //ezacroo_change($ednr, $ednr2); //execute the change
-  } //ezacroo_confirm_form_submit
 
 }
