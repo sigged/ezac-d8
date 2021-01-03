@@ -108,7 +108,6 @@ class EzacRoosterSwitchForm extends FormBase {
 
     // read rooster for datum or datum range and dienstSoort
     EzacUtil::checkDatum($year, $datumStart, $datumEnd);
-    //@todo deze selectie lijkt niet te werken
     $condition = [
       'datum' => [
         'value' => [$datumStart, $datumEnd],
@@ -126,6 +125,12 @@ class EzacRoosterSwitchForm extends FormBase {
       $messenger->addError("Geen diensten gevonden om mee te ruilen");
       return NULL; // no entries for datum
     }
+
+
+    $form['intro'] = [
+      '#type' => 'markup',
+      '#markup' => "<H2>Ruil $rooster1->dienst op $rooster1->datum in $rooster1->periode periode</H2>",
+    ];
 
     //toon tabel met datum en diensten per periode
     //prepare header
