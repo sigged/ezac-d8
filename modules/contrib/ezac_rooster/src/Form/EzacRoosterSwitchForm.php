@@ -187,7 +187,7 @@ class EzacRoosterSwitchForm extends FormBase {
         else {
           $form['table'][$rooster_dag][$periode] = [
             '#type' => 'markup',
-            '#markup' => '',
+            '#markup' => t('niets'),
           ];
         }
       }
