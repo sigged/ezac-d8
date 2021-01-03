@@ -210,7 +210,7 @@ class EzacRoosterSwitchForm extends FormBase {
           }
           //dpm($options, 'options'); //debug
           $form['table'][$rooster_dag][$periode] = [
-            '#type' => 'radio',
+            '#type' => 'radios',
             '#options' => $options,
           ];
         }
