@@ -169,6 +169,10 @@ class EzacRoosterSwitchForm extends FormBase {
         'dienst' => [ // toon alleen ruilbare diensten
           'value' => $dienstSoort,
           'operator' => 'IN',
+        ],
+        'naam' => [ // toon niet de eigen diensten
+          'value' => $zelf,
+          'operator' => '<>',
         ]
       ];
       $roosterIndex = EzacRooster::index($condition);
