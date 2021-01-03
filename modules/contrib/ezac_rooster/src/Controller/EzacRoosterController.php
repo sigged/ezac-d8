@@ -276,16 +276,6 @@ class EzacRoosterController extends ControllerBase {
     $sortdir = 'ASC';
 
     foreach ($roosterDates as $datum) {
-      // build link to rooster edit
-      $urlString = Url::fromRoute(
-        //'ezac_rooster_overzicht',  // show rooster for datum
-        'ezac_rooster_table',  // show rooster for datum
-        [
-          'datum' => $datum,
-        ]
-      )->toString();
-
-      // build periode columns for diensten
 
       // intialize columns for diensten
       $dienst = [];
@@ -301,13 +291,10 @@ class EzacRoosterController extends ControllerBase {
         // add dienst to table for datum
         $rooster = new EzacRooster($id);
 
-        //@todo if edit access or own afkorting add link for switching
         // build link to rooster edit
         $urlSwitchString = Url::fromRoute(
           'ezac_rooster_switch',  // show rooster for datum
-          [
-            'id' => $rooster->id,
-          ]
+          ['id' => $rooster->id]
         )->toString();
         $t = $diensten[$rooster->dienst] .':';
         // als EZAC_edit permission of eigen dienst dan is ruilen toegestaan
@@ -321,12 +308,18 @@ class EzacRoosterController extends ControllerBase {
         $dienst[$rooster->periode] .= $t;
       }
 
-      $d = EzacUtil::showDate($datum);
+      $d = EzacUtil::showDate($datum); // format datum
       $row = [];
       //link each record to overzicht , use new FormattableMarkup()
       // @todo check op may_edit
-      if ($may_edit == TRUE)
+      if ($may_edit == TRUE) {
+        // build link to rooster edit
+        $urlString = Url::fromRoute(
+          'ezac_rooster_table',  // show rooster for datum
+          ['datum' => $datum]
+        )->toString();
         $row['datum'] = t("<a href=$urlString>$d</a>");
+      }
       else $row['datum'] = t("$d");
       foreach ($periodes as $periode => $omschrijving) {
         if ($dienst[$periode] != '') {
