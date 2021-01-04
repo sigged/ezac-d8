@@ -214,8 +214,14 @@ class EzacVbaLidForm extends FormBase {
 
       //toon huidige bevoegdheden
       // query vba verslag, bevoegdheid records
-      $condition['afkorting'] = $vlieger_afkorting;
-      $condition['actief'] = TRUE;
+      $condition = [
+        'datum_aan' => [
+          'value' => [$datum_start, $datum_eind],
+          'operator' => 'BETWEEN',
+        ],
+        'afkorting' => $vlieger_afkorting,
+        'actief' => TRUE,
+      ];
       $vlieger_bevoegdhedenIndex = EzacVbaBevoegdheidLid::index($condition);
 
       // put in table
