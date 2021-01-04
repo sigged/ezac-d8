@@ -167,7 +167,7 @@ class EzacVbaLidForm extends FormBase {
       // query vba verslag, bevoegdheid records
       $condition = ['afkorting' => $vlieger_afkorting];
       if (isset($datum_start)) {
-        $condition ['datum'] =
+        $condition ['datum_aan'] =
           [
             'value' => [$datum_start, $datum_eind],
             'operator' => 'BETWEEN'
