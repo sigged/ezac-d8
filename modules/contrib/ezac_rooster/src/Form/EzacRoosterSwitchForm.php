@@ -421,7 +421,6 @@ class EzacRoosterSwitchForm extends FormBase {
     if (isset($recipient)) {
       mail($recipient, $subject, $message, $headers); //mail even uitgezet voor test DEBUG
     }
-    $messenger->addMessage($print); // debug - toon verzonden bericht
 
     // redirect naar rooster overzicht
     //go back to rooster overzicht

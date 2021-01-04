@@ -1,6 +1,6 @@
 langcode: 'nl'
 
-ezac_vba:
+vba:
   bevoegdheden:
     DBO:
       naam: 'leerling'
