@@ -7,7 +7,7 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\ezac_vba\Model\EzacVbaBevoegdheidLid;
+use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
 use Drupal\ezac_vba\Model\EzacVbaDagverslag;
 use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
 
@@ -125,7 +125,7 @@ class EzacVbaStatusForm extends FormBase
           'operator' => 'BETWEEN'
         ],
       ];
-      $bevoegdheidLidCount = EzacVbaBevoegdheidLid::counter($condition);
+      $bevoegdheidLidCount = EzacVbaBevoegdheid::counter($condition);
 
       $form['status'] = [
         '#type' => 'container',

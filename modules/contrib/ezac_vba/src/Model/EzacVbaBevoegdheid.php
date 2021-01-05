@@ -14,9 +14,9 @@ use Drupal\Ezac\Model\EzacStorage;
 /**
  * Provides the implementation of the EzacVbaBevoegdheden class
  */
-class EzacVbaBevoegdheidLid extends EzacStorage
+class EzacVbaBevoegdheid extends EzacStorage
 {
-    //Define vba bevoegdheden lid fields
+    //Define vba bevoegdheden fields
     public static $fields = array(
       'id' => 'Record ID (uniek, auto_increment)',
       'afkorting' => 'Afkorting',
@@ -50,19 +50,19 @@ class EzacVbaBevoegdheidLid extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('vba_bevoegdheid_lid', __CLASS__);
+            $this->ezacRead('vba_bevoegdheden', __CLASS__);
         }
     }
 
     /**
      * create - Create vba record
      *
-     * @return \Drupal\ezac_vba\Model\EzacVbaBevoegdheidLid
+     * @return \Drupal\ezac_vba\Model\EzacVbaBevoegdheid
      *   ID of record created
      */
-    public function create(): EzacVbaBevoegdheidLid {
+    public function create(): EzacVbaBevoegdheid {
 
-        $this->id = $this->ezacCreate('vba_bevoegdheid_lid');
+        $this->id = $this->ezacCreate('vba_bevoegdheden');
         return $this;
     }
 
@@ -77,7 +77,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        $this->ezacRead('vba_bevoegdheid_lid', get_class($this));
+        $this->ezacRead('vba_bevoegdheden', get_class($this));
         if ($this->id == null) {
           // read failed
           return null;
@@ -95,7 +95,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      */
     public function update(): int {
         // build $condition
-        return $this->ezacUpdate('vba_bevoegdheid_lid');
+        return $this->ezacUpdate('vba_bevoegdheden');
     }
 
     /**
@@ -105,7 +105,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      *   records_deleted
      */
     public function delete(): int {
-        return $this->ezacDelete('vba_bevoegdheid_lid');
+        return $this->ezacDelete('vba_bevoegdheden');
     }
 
     /***
@@ -117,7 +117,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      *   number of records
      */
     public static function counter($condition): int {
-      return EzacStorage::ezacCount('vba_bevoegdheid_lid', $condition);
+      return EzacStorage::ezacCount('vba_bevoegdheden', $condition);
     }
 
     /***
@@ -133,7 +133,7 @@ class EzacVbaBevoegdheidLid extends EzacStorage
      * @return array of id values
      */
     public static function index($condition = NULL, $field = 'id', $sortkey = 'datum_aan', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
-        return EzacStorage::ezacIndex('vba_bevoegdheid_lid', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
+        return EzacStorage::ezacIndex('vba_bevoegdheden', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
 
 }

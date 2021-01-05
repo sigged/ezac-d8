@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_starts\Controller\EzacStartsController;
-use Drupal\ezac_vba\Model\EzacVbaBevoegdheidLid;
+use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
 use Drupal\ezac_vba\Model\EzacVbaDagverslag;
 use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
 
@@ -215,16 +215,10 @@ class EzacVbaLidForm extends FormBase {
       //toon huidige bevoegdheden
       // query vba verslag, bevoegdheid records
       $condition = [
-        /* toon alle bevoegdheden
-        'datum_aan' => [
-          'value' => [$datum_start, $datum_eind],
-          'operator' => 'BETWEEN',
-        ],
-        */
         'afkorting' => $vlieger_afkorting,
         'actief' => TRUE,
       ];
-      $vlieger_bevoegdhedenIndex = EzacVbaBevoegdheidLid::index($condition);
+      $vlieger_bevoegdhedenIndex = EzacVbaBevoegdheid::index($condition);
 
       // put in table
       $header = [
@@ -246,7 +240,7 @@ class EzacVbaLidForm extends FormBase {
           '#tree' => TRUE,
         ];
         foreach ($vlieger_bevoegdhedenIndex as $id) {
-          $bevoegdheid = new EzacVbaBevoegdheidLid($id);
+          $bevoegdheid = new EzacVbaBevoegdheid($id);
           $rows[] = [
             EzacUtil::showDate($bevoegdheid->datum_aan),
             $namen[$bevoegdheid->instructeur],
