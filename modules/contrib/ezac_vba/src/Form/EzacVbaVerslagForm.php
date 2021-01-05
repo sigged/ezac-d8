@@ -585,7 +585,7 @@ class EzacVbaVerslagForm extends FormBase {
     //mail verslag naar instructeurs
     self::verslagenMail($dagverslagLid->datum);
 
-    //redirect naar calling url
+    //@todo redirect naar calling url
     /*
     if ($current_url != "") {
       $form_state['redirect'] = $current_url;

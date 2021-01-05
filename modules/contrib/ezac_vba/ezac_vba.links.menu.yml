@@ -4,3 +4,8 @@ ezac_vba:
   description: EZAC Voortgang en Bevoegdheid Administratie
   weight: 04
 
+ezac_vba_dagverslag:
+  title: Invoeren dagverslag
+  route_name: ezac_vba_dagverslag
+  description: EZAC VBA Dagverslag invoer
+  weight: 05
