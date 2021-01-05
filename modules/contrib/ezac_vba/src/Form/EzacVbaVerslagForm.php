@@ -40,7 +40,7 @@ class EzacVbaVerslagForm extends FormBase {
    *
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     // read settings
     $settings = Drupal::config('ezac_vba.settings');
     //set up bevoegdheden
@@ -103,7 +103,7 @@ class EzacVbaVerslagForm extends FormBase {
     $start_dates = array();
     $start_dates['other'] = '<Andere datum>'; //select other date
     foreach ($starts as $start) {
-      $start_dates[$start->datum] = EzacUtil::showDate($start->datum); //list of dates for selection
+      $start_dates[$start] = EzacUtil::showDate($start); //list of dates for selection
     }
     $datum = (isset($start_dates))
       ? $starts[0]->datum // most recent date value
