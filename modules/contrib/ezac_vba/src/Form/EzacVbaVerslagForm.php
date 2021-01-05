@@ -98,7 +98,7 @@ class EzacVbaVerslagForm extends FormBase {
         'operator' => 'BETWEEN',
       ],
     ];
-    $starts = array_unique(EzacStart::index($condition,'datum', 'DESC'));
+    $starts = array_unique(EzacStart::index($condition,'datum', 'datum', 'DESC'));
 
     $start_dates = array();
     $start_dates['other'] = '<Andere datum>'; //select other date
