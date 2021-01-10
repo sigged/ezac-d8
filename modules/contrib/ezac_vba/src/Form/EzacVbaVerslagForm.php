@@ -96,7 +96,7 @@ class EzacVbaVerslagForm extends FormBase {
     foreach ($starts as $start) {
       $start_dates[$start] = EzacUtil::showDate($start); //list of dates for selection
     }
-    $datum = (isset($start_dates))
+    $datum = (isset($start_dates[0]))
       ? $start_dates[0]->datum // most recent date value
       : date('Y-m-d');
 
@@ -534,8 +534,9 @@ class EzacVbaVerslagForm extends FormBase {
     $dagverslag->instructeur = $form_state->getValue('instructeur');
     $dagverslag->weer = htmlentities($form_state->getValue('weer'));
     $dagverslag->verslag = htmlentities($form_state->getValue('verslag'));
+    $dagverslag->mutatie = date('Y-m-d h:m:s');
 
-    //write verslag to ezac_LVS_verslag
+    //write verslag to vba_dagverslagen
     if ($dagverslag->weer . $dagverslag->verslag != '') { // verslag ingevuld
       $dagverslag = $dagverslag->create(); // write to database
       $id = $dagverslag->id;
@@ -553,6 +554,7 @@ class EzacVbaVerslagForm extends FormBase {
           $dagverslagLid->afkorting = $afkorting;
           $dagverslagLid->instructeur = $form_state->getValue('instructeur');
           $dagverslagLid->verslag = htmlentities($verslag['opmerking']);
+          $dagverslagLid->mutatie = date('Y-m-d h:m:s');
           $dagverslagLid = $dagverslagLid->create();
           $message->addMessage('Verslag voor ' .$namen[$afkorting] .' aangemaakt', 'status');
         }
