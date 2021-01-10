@@ -82,15 +82,6 @@ class EzacVbaVerslagForm extends FormBase {
     }
 
     // find this year's flight days, descending
-    /*
-    $query = db_select('ezac_Starts', 's');
-    $query->fields('s',array('datum'));
-    //$query->condition('s.datum', date('Y') .'-01-01', '>'); //this year
-    $query->condition('s.datum', date('Y-m-d', mktime(0,0,0,date('n'),date('j'),date('Y')-1)), '>'); //12 maanden
-    $query->distinct(); //unique values
-    $query->orderBy('s.datum', 'DESC');
-    $starts = $query->execute()->fetchAll();
-    */
     $errmsg = EzacUtil::checkDatum(date('Y'), $datumStart, $datumEnd);
     $condition = [
       'datum' => [
@@ -106,7 +97,7 @@ class EzacVbaVerslagForm extends FormBase {
       $start_dates[$start] = EzacUtil::showDate($start); //list of dates for selection
     }
     $datum = (isset($start_dates))
-      ? $starts[0]->datum // most recent date value
+      ? $start_dates[0]->datum // most recent date value
       : date('Y-m-d');
 
     $form['titel']['#type'] = 'markup';
