@@ -130,10 +130,10 @@ class EzacStartsUpdateForm extends FormBase {
     ];
 
     $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
-    $form['gezagvoerder']['#attributes'] = [
+    $form['tweede']['#attributes'] = [
       'name' => 'field_tweede',
     ];
-    $form["tweede"]['#states'] = [
+    $form['tweede']['#states'] = [
       // show this field only when tweezitter == TRUE
       'visible' => [
         ':input[name="tweezitter"]' => ['checked' => TRUE],
