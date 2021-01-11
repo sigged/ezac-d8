@@ -108,7 +108,7 @@ class EzacStartsUpdateForm extends FormBase {
     $form = EzacUtil::addField($form, 'registratie', 'select', 'registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
     $form['registratie']['#attributes'] = ['name' => 'registratie'];
     $form = EzacUtil::addField($form, 'registratie2', 'textffield', 'registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten);
-    $form['registratie2']['#states'] = [
+    $form['registratie_onbekend']['#states'] = [
       // show this field only when registratie not exists
       'visible' => [
         ':input[name="registratie_bekend"]' => ['value' => 'Onbekend'],
@@ -130,10 +130,20 @@ class EzacStartsUpdateForm extends FormBase {
     ];
 
     $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
+    $form['gezagvoerder']['#attributes'] = [
+      'name' => 'field_tweede',
+    ];
     $form["tweede"]['#states'] = [
       // show this field only when tweezitter == TRUE
       'visible' => [
         ':input[name="tweezitter"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['tweede_onbekend']['#states'] = [
+      // show this field only when Gezagvoerder = Onbekend
+      'visible' => [
+        ':input[name="tweezitter"]' => ['checked' => TRUE],
+        ':input[name="field_tweede"]' => ['value' => ''],
       ],
     ];
     $form = EzacUtil::addField($form, 'soort', 'select', 'soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
@@ -248,6 +258,8 @@ class EzacStartsUpdateForm extends FormBase {
       foreach (EzacStart::$fields as $field => $description) {
         $start->$field = $form_state->getValue($field);
       }
+      //@todo check gezagvoerder_onbekend, tweede_onbekend, registratie_onbekend
+
       //Check value newRecord to select insert or update
       if ($form_state->getValue('new') == TRUE) {
         $start->create(); // add record in database
