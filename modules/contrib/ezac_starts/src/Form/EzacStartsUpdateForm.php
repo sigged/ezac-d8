@@ -129,7 +129,7 @@ class EzacStartsUpdateForm extends FormBase
         $form['gezagvoerder_onbekend']['#states'] = [
           // show this field only when Gezagvoerder = Onbekend
           'visible' => [
-            ':input[name="gezagvoerder"]' => ['value' => 'Onbekend'],
+            ':input[name="gezagvoerder"]' => ['value' => ''],
           ],
         ];
 
