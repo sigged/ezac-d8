@@ -122,11 +122,14 @@ class EzacStartsUpdateForm extends FormBase
 
         // @todo allow for unknown name using checkbox
         $form = EzacUtil::addField($form,'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
+        $form['gezagvoerder']['#attributes'] = [
+          'name' => 'gezagvoerder',
+        ];
         $form = EzacUtil::addField($form, 'gezagvoerder_onbekend', 'textfield', 'gezagvoerder', 'onbekend', '',20, 20, FALSE, 3.5);
         $form['gezagvoerder_onbekend']['#states'] = [
           // show this field only when Gezagvoerder = Onbekend
           'visible' => [
-            ':input[name="gezagvoerder_onbekend"]' => ['value' => 'Onbekend'],
+            ':input[name="gezagvoerder"]' => ['value' => 'Onbekend'],
           ],
         ];
 
