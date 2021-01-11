@@ -139,6 +139,7 @@ class EzacStartsUpdateForm extends FormBase {
         ':input[name="tweezitter"]' => ['checked' => TRUE],
       ],
     ];
+    $form = EzacUtil::addField($form, 'tweede_onbekend', 'textfield', 'tweede', 'onbekend', '', 20, 20, FALSE, 4.5);
     $form['tweede_onbekend']['#states'] = [
       // show this field only when Gezagvoerder = Onbekend
       'visible' => [
