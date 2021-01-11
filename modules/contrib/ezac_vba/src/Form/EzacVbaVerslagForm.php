@@ -114,6 +114,7 @@ class EzacVbaVerslagForm extends FormBase {
       '#tree' => TRUE,
     );
     //if (!isset($starts)) //do not show chooser and dropdown selection
+    //@todo use conditional field like in EzacStartsUpdateForm
     $form['datum_select']['chooser'] = array(
       '#title' => 'Kies andere datum',
       '#type' => 'checkbox',
@@ -138,7 +139,7 @@ class EzacVbaVerslagForm extends FormBase {
         '#weight' => 1,
         '#ajax' => array(
           'callback' => '::verslagCallback',
-          'wrapper' => 'vliegers-div',
+          'wrapper' => 'datum-div',
           'effect' => 'fade',
           'progress' => array('type' => 'throbber'),
         ),

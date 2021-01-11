@@ -110,6 +110,7 @@ class EzacStartsUpdateForm extends FormBase {
     $form = EzacUtil::addField($form, 'registratie_onbekend', 'textffield', 'registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2);
     $form['registratie_onbekend']['#states'] = [
       // show this field only when registratie not exists
+      // @todo dit werkt nog niet
       'visible' => [
         ':input[name="registratie_bekend"]' => ['value' => 0],
       ],
