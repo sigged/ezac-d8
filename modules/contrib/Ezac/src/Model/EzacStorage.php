@@ -233,6 +233,53 @@ class EzacStorage {
   } //ezacRead
 
   /**
+   * Read from the database
+   * The id of the record to be read is taken from the object->id
+   *
+   * @param string $table
+   *   The EZAC table to be used for the database operation
+   * @param string $className default stdClass __CLASS__
+   *
+   * @return object|void
+   *   An object containing the loaded entry if found.
+   */
+  protected function read(string $table, $className = NULL) {
+
+    // define prefix for EZAC tables
+    // $table = 'EZAC_' .$table;
+
+    // Read all fields from a Ezac table.
+    // select EZAC database outside Drupal structure
+    Database::setActiveConnection(self::DBNAME);
+    $db = Database::getConnection();
+
+    $select = $db->select($table); // geen alias gebruikt
+    $select->fields($table); // all fields of the table
+    $select->condition('id', $this->id); // select this record
+
+    // Return the result as an object
+    $select->execute()
+      ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
+    $record = $select->execute()->fetchObject();
+    // return to standard Drupal database
+    Database::setActiveConnection();
+
+    if ($record != FALSE) { //read succesful
+      // cast record in $this
+      /* see if it works without casting
+      foreach (get_object_vars($record) as $var => $value) {
+        $this->$var = $value;
+      }
+      */
+    }
+    else {
+      // read failed
+      $this->id = null;
+      //throw new Drupal\Core\Database\DatabaseNotFoundException("record $this->id not found");
+    }
+  } //read
+
+  /**
    * @param $table
    * @param $condition
    * @param string $className
