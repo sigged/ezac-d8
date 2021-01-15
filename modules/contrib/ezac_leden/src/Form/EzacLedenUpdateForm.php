@@ -270,8 +270,8 @@ class EzacLedenUpdateForm extends FormBase
             }
             //Check value newRecord to select insert or update
             if ($form_state->getValue('new') == TRUE) {
-                $lid->create(); // add record in database
-                $messenger->addMessage("Leden record aangemaakt met id [$lid->id]", $messenger::TYPE_STATUS);
+                $id = $lid->create(); // add record in database
+                $messenger->addMessage("Leden record aangemaakt met id [$id]", $messenger::TYPE_STATUS);
 
             } else {
                 $count = $lid->update(); // update record in database
