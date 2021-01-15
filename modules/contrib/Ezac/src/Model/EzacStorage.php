@@ -223,6 +223,7 @@ class EzacStorage {
       foreach ($record as $var => $value) {
         $this->$var = $value;
       }
+      return $record;
     }
     else {
       // read failed
