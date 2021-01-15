@@ -114,33 +114,32 @@ class EzacLid extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            parent::ezacRead('leden', get_class($this));
+            parent::ezacRead('leden');
         }
     }
 
     /**
      * create - Create leden record
      *
-     * @return EzacLid ID of record created
+     * @return int of record created
      *   ID of record created
      */
-    public function create(): EzacLid {
+    public function create(): int {
 
         $this->id = $this->ezacCreate('leden');
-        return $this;
+        return $this->id;
     }
 
     /**
      * read - Reads record from the leden table in $this
-     *
+     * this method is deprecated, read uses __construct($id)
      * @param int id
      */
     public function read($id = NULL)
     {
       if (isset($id)) {
         $this->id = $id;
-        //@todo className parameter is overbodig
-        parent::ezacRead('leden', get_class($this));
+        parent::ezacRead('leden');
         if ($this->id == null) {
           // read failed
           return null;
