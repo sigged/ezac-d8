@@ -266,11 +266,10 @@ class EzacStorage {
 
     if ($record != FALSE) { //read succesful
       // cast record in $this
-      // see if it works without casting
-      foreach (get_object_vars($record) as $var => $value) {
+      //foreach (get_object_vars($record) as $var => $value) {
+      foreach ($record as $var => $value) {
         $this->$var = $value;
       }
-      //*/
     }
     else {
       // read failed
