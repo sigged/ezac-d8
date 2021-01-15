@@ -13,7 +13,7 @@ use Drupal\ezac\Model\EzacStorage;
  */
 
 /**
- * Provides the implementation of the DloLid class
+ * Provides the implementation of the EzacLid class
  */
 class EzacLid extends EzacStorage
 {

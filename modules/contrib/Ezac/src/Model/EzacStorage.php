@@ -219,6 +219,7 @@ class EzacStorage {
 
     if ($record != FALSE) { //read succesful
       // cast record in $this
+      dpm($record, 'record'); //debug
       foreach ($record as $var => $value) {
         $this->$var = $value;
       }
