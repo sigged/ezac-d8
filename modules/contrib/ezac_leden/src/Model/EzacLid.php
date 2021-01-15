@@ -107,14 +107,14 @@ class EzacLid extends EzacStorage
 
 
     /**
-     * constructor for EzacLid
+     * constructor for EzacLid - also reads from table
      * @param null $id
      */
     public function __construct($id = NULL)
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('leden', get_class($this));
+            parent::read('leden', get_class($this));
         }
     }
 
@@ -140,7 +140,7 @@ class EzacLid extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        $this->ezacRead('leden', get_class($this));
+        parent::read('leden', get_class($this));
         if ($this->id == null) {
           // read failed
           return null;
