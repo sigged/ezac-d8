@@ -114,7 +114,7 @@ class EzacLid extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            parent::read('leden', get_class($this));
+            parent::ezacRead('leden', get_class($this));
         }
     }
 
@@ -140,7 +140,7 @@ class EzacLid extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        parent::read('leden', get_class($this));
+        parent::ezacRead('leden', get_class($this));
         if ($this->id == null) {
           // read failed
           return null;
