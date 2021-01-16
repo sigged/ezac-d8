@@ -55,7 +55,7 @@ class EzacKist extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            return $this->ezacRead('kisten', get_class($this));
+            return $this->ezacRead('kisten');
         }
         return $this;
     }
@@ -83,7 +83,7 @@ class EzacKist extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        $this->ezacRead('kisten', get_class($this));
+        $this->ezacRead('kisten');
         if ($this->id == null) {
           // read failed
           return null;

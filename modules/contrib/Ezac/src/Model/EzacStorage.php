@@ -6,8 +6,6 @@ use Drupal;
 use Drupal\Core\Database\Database;
 use Exception;
 use PDO;
-use ReflectionObject;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 // use Drupal\Core\Database\Connection;
 
@@ -66,7 +64,14 @@ class EzacStorage {
    * @return array
    *   An array of objects containing the loaded entries if found.
    */
-  public static function ezacIndex(string $table, $condition = NULL, $field = 'id', $sortkey = NULL, $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
+  public static function ezacIndex(string $table,
+                                   $condition = NULL,
+                                   $field = 'id',
+                                   $sortkey = NULL,
+                                   $sortdir = 'ASC',
+                                   $from = NULL,
+                                   $range = NULL,
+                                   $unique = FALSE): array {
 
     // Read unique index from a Ezac table.
     // EZAC database is outside the Drupal structure
@@ -173,10 +178,10 @@ class EzacStorage {
     // set id value
     $entry['id'] = $return_value;
 
-
     // return to standard Drupal database
     Database::setActiveConnection();
 
+    // return record id value
     return $return_value;
 
   } // ezacCreate
@@ -187,12 +192,11 @@ class EzacStorage {
    *
    * @param string $table
    *   The EZAC table to be used for the database operation
-   * @param string $className default stdClass __CLASS__
    *
    * @return object|void
    *   An object containing the loaded entry if found.
    */
-  protected function ezacRead(string $table, $className = NULL) {
+  protected function ezacRead(string $table): object {
 
     // define prefix for EZAC tables
     // $table = 'EZAC_' .$table;
@@ -207,70 +211,25 @@ class EzacStorage {
     $select->condition('id', $this->id); // select this record
 
     // Return the result as an object
-    //@todo className is mogelijk overbodig met gebruik van PDO::FETCH_CLASSTYPE
-    if (!isset($className)) {
-      $className = get_class($this);
-    }
-      $select->execute()
-        ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
-      $record = $select->execute()->fetchObject();
+    $select->execute()
+      ->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE); //prepare class
+    $record = $select->execute()->fetchObject();
     // return to standard Drupal database
     Database::setActiveConnection();
 
     if ($record != FALSE) { //read succesful
       // cast record in $this
-      foreach (get_object_vars($record) as $var => $value) {
+      foreach ($record as $var => $value) {
         $this->$var = $value;
       }
-      //@todo return kan vervallen, record is in $this ingelezen
       return $record;
     }
     else {
       // read failed
-      $this->id = null;
+      $this->id = NULL;
       //throw new Drupal\Core\Database\DatabaseNotFoundException("record $this->id not found");
     }
   } //ezacRead
-
-  /**
-   * @param $table
-   * @param $condition
-   * @param string $className
-   *
-   * @return mixed
-   */
-  static public function ezacReadAll($table, $condition, $className = "stdClass") {
-    // Read all fields from a Ezac table.
-    // select EZAC database outside Drupal structure
-    Database::setActiveConnection(self::DBNAME);
-    $db = Database::getConnection();
-
-    $select = $db->select($table); // geen alias gebruikt
-    $select->fields($table); // all fields of the table
-
-    // Add each field and value as a condition to this query.
-    foreach ((array) $condition as $field => $test) {
-      // condition can be a simple field => value pair for EQUALS (default test)
-      //   or contain value and operator keys for other tests
-      if (is_array($test)) {
-        $value = $test["value"];
-        $operator = $test["operator"];
-        $select->condition($field, $value, $operator);
-      }
-      else {
-        $select->condition($field, $test);
-      }
-    }
-
-    // Return the result as an object
-    $select->execute()
-      ->setFetchMode(PDO::FETCH_CLASS, $className); //prepare class
-    $records = $select->execute()->fetchAll();
-
-    // return to standard Drupal database
-    Database::setActiveConnection();
-    return $records;
-  } //ezacReadAll
 
   /**
    * Update an entry in the database.
@@ -281,7 +240,7 @@ class EzacStorage {
    * @return int
    *   The number of updated rows.
    *
-   * @see db_update()
+   *
    */
   public function ezacUpdate(string $table): int {
     $messenger = Drupal::messenger();
@@ -294,7 +253,7 @@ class EzacStorage {
     $entry = get_object_vars($this);
 
     try {
-      // db_update()...->execute() returns the number of rows updated.
+      // update()...->execute() returns the number of rows updated.
       $update = $db->update($table)
         ->fields($entry);
       $update->condition('id', $entry['id']);
@@ -308,7 +267,8 @@ class EzacStorage {
     Database::setActiveConnection();
 
     /** @var int $count */
-    return $count;
+    //@todo null returned (at failed update?)
+    return $count ?? 0; // return zero if $count = null
 
   }  // ezacUpdate
 

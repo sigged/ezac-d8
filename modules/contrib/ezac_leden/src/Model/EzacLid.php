@@ -13,7 +13,7 @@ use Drupal\ezac\Model\EzacStorage;
  */
 
 /**
- * Provides the implementation of the DloLid class
+ * Provides the implementation of the EzacLid class
  */
 class EzacLid extends EzacStorage
 {
@@ -107,40 +107,39 @@ class EzacLid extends EzacStorage
 
 
     /**
-     * constructor for EzacLid
+     * constructor for EzacLid - also reads from table
      * @param null $id
      */
     public function __construct($id = NULL)
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('leden', get_class($this));
+            parent::ezacRead('leden');
         }
     }
 
     /**
      * create - Create leden record
      *
-     * @return EzacLid ID of record created
+     * @return int of record created
      *   ID of record created
      */
-    public function create(): EzacLid {
+    public function create(): int {
 
         $this->id = $this->ezacCreate('leden');
-        return $this;
+        return $this->id;
     }
 
     /**
      * read - Reads record from the leden table in $this
-     *
+     * this method is deprecated, read uses __construct($id)
      * @param int id
      */
     public function read($id = NULL)
     {
       if (isset($id)) {
         $this->id = $id;
-        //@todo className parameter is overbodig
-        $this->ezacRead('leden', get_class($this));
+        parent::ezacRead('leden');
         if ($this->id == null) {
           // read failed
           return null;

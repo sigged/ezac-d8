@@ -2,7 +2,7 @@
 
 namespace Drupal\ezac_vba\Controller;
 
-use Drupal\ezac_vba\Model\EzacVbaBevoegdheidLid;
+use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
 use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -62,7 +62,7 @@ class EzacVbaController extends ControllerBase {
         'operator' => 'BETWEEN'
       ],
     ];
-    $bevoegdheidLidIndex = EzacVbaBevoegdheidLid::index($condition);
+    $bevoegdheidLidIndex = EzacVbaBevoegdheid::index($condition);
 
     $header = array(
       array('data' => 'datum', 'width' => '20%'),
@@ -92,7 +92,7 @@ class EzacVbaController extends ControllerBase {
 
     //verwerk bevoegdheid_lid
     foreach ($bevoegdheidLidIndex as $id) {
-      $bl = new EzacVbaBevoegdheidLid($id);
+      $bl = new EzacVbaBevoegdheid($id);
       $p_naam  = $namen[$bl->afkorting];
       $p_instr = $namen[$bl->instructeur];
       $p_onderdeel = nl2br($bl->onderdeel);

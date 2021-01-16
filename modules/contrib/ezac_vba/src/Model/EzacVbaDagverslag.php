@@ -43,7 +43,7 @@ class EzacVbaDagverslag extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('vba_dagverslagen', __CLASS__);
+            $this->ezacRead('vba_dagverslagen');
         }
         return $this;
     }
@@ -70,7 +70,7 @@ class EzacVbaDagverslag extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        $this->ezacRead('vba_dagverslagen', get_class($this));
+        $this->ezacRead('vba_dagverslagen');
         if ($this->id == null) {
           // read failed
           return null;

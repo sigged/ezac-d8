@@ -1,4 +1,148 @@
-database:
-  external: '1'
-  name: 'Ezac'
-  prefix: 'ezac_'
+langcode: 'nl'
+
+vba:
+  bevoegdheden:
+    DBO:
+      naam: 'leerling'
+      status: 1
+      instructeur: 0
+    SOLO:
+      naam: 'solist'
+      status: 1
+      instructeur: 0
+    LAPL(S):
+      naam: 'Zweefvliegbewijs'
+      status: 3
+      instructeur: 0
+    SPL:
+      naam: 'SPL'
+      status: 3
+      instructeur: 0
+    LAPL(S)-TMG:
+      naam: 'Touring Motorglider'
+      status: 3
+      instructeur: 0
+    LAPL(S)-FI:
+      naam: 'Instructeur'
+      status: 4
+      instructeur: 1
+    LAPL(S)-FIE:
+      naam: 'Examinator'
+      status: 5
+      instructeur: 1
+    LAPL(S)-FI-TMG:
+      naam: 'Instructeur TMG'
+      status: 4
+      instructeur: 1
+    LAPL(S)-FIE-TMG:
+      naam: 'Examinator TMG'
+      status: 5
+      instructeur: 1
+    LAPL(S)-Aerobatics:
+      naam: 'Aerobatics'
+      status: 3
+      instructeur: 0
+    LAPL(S)-FI-Aerobatic:
+      naam: 'Instructeur aerobatics'
+      status: 4
+      instructeur: 1
+    LAPL(S)-FIE-Aerobatics:
+      naam: 'Examinator aerobatics'
+      status: 5
+      instructeur: 1
+    LAPL(S)-Overig:
+      naam: 'Overige ratings'
+      status: 3
+      instructeur: 0
+    MEDICAL:
+      naam: 'Medical'
+      status: 0
+      instructie: 0
+    REFRESHER:
+      naam: 'Refresher cursus'
+      status: 0
+      instructie: 1
+    LICHTGEVEN:
+      naam: 'Lichtgeven'
+      status: 0
+      instructeur: 0
+    AANHAKEN:
+      naam: 'Aanhaken lierkabel'
+      status: 0
+      instructeur: 0
+    AANHAKEN-SLEEP:
+      naam: 'Aanhaken sleepkabel'
+      status: 0
+      instructeur: 0
+    SIGNALEN-SLEEP:
+      naam: 'Signalen sleep'
+      status: 0
+      instructeur: 0
+    KABELRIJDEN:
+      naam: 'Kabelrijden'
+      status: 0
+      instructeur: 0
+    TIJDSCHRIJVEN:
+      naam: 'Tijd schrijven'
+      status: 0
+      instructeur: 0
+    LIEREN:
+      naam: 'Lieren'
+      status: 0
+      instructie: 0
+    LIERINSTRUCTIE:
+      naam: 'Lier instructie'
+      status: 0
+      instructie: 1
+    STARTOFFICIER:
+      naam: 'Startofficier'
+      status:
+      instructie: 0
+    OVERLAND:
+      naam: 'Overland'
+      status: 3
+      instructie: 0
+    OVERIG:
+      naam: 'Overig'
+      status: 3
+      instructie: 0
+    CURSUS-CM:
+      naam: 'Cursus CM gevolgd'
+      status: 0
+      instructie: 0
+    CURSUS-SM:
+      naam: 'Cursus SM gevolgd'
+      status: 0
+      instructie: 0
+    CURSUS-EASA:
+      naam: 'Cursus EASA regelgeving gevolgd'
+      status: 0
+      instructie: 0
+    CERTIFICAAT:
+      naam: 'Theorie certificaat'
+      status: 0
+      instructie: 0
+    RT:
+      naam: 'Radio Telefonie'
+      status: 3
+      instructie: 0
+    SL:
+      naam: 'Self Launch'
+      status: 3
+      instructie: 0
+    VVO-1:
+      naam: 'VVO'
+      status: 2
+      instructie: 0
+    VVO-2:
+      naam: 'Overland training'
+      status: 2
+      instructie: 0
+
+  status:
+    0: 'Diverse'
+    1: 'Leerling'
+    2: 'Solist'
+    3: 'Zweefvliegbewijs'
+    4: 'Instructeur'
+    5: 'Examinator'

@@ -1,0 +1,26 @@
+rooster:
+  periodes:
+    A: 'ochtend'
+    B: 'middag'
+    C: 'avond'
+  diensten:
+    D: 'DDI'
+    I: 'instructeur'
+    L: 'lierist'
+    P: 'pleinoverste'
+    B: 'bar'
+    K: 'kader'
+    C: 'dagcoordinator'
+    O: 'opmerking'
+  kader:
+    L: 'L'
+    P: 'P'
+    B: 'B'
+    K: 'K'
+    C: 'C'
+    O: 'O'
+  instructie:
+    D: 'D'
+    I: 'I'
+
+langcode: 'nl'

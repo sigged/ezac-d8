@@ -2,6 +2,7 @@
 
 namespace Drupal\ezac_vba\Form;
 
+use Drupal;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
@@ -11,7 +12,6 @@ use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_starts\Controller\EzacStartsController;
 use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
-use Drupal\ezac_vba\Model\EzacVbaBevoegdheidLid;
 use Drupal\ezac_vba\Model\EzacVbaDagverslag;
 use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
 
@@ -44,6 +44,22 @@ class EzacVbaLidForm extends FormBase {
    * @return array
    */
   public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL): array {
+    // read settings
+    $settings = Drupal::config('ezac_vba.settings');
+    //set up bevoegdheden
+    $bevoegdheden = $settings->get('vba.bevoegdheden');
+    $form['bevoegdheden'] = [
+      '#type' => 'value',
+      '#value' => $bevoegdheden,
+    ];
+
+    // set up status van bevoegdheden
+    $status = $settings->get('vba.status');
+    $form['status'] = [
+      '#type' => 'value',
+      '#value' => $status,
+    ];
+
     // Wrap the form in a div.
     $form = [
       '#prefix' => '<div id="statusform">',
@@ -137,6 +153,9 @@ class EzacVbaLidForm extends FormBase {
     $datum_start = $form_state->getValue('datum_start');
     $datum_eind = $form_state->getValue('datum_eind');
 
+    $bevoegdheden = $form_state->getValue('bevoegdheden');
+    $status = $form_state->getValue('status');
+
     if (isset($persoon) && $persoon != '') {
 
       // lees vlieger gegevens
@@ -193,20 +212,13 @@ class EzacVbaLidForm extends FormBase {
         ];
       }
 
-      $condition = [];
-      $bevoegdhedenIndex = EzacVbaBevoegdheid::index($condition);
-      $bv_list[0] = '<Geen wijziging>';
-      if (isset($bevoegdhedenIndex)) {
-        foreach ($bevoegdhedenIndex as $id) {
-          $bevoegdheid = new EzacVbaBevoegdheid($id);
-          $bv_list[$bevoegdheid->bevoegdheid] = $bevoegdheid->naam;
-        }
-      }
       //toon huidige bevoegdheden
       // query vba verslag, bevoegdheid records
-      $condition['afkorting'] = $vlieger_afkorting;
-      $condition['actief'] = TRUE;
-      $vlieger_bevoegdhedenIndex = EzacVbaBevoegdheidLid::index($condition);
+      $condition = [
+        'afkorting' => $vlieger_afkorting,
+        'actief' => TRUE,
+      ];
+      $vlieger_bevoegdhedenIndex = EzacVbaBevoegdheid::index($condition);
 
       // put in table
       $header = [
@@ -228,12 +240,12 @@ class EzacVbaLidForm extends FormBase {
           '#tree' => TRUE,
         ];
         foreach ($vlieger_bevoegdhedenIndex as $id) {
-          $bevoegdheid = new EzacVbaBevoegdheidLid($id);
+          $bevoegdheid = new EzacVbaBevoegdheid($id);
           $rows[] = [
             EzacUtil::showDate($bevoegdheid->datum_aan),
             $namen[$bevoegdheid->instructeur],
             $bevoegdheid->bevoegdheid . ' - '
-            . $bv_list[$bevoegdheid->bevoegdheid] . ' '
+            . $bevoegdheden[$bevoegdheid->bevoegdheid] . ' '
             . nl2br($bevoegdheid->onderdeel)
           ];
         }
@@ -282,7 +294,7 @@ class EzacVbaLidForm extends FormBase {
         $form['vliegers']['bevoegdheid']['keuze'] = [
           '#title' => t('Bevoegdheid'),
           '#type' => 'select',
-          '#options' => $bv_list,
+          '#options' => $bevoegdheden,
           '#default_value' => 0, //<Geen wijziging>
           '#weight' => 10,
           '#tree' => TRUE,

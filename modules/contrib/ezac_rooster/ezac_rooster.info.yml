@@ -1,0 +1,10 @@
+name: EZAC administratie - Rooster
+type: module
+description: 'EZAC Rooster'
+core_version_requirement: ^8.8 || ^9
+package: 'Ezac'
+dependencies:
+  - ezac
+  - ezac_leden
+
+#configure: ezac_rooster.settings

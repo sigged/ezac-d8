@@ -2,64 +2,62 @@
 
 namespace Drupal\ezac_vba\Model;
 
-use Drupal\ezac\Model\EzacStorage;
+use Drupal\Ezac\Model\EzacStorage;
 
 /**
- * @file Ezac/EzacVbaBevoegdheid.php
- * The EZAC class definitions for the vba bevoegdheden table
+ * @file Ezac/EzacBevoegdheidLid.php
+ * The EZAC class definitions for the vba bevoegdheden status table
  *
  * @author Evert Fekkes evert@efekkes.nl
  */
 
 /**
- * Provides the implementation of the EzacVbabevoegdheid class
+ * Provides the implementation of the EzacVbaBevoegdheden class
  */
 class EzacVbaBevoegdheid extends EzacStorage
 {
-    // Define vba bevoegdheid status values
-    public static $bevoegdheidStatus = array(
-      '0' => 'Diverse',
-      '1' => 'Leerling',
-      '2' => 'Solist',
-      '3' => 'Zweefvliegbewijs',
-      '4' => 'Instructeur',
-      '5' => 'Examinator'
-    );
-
-    //Define vba bevoegdheid fields
+    //Define vba bevoegdheden fields
     public static $fields = array(
-        'id' => 'Record ID (uniek, auto_increment)',
-        'bevoegdheid' => 'Bevoegdheid',
-        'naam' => 'Naam',
-        'status' => 'Status',
-        'instructeur' => 'Instructeur',
-        'mutatie' => 'Mutatie',
+      'id' => 'Record ID (uniek, auto_increment)',
+      'afkorting' => 'Afkorting',
+      'bevoegdheid' => 'Bevoegdheid',
+      'onderdeel' => 'Onderdeel',
+      'datum_aan' => 'Datum vanaf',
+      'datum_uit' => 'Datum tot',
+      'actief' => 'Actief',
+      'instructeur' => 'Instructeur',
+      'opmerking' => 'Opmerking',
+      'mutatie' => 'Mutatie',
     );
 
-    // define the fields for the vba bevoegdheid table
+    // define the fields for the vba bevoegdheden lid table
     public $id = 0;
+    public $afkorting = '';
+    public $onderdeel = '';
     public $bevoegdheid = '';
-    public $naam = '';
-    public $status = '';
+    public $datum_aan = '';
+    public $datum_uit = '';
+    public $actief = 0;
     public $instructeur = '';
-    public $mutatie = '';
+    public $opmerking = '';
+    public $mutatie = 0;
 
     /**
-     * constructor for vba_bevoegdheid
+     * constructor for vba_bevoegdheden
      * @param null $id
      */
     public function __construct($id = NULL)
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('vba_bevoegdheden', get_class($this));
+            $this->ezacRead('vba_bevoegdheden');
         }
     }
 
     /**
      * create - Create vba record
      *
-     * @return EzacVbaBevoegdheid ID of record created
+     * @return \Drupal\ezac_vba\Model\EzacVbaBevoegdheid
      *   ID of record created
      */
     public function create(): EzacVbaBevoegdheid {
@@ -79,7 +77,7 @@ class EzacVbaBevoegdheid extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        $this->ezacRead('vba_bevoegdheden', get_class($this));
+        $this->ezacRead('vba_bevoegdheden');
         if ($this->id == null) {
           // read failed
           return null;
@@ -89,12 +87,6 @@ class EzacVbaBevoegdheid extends EzacStorage
       else return null;
     }
 
-    static public function readAll($condition)
-      //@TODO this function is used nowhere? - to be discarded also in EzacStorage
-    {
-      $condition = []; // select all records
-      return EzacStorage::ezacReadAll('vba_bevoegdheden', $condition, __CLASS__);
-    }
     /**
      * update - Updates record in the vba table
      *
@@ -140,7 +132,7 @@ class EzacVbaBevoegdheid extends EzacStorage
      * @param bool $unique
      * @return array of id values
      */
-    public static function index($condition = NULL, $field = 'id', $sortkey = 'bevoegdheid', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
+    public static function index($condition = NULL, $field = 'id', $sortkey = 'datum_aan', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
         return EzacStorage::ezacIndex('vba_bevoegdheden', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
 

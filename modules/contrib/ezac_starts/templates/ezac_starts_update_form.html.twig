@@ -3,11 +3,11 @@
 <table style="width:100%">
   <tr>
     <td>{{ form.datum }} </td>
-    <td>{{ form.registratie}} </td>
+    <td>{{ form.registratie}} {{ form.registratie_onbekend }}</td>
     <td>{{ form.startmethode }}</td>
   </tr>
   <tr>
-    <td>{{  form.gezagvoerder }} {{ form.tweede }}</td>
+    <td>{{ form.gezagvoerder }} {{ form.gezagvoerder_onbekend }} {{ form.tweede }} {{ form.tweede_onbekend }}</td>
     <td>{{ form.instructie }}</td>
     <td>{{ form.soort }}</td>
   </tr>
