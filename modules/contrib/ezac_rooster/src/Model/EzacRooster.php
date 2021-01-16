@@ -52,13 +52,13 @@ class EzacRooster extends EzacStorage
     /**
      * create - Create rooster record
      *
-     * @return EzacRooster ID of record created
+     * @return int ID of record created
      *   ID of record created
      */
-    public function create(): EzacRooster {
+    public function create(): int {
 
         $this->id = $this->ezacCreate('rooster');
-        return $this;
+        return $this->id;
     }
 
     /**

@@ -51,14 +51,14 @@ class EzacVbaDagverslagLid extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\ezac_vba\Model\EzacVbaDagverslagLid
+     * @return int
      *   ID of record created
      */
     public function create()
     {
 
         $this->id = $this->ezacCreate('vba_dagverslagen_lid');
-        return $this;
+        return $this->id;
     }
 
     /**

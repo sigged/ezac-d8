@@ -63,14 +63,14 @@ class EzacKist extends EzacStorage
     /**
      * create - Create kisten record
      *
-     * @return EzacKist ID of record created
+     * @return int ID of record created
      *   ID of record created
      */
     public function create()
     {
 
         $this->id = $this->ezacCreate('kisten');
-        return $this;
+        return $this->id;
     }
 
     /**

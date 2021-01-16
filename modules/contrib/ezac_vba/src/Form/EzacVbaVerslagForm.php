@@ -3,12 +3,9 @@
 namespace Drupal\ezac_vba\Form;
 
 use Drupal;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
-use Drupal\Core\Messenger\Messenger;
 use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_starts\Model\EzacStart;
@@ -41,6 +38,10 @@ class EzacVbaVerslagForm extends FormBase {
    * @return array
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    // prepare message area
+    $messenger = Drupal::messenger();
+
+    // 1. prepare form data elements
     // read settings
     $settings = Drupal::config('ezac_vba.settings');
     //set up bevoegdheden
@@ -100,6 +101,8 @@ class EzacVbaVerslagForm extends FormBase {
       ? $start_dates[0]->datum // most recent date value
       : date('Y-m-d');
 
+    // 2. build form contents
+    //@todo this markup is superfluous with the form title set in routing
     $form['titel']['#type'] = 'markup';
     $form['titel']['#markup'] = '<p><h2>Invoer dagverslag</h2></p>';
     $form['titel']['#weight'] = 0;
@@ -111,7 +114,7 @@ class EzacVbaVerslagForm extends FormBase {
       '#weight' => 1,
       '#prefix' => '<div id="datum-div">',
       '#suffix' => '</div>',
-      '#tree' => TRUE,
+      '#tree' => TRUE, // is this necessary?
     );
     //if (!isset($starts)) //do not show chooser and dropdown selection
     //@todo use conditional field like in EzacStartsUpdateForm
@@ -129,8 +132,10 @@ class EzacVbaVerslagForm extends FormBase {
 
     // make most recent day active
     // present as default date in dropdown list
+    /*
     $chooser = $form_state->getValue('datum_select')['chooser]'];
     if (isset($starts) || (isset($chooser) && $chooser == 0)) { //select dropdown date
+      //@todo chooser disappears after usage
       $form['datum_select']['datum'] = array(
         '#title' => t('Datum'),
         '#type' => 'select',
@@ -149,7 +154,7 @@ class EzacVbaVerslagForm extends FormBase {
       $form['datum_select']['datum'] = array(
         '#title' => t('Datum'),
         '#type' => 'date', //extension to 'date'
-        '#date_format' => 'Y-m-d',
+        '#date_format' => 'Y-m-d', // d-m-Y?
         '#default_value' => $datum, //today
         '#weight' => 1.5,
         '#ajax' => array(
@@ -160,6 +165,41 @@ class EzacVbaVerslagForm extends FormBase {
         ),
       );
     }
+    */
+    // Choose datum from list if available
+    $form['datum_select'] = [
+      '#title' => t('Datum'),
+      '#type' => 'date', //extension to 'date'
+      '#date_format' => 'Y-m-d',
+      '#default_value' => $datum, //today
+      //'#weight' => 1.5,
+      '#states' => [
+        'visible' => [
+          ':input[name="andere_datum"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
+    // Enter datum manually if requested or no list available
+    $form['datum_entry'] = [
+      '#title' => t('Datum'),
+      '#type' => 'date', //extension to 'date'
+      '#date_format' => 'Y-m-d', // d-m-Y?
+      '#default_value' => $datum, //today
+      '#states' => [
+        'visible' => [
+          ':input[name="andere_datum"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['andere_datum'] = [
+      '#title' => t('Kies andere datum'),
+      '#type' => 'checkbox',
+      '#value' => !isset($starts), // checked when no start dates exist
+      '#checked' => !isset($starts),
+      '#attributes' => ['name' => 'andere_datum'],
+    ];
 
     // set instructeur default to value of current user
     // present drop list with leden
@@ -231,7 +271,22 @@ class EzacVbaVerslagForm extends FormBase {
 
     // generate form element with vliegers for the selected day
     // get starts->gezagvoerder, starts->tweede in $namen
-    $datum_form = $form_state->getValue('datum_select')['datum'] ?? $datum;
+    //$datum_form = $form_state->getValue('datum_select')['datum'] ?? $datum;
+
+    if ($form_state->getValue('andere_datum')) {
+      // manual data entry selected
+      $datum_form = $form_state->getValue('datum_entry');
+      //check datum
+      $errmsg = EzacUtil::checkDatum($datum_form, $dS, $dE);
+      if ($errmsg != '') {
+        $messenger->addMessage($errmsg,'ERROR');
+        $datum_form = null;
+      }
+    }
+    else {
+      // date selected from list
+      $datum_form = $form_state->getValue('datum_select');
+    }
     /*
     $query = db_select('ezac_Starts', 's');
     $query->fields('s',array('gezagvoerder', 'tweede'));
@@ -572,9 +627,9 @@ class EzacVbaVerslagForm extends FormBase {
           $bevoegdheid->afkorting = $afkorting;
           $bevoegdheid->instructeur = $form_state->getValue('instructeur');
           $bevoegdheid->actief = TRUE;
-          $bevoegdheid = $bevoegdheid->create();
+          $id = $bevoegdheid->create();
           $message->addMessage('Bevoegdheid ' .$verslag['bevoegdheid']['rows'][0]['soort']
-            .' voor ' .$namen[$afkorting] .' aangemaakt', 'status');
+            .' voor ' .$namen[$afkorting] ." aangemaakt [$id]", 'status');
         }
       }
     }
