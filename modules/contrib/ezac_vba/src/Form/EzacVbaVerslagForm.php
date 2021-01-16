@@ -169,10 +169,9 @@ class EzacVbaVerslagForm extends FormBase {
     // Choose datum from list if available
     $form['datum_select'] = [
       '#title' => t('Datum'),
-      '#type' => 'date', //extension to 'date'
-      '#date_format' => 'Y-m-d',
-      '#default_value' => $datum, //today
-      //'#weight' => 1.5,
+      '#type' => 'select',
+      '#options' => $start_dates,
+      '#default_value' => $datum,  //most recent date
       '#states' => [
         'visible' => [
           ':input[name="andere_datum"]' => ['checked' => FALSE],
@@ -184,7 +183,7 @@ class EzacVbaVerslagForm extends FormBase {
     $form['datum_entry'] = [
       '#title' => t('Datum'),
       '#type' => 'date', //extension to 'date'
-      '#date_format' => 'Y-m-d', // d-m-Y?
+      '#date_format' => 'Y-m-d',
       '#default_value' => $datum, //today
       '#states' => [
         'visible' => [
