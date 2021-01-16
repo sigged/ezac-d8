@@ -71,7 +71,7 @@ class EzacRooster extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        $this->ezacRead('rooster', get_class($this));
+        $this->ezacRead('rooster');
         if ($this->id == null) {
           // read failed
           return null;

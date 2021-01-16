@@ -71,7 +71,7 @@ class EzacStart extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('starts', get_class($this));
+            $this->ezacRead('starts');
         }
     }
 
@@ -98,7 +98,7 @@ class EzacStart extends EzacStorage
     {
       $this->id = $id;
       //@todo className parameter is overbodig
-      $this->ezacRead('starts', get_class($this));
+      $this->ezacRead('starts');
       if ($this->id == null) {
         // read failed
         return null;

@@ -50,7 +50,7 @@ class EzacVbaBevoegdheid extends EzacStorage
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('vba_bevoegdheden', __CLASS__);
+            $this->ezacRead('vba_bevoegdheden');
         }
     }
 
@@ -77,7 +77,7 @@ class EzacVbaBevoegdheid extends EzacStorage
       if (isset($id)) {
         $this->id = $id;
         //@todo className parameter is overbodig
-        $this->ezacRead('vba_bevoegdheden', get_class($this));
+        $this->ezacRead('vba_bevoegdheden');
         if ($this->id == null) {
           // read failed
           return null;
