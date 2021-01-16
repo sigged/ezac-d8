@@ -480,9 +480,12 @@ class EzacVbaVerslagForm extends FormBase {
    * Selects the piece of the form we want to use as replacement text and returns
    * it as a form (renderable array).
    *
+   * @param $form
+   * @param $form_state
+   *
    * @return  array (the textfields element)
    */
-  function verslagCallback($form, $form_state) {
+  function verslagCallback($form, $form_state): array {
     return $form['vliegers']; //HTML for verslag form['vliegers']
   }
 
