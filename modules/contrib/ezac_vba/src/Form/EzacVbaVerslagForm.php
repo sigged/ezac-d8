@@ -93,7 +93,6 @@ class EzacVbaVerslagForm extends FormBase {
     $starts = array_unique(EzacStart::index($condition,'datum', 'datum', 'DESC'));
 
     $start_dates = array();
-    $start_dates['other'] = '<Andere datum>'; //select other date
     foreach ($starts as $start) {
       $start_dates[$start] = EzacUtil::showDate($start); //list of dates for selection
     }
@@ -132,41 +131,6 @@ class EzacVbaVerslagForm extends FormBase {
 
     // make most recent day active
     // present as default date in dropdown list
-    /*
-    $chooser = $form_state->getValue('datum_select')['chooser]'];
-    if (isset($starts) || (isset($chooser) && $chooser == 0)) { //select dropdown date
-      //@todo chooser disappears after usage
-      $form['datum_select']['datum'] = array(
-        '#title' => t('Datum'),
-        '#type' => 'select',
-        '#options' => $start_dates,
-        '#default_value' => $datum,  //most recent date
-        '#weight' => 1,
-        '#ajax' => array(
-          'callback' => '::verslagCallback',
-          'wrapper' => 'datum-div',
-          'effect' => 'fade',
-          'progress' => array('type' => 'throbber'),
-        ),
-      );
-    }
-    if (!isset($starts) || ($chooser == 1)) { //select manual date
-      $form['datum_select']['datum'] = array(
-        '#title' => t('Datum'),
-        '#type' => 'date', //extension to 'date'
-        '#date_format' => 'Y-m-d', // d-m-Y?
-        '#default_value' => $datum, //today
-        '#weight' => 1.5,
-        '#ajax' => array(
-          'callback' => '::verslagCallback',
-          'wrapper' => 'vliegers-div',
-          'effect' => 'fade',
-          'progress' => array('type' => 'throbber'),
-        ),
-      );
-    }
-    */
-    // Choose datum from list if available
     $form['datum_select'] = [
       '#title' => t('Datum'),
       '#type' => 'select',
@@ -275,17 +239,12 @@ class EzacVbaVerslagForm extends FormBase {
     if ($form_state->getValue('andere_datum')) {
       // manual data entry selected
       $datum_form = $form_state->getValue('datum_entry');
-      //check datum
-      $errmsg = EzacUtil::checkDatum($datum_form, $dS, $dE);
-      if ($errmsg != '') {
-        $messenger->addMessage($errmsg,'ERROR');
-        $datum_form = null;
-      }
     }
     else {
       // date selected from list
       $datum_form = $form_state->getValue('datum_select');
     }
+    dpm($datum_form, 'datum'); //debug
     /*
     $query = db_select('ezac_Starts', 's');
     $query->fields('s',array('gezagvoerder', 'tweede'));
