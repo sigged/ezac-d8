@@ -239,7 +239,7 @@ class EzacStartsUpdateForm extends FormBase {
 
     // delete record
     if ($form_state->getValue('op') == 'Verwijderen') {
-      if (!\Drupal::currentUser()->hasPermission('DLO_delete')) {
+      if (!\Drupal::currentUser()->hasPermission('EZAC_delete')) {
         $messenger->addMessage('Verwijderen niet toegestaan', $messenger::TYPE_ERROR);
         return;
       }
