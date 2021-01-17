@@ -162,10 +162,8 @@ class EzacVbaVerslagForm extends FormBase {
       //'#description' => t('Instructeur of verantwoordelijke'),
       '#weight' => 2,
       '#ajax' => array(
-        'callback' => '::verslagCallback',
+        'callback' => 'self::verslagCallback',
         'wrapper' => 'vliegers-div',
-        'effect' => 'fade',
-        'progress' => array('type' => 'throbber'),
       ),
     );
 
@@ -176,10 +174,8 @@ class EzacVbaVerslagForm extends FormBase {
       '#default_value' => TRUE,
       '#weight' => 2,
       '#ajax' => array(
-        'callback' => '::verslagCallback',
+        'callback' => 'self::verslagCallback',
         'wrapper' => 'vliegers-div',
-        'effect' => 'fade',
-        'progress' => array('type' => 'throbber'),
       ),
     );
 
@@ -206,6 +202,9 @@ class EzacVbaVerslagForm extends FormBase {
       '#suffix' => '</div>',
     );
 
+    // generate form element with vliegers for the selected day
+    // get starts->gezagvoerder, starts->tweede in $namen
+    //$datum_form = $form_state->getValue('datum_select')['datum'] ?? $datum;
     //[vliegers] form wordt door AJAX opnieuw opgebouwd
     $form['vliegers'] = array(
       '#title' => t('Opmerkingen per vlieger'),
@@ -215,10 +214,6 @@ class EzacVbaVerslagForm extends FormBase {
       '#suffix' => '</div>',
       '#tree' => TRUE,
     );
-
-    // generate form element with vliegers for the selected day
-    // get starts->gezagvoerder, starts->tweede in $namen
-    //$datum_form = $form_state->getValue('datum_select')['datum'] ?? $datum;
 
     /*
     $query = db_select('ezac_Starts', 's');
@@ -232,8 +227,8 @@ class EzacVbaVerslagForm extends FormBase {
 
     // get datum from entry or select depending on checkbox datum_other
     $datum = ($form_state->getValue('datum_other') == 1)
-      ? $form_state->getValue('entry')
-      : $form_state->getValue('select');
+      ? $form_state->getValue('datum_entry')
+      : $form_state->getValue('datum_select');
 
     // select only own students depending on checkbox
     $eigen_leerling = $form_state->getValue('leerling') ?? TRUE;
@@ -286,9 +281,8 @@ class EzacVbaVerslagForm extends FormBase {
         '#type' => 'select',
         '#options' => $vliegers,
         '#ajax' => array(
-          'callback' => 'ezacvba_verslag_callback', // does this work recursively?
+          'callback' => 'self::verslagCallback',
           'wrapper' => 'vliegers-div',
-          'effect' => 'fade',
           'progress' => array('type' => 'throbber'),
         ),
       );
@@ -484,8 +478,6 @@ class EzacVbaVerslagForm extends FormBase {
    * @return  array (the textfields element)
    */
   function verslagCallback(array $form, FormStateInterface $form_state): array {
-    //dpm($form_state->getValue('vliegers'), 'vliegers in callback'); //debug
-    dpm($form, 'form in callback'); //debug
     return $form['vliegers']; //HTML for verslag form['vliegers']
   }
 
