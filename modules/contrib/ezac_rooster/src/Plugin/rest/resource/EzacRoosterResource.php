@@ -55,17 +55,11 @@ class EzacRoosterResource extends ResourceBase {
       ],
     ];
 
+    // prepare selection condition
+    $condition = [];
+
     // when id given, read that record
-    if (isset($id)) {
-      if ($id == '') {
-        //return index of id
-        $condition = [];
-        if (isset($datum)) {
-          $condition['datum'] = $datum;
-        }
-        $roosterIndex = EzacRooster::index($condition);
-        return (new ResourceResponse((array) $roosterIndex))->addCacheableDependency($build);
-      }
+    if (isset($id) && $id !='') {
       // return record for id
       $record = new EzacRooster($id);
       if ($record->id != null) {
@@ -74,28 +68,64 @@ class EzacRoosterResource extends ResourceBase {
       throw new NotFoundHttpException("Invalid ID: $id");
     }
 
-    // when no ID is given, datum has to be present
+    // when no ID is given, datum or other parameter has to be present
     if (isset($datum)) {
-      // @todo test valid datum values  and range
-      $condition = ['datum' => $datum];
-      if (isset ($periode)) {
-        $condition['periode'] = $periode;
+      // test valid datum values and range
+      $errmsg = Drupal\ezac\Util\EzacUtil::checkDatum($datum, $datumStart, $datumEnd);
+      if ($errmsg != '') {
+        // invalid date
+        throw new NotFoundHttpException($errmsg);
       }
-      if (isset($dienst)) {
-        $condition['dienst'] = $dienst;
+      $condition = [
+        'datum' => [
+          'value' => [$datumStart, $datumEnd],
+          'operator' => 'BETWEEN',
+        ]
+      ];
+    }
+
+    if (isset ($periode)) {
+      // read settings
+      $settings = Drupal::config('ezac_rooster.settings');
+      $periodes = $settings->get('rooster.periodes');
+      if (!key_exists($periode, $periodes)) {
+        // invalid periode
+        throw new NotFoundHttpException("periode $periode invalid");
       }
-      $roosterIndex = EzacRooster::index($condition);
+      $condition['periode'] = $periode;
+    }
+
+    if (isset($dienst)) {
+      // read settings
+      if (!isset($settings)) $settings = Drupal::config('ezac_rooster.settings');
+      $diensten = $settings->get('rooster.diensten');
+      if (!key_exists($dienst, $diensten)) {
+        // invalid dienst
+        throw new NotFoundHttpException("dienst $dienst invalid");
+      }
+      $condition['dienst'] = $dienst;
+    }
+
+    // if no selection condition then return error
+    if ($condition == []) {
+      throw new BadRequestHttpException('No valid parameter provided');
+    }
+
+    // read selected rooster entry IDs
+    $roosterIndex = EzacRooster::index($condition);
+
+    // return IDs or full records
+    if (isset($id) && $id == '') {
+      // return indexes only
+      $result = $roosterIndex;
+    }
+    else {
+      // return full records
       $result = [];
       foreach ($roosterIndex as $id) {
         $result[] = (array) new EzacRooster($id);
       }
-      return (new ResourceResponse($result))->addCacheableDependency($build);
     }
-
-    // no id code or afkorting parameter given
-    // return index of rooster
-
-    throw new BadRequestHttpException('No valid parameter provided');
+    return (new ResourceResponse($result))->addCacheableDependency($build);
   }
-
 }

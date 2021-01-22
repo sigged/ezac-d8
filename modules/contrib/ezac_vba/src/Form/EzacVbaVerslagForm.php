@@ -5,7 +5,6 @@ namespace Drupal\ezac_vba\Form;
 use Drupal;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-
 use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_starts\Model\EzacStart;
@@ -16,8 +15,6 @@ use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
 /**
  * UI to show status of VBA records
  */
-
-
 class EzacVbaVerslagForm extends FormBase {
 
   /**
@@ -68,10 +65,10 @@ class EzacVbaVerslagForm extends FormBase {
 
     //opslag voor ingevoerde opmerkingen en bevoegdheden per vlieger
     //dit is een array van $vlieger['data'] gegevens (opmerking en bevoegdheid)
-    $form['vlieger_storage'] = array(
+    $form['vlieger_storage'] = [
       '#type' => 'value',
       '#value' => NULL,
-    );
+    ];
 
     //maak lijst van bevoegdheden voor dropdown menu
     //$bevoegdheden = ezacvba_get_bevoegdheden();
@@ -90,9 +87,9 @@ class EzacVbaVerslagForm extends FormBase {
         'operator' => 'BETWEEN',
       ],
     ];
-    $starts = array_unique(EzacStart::index($condition,'datum', 'datum', 'DESC'));
+    $starts = array_unique(EzacStart::index($condition, 'datum', 'datum', 'DESC'));
 
-    $start_dates = array();
+    $start_dates = [];
     foreach ($starts as $start) {
       $start_dates[$start] = EzacUtil::showDate($start); //list of dates for selection
     }
@@ -152,35 +149,37 @@ class EzacVbaVerslagForm extends FormBase {
       $lid = new EzacLid($id);
       $afkorting = $lid->afkorting;
     }
-    else $afkorting = ''; // geen lid gevonden
+    else {
+      $afkorting = '';
+    } // geen lid gevonden
 
-    $form['instructeur'] = array(
+    $form['instructeur'] = [
       '#title' => t('Instructeur / verantwoordelijke'),
       '#type' => 'select',
       '#options' => $namen,  //@TODO select only instructeur from namen
       '#default_value' => $afkorting,
       //'#description' => t('Instructeur of verantwoordelijke'),
       '#weight' => 2,
-      '#ajax' => array(
-        'callback' => 'self::verslagCallback',
+      '#ajax' => [
+        'callback' => '::verslagCallback',
         'wrapper' => 'vliegers-div',
-      ),
-    );
+      ],
+    ];
 
     //optie om alleen eigen leerlingen te selecteren of alle vliegers van die dag
-    $form['leerling'] = array(
+    $form['leerling'] = [
       '#title' => t('Selecteer alleen eigen leerlingen'),
       '#type' => 'checkbox',
       '#default_value' => TRUE,
       '#weight' => 2,
-      '#ajax' => array(
-        'callback' => 'self::verslagCallback',
+      '#ajax' => [
+        'callback' => '::verslagCallback',
         'wrapper' => 'vliegers-div',
-      ),
-    );
+      ],
+    ];
 
     // textarea field for 'weer' (2 lines)
-    $form['weer'] = array(
+    $form['weer'] = [
       '#title' => t('Weer en baanrichting'),
       '#type' => 'textarea',
       '#rows' => 2,
@@ -188,10 +187,10 @@ class EzacVbaVerslagForm extends FormBase {
       '#weight' => 3,
       '#prefix' => '<div id="weer">',
       '#suffix' => '</div>',
-    );
+    ];
 
     // textarea field for 'verslag'  (10 lines)
-    $form['verslag'] = array(
+    $form['verslag'] = [
       '#title' => t('Algemeen verslag'),
       '#type' => 'textarea',
       '#rows' => 10,
@@ -200,20 +199,21 @@ class EzacVbaVerslagForm extends FormBase {
       '#weight' => 4,
       '#prefix' => '<div id="verslag">',
       '#suffix' => '</div>',
-    );
+    ];
 
     // generate form element with vliegers for the selected day
     // get starts->gezagvoerder, starts->tweede in $namen
     //$datum_form = $form_state->getValue('datum_select')['datum'] ?? $datum;
     //[vliegers] form wordt door AJAX opnieuw opgebouwd
-    $form['vliegers'] = array(
+    $form['vliegers'] = [
       '#title' => t('Opmerkingen per vlieger'),
       '#type' => 'container',
       '#weight' => 5,
-      '#prefix' => '<div id="vliegers-div">', //This section replaced by AJAX callback
+      '#prefix' => '<div id="vliegers-div">',
+      //This section replaced by AJAX callback
       '#suffix' => '</div>',
       '#tree' => TRUE,
-    );
+    ];
 
     /*
     $query = db_select('ezac_Starts', 's');
@@ -234,62 +234,57 @@ class EzacVbaVerslagForm extends FormBase {
     $eigen_leerling = $form_state->getValue('leerling') ?? TRUE;
     $instructeur = $form_state->getValue('instructeur') ?? $afkorting;
 
-    // read starts for datum
+    // read starts for datum and put names in $vliegers
     $condition = ['datum' => $datum];
     $startsIndex = EzacStart::index($condition);
-    foreach ($startsIndex as $startId) {
-      $start = new EzacStart($startId);
+    foreach ($startsIndex as $id) {
+      $start = new EzacStart($id);
       $gezagvoerder = $start->gezagvoerder;
-      if ($eigen_leerling == FALSE) {
+      if (!$eigen_leerling) {
         // selecteer alle leerlingen
-        if (!isset($vliegers[$gezagvoerder]))
-          // initialiseer vliegers voor gezagvoerder
+        if (!isset($vliegers[$gezagvoerder])) // initialiseer vliegers voor gezagvoerder
+        {
           $vliegers[$gezagvoerder] = $namen[$gezagvoerder];
-        if (isset($start->tweede) && ($start->tweede !='')) {
+        }
+        if (isset($start->tweede) && ($start->tweede != '')) {
           $tweede = $start->tweede;
-          if (!isset($vliegers[$tweede]))
-            // initialiseer vliegers voor tweede inzittende
+          if (!isset($vliegers[$tweede])) // initialiseer vliegers voor tweede inzittende
+          {
             $vliegers[$tweede] = $namen[$tweede];
+          }
         }
       }
-      if (($eigen_leerling == TRUE) && ($gezagvoerder == $instructeur)) {
-        if (isset($start->tweede) && ($start->tweede !='')) {
+      if ($eigen_leerling && ($gezagvoerder == $instructeur)) {
+        if (isset($start->tweede) && ($start->tweede != '')) {
           $tweede = $start->tweede;
-          if (!isset($vliegers[$tweede]))
+          if (!isset($vliegers[$tweede])) {
             $vliegers[$tweede] = $namen[$tweede];
+          }
         }
       }
     }
 
+    dpm($vliegers, 'vliegers'); //debug
     //sorteer $vliegers array
     asort($vliegers);
 
-    $form['vliegers'] = [
-      '#title' => t('Opmerkingen per vlieger'),
-      '#type' => 'container',
-      '#weight' => 5,
-      '#prefix' => '<div id="vliegers-div">', //This section replaced by AJAX callback
-      '#suffix' => '</div>',
-      '#tree' => TRUE,
-    ];
-
     // Check of $vliegers gevuld is ...
     if (count($vliegers) > 0) {
-      $form['vliegers']['select'] = array(
+      $form['vliegers']['select'] = [
         '#title' => t('Selecteer een vlieger'),
         '#description' => t('Je kunt verschillende vliegers na elkaar selecteren en invullen<br>Kies Opslaan nadat je de laatste hebt ingevuld'),
         '#type' => 'select',
         '#options' => $vliegers,
-        '#ajax' => array(
-          'callback' => 'self::verslagCallback',
+        '#ajax' => [
+          'callback' => '::verslagCallback',
           'wrapper' => 'vliegers-div',
-          'progress' => array('type' => 'throbber'),
-        ),
-      );
+          'progress' => ['type' => 'throbber'],
+        ],
+      ];
 
       //Toon eerdere verslagen voor de geselecteerde vlieger
       $afkorting = $form_state->getValue('vliegers')['select'] ?? key($vliegers); // default eerste waarde
-      $helenaam  = $vliegers[$afkorting];
+      $helenaam = $vliegers[$afkorting];
 
       // query vba verslag, bevoegdheid records
       /*
@@ -304,49 +299,49 @@ class EzacVbaVerslagForm extends FormBase {
       foreach ($dagverslagenIndex as $id) {
         $verslagen[] = new EzacVbaDagverslag($id);
       }
-      $form['vliegers']['data'][$afkorting] = array(
+      $form['vliegers']['data'][$afkorting] = [
         '#title' => $helenaam,
-        '#type'=> 'fieldset',
+        '#type' => 'fieldset',
         '#required' => FALSE,
         '#collapsible' => TRUE,
         '#collapsed' => FALSE,
-      );
+      ];
 
       if (!empty($verslagen)) {
         //create fieldset
-        $form['vliegers']['data'][$afkorting]['verslagen'] = array(
+        $form['vliegers']['data'][$afkorting]['verslagen'] = [
           '#title' => t("Eerdere opmerkingen voor $helenaam"),
-          '#type'=> 'fieldset',
+          '#type' => 'fieldset',
           '#edit' => FALSE,
           '#required' => FALSE,
           '#collapsible' => TRUE,
           '#collapsed' => TRUE,
           '#weight' => 6,
           '#tree' => TRUE,
-        );
+        ];
 
-        $header = array(
-          array('data' => 'datum', 'width' => '20%'),
-          array('data' => 'instructeur', 'width' => '20%'),
-          array('data' => 'opmerking'),
-        );
-        $rows = array();
+        $header = [
+          ['data' => 'datum', 'width' => '20%'],
+          ['data' => 'instructeur', 'width' => '20%'],
+          ['data' => 'opmerking'],
+        ];
+        $rows = [];
 
         foreach ($verslagen as $verslag) {
-          $rows[] = array(
+          $rows[] = [
             EzacUtil::showDate($verslag->datum),
             $namen[$verslag->instructeur],
             nl2br($verslag->verslag),
-          );
+          ];
 
         }
-        $form['vliegers']['data'][$afkorting]['verslagen']['tabel'] = array(
+        $form['vliegers']['data'][$afkorting]['verslagen']['tabel'] = [
           '#type' => 'table',
           '#header' => $header,
           '#rows' => $rows,
           '#empty' => t('Geen gegevens beschikbaar'),
           //'#attributes' => $attributes,
-        );
+        ];
       } //!empty(verslagen)
 
       //  list with persons who have flown that day - each may be selected
@@ -358,7 +353,7 @@ class EzacVbaVerslagForm extends FormBase {
       $opmerking = (isset($form_state['vlieger_storage'][$afkorting]['opmerking']))
         ? $form_state['vlieger_storage'][$afkorting]['opmerking']
         : '';
-      $form['vliegers']['data'][$afkorting]['opmerking'] = array(
+      $form['vliegers']['data'][$afkorting]['opmerking'] = [
         '#title' => t("Opmerkingen voor $helenaam"),
         '#type' => 'textarea',
         '#rows' => 3,
@@ -366,7 +361,7 @@ class EzacVbaVerslagForm extends FormBase {
         '#weight' => 5,
         '#tree' => TRUE,
         '#default_value' => $opmerking,
-      );
+      ];
 
       //toon huidige bevoegdheden
       // query vba verslag, bevoegdheid records
@@ -386,98 +381,99 @@ class EzacVbaVerslagForm extends FormBase {
         $vlieger_bevoegdheden[] = $bevoegdheid;
       }
       // put in table
-      $header = array(
-        array('data' => 'datum', 'width' => '20%'),
-        array('data' => 'instructeur', 'width' => '20%'),
-        array('data' => 'bevoegdheid'),
-      );
-      $rows = array();
+      $header = [
+        ['data' => 'datum', 'width' => '20%'],
+        ['data' => 'instructeur', 'width' => '20%'],
+        ['data' => 'bevoegdheid'],
+      ];
+      $rows = [];
 
       // lees uit ['vlieger_storage'] eventueel eerder ingevoerde waarde voor #default_value
       if (!empty($vlieger_bevoegdheden)) { //create fieldset
-        $form['vliegers']['data'][$afkorting]['bevoegdheden'] = array(
+        $form['vliegers']['data'][$afkorting]['bevoegdheden'] = [
           '#title' => t("Bevoegdheden van $helenaam"),
-          '#type'=> 'fieldset',
+          '#type' => 'fieldset',
           '#edit' => FALSE,
           '#required' => FALSE,
           '#collapsible' => TRUE,
           '#collapsed' => TRUE,
           '#weight' => 7,
           '#tree' => TRUE,
-        );
+        ];
         foreach ($vlieger_bevoegdheden as $bevoegdheid) {
-          $rows[] = array(
+          $rows[] = [
             EzacUtil::showDate($bevoegdheid->datum_aan),
             $namen[$bevoegdheid->instructeur],
-            $bevoegdheid->bevoegdheid .' - '
-            .$bv_list[$bevoegdheid->bevoegdheid] .' '
-            .nl2br($bevoegdheid->onderdeel)
-          );
+            $bevoegdheid->bevoegdheid . ' - '
+            . $bv_list[$bevoegdheid->bevoegdheid] . ' '
+            . nl2br($bevoegdheid->onderdeel),
+          ];
         }
-        $form['vliegers']['data'][$afkorting]['bevoegdheden']['tabel'] = array(
+        $form['vliegers']['data'][$afkorting]['bevoegdheden']['tabel'] = [
           '#type' => 'table',
           '#header' => $header,
           '#rows' => $rows,
           '#empty' => t('Geen gegevens beschikbaar'),
           '#weight' => 7,
-        );
+        ];
       }
 
       //formatteer bevoegdheid en onderdeel in een tabel regel
       $soort = $form_state->getValue('vlieger_storage')[$afkorting]['bevoegdheid']['rows'][0]['soort'] ?? 0;
       $onderdeel = $form_state->getValue('vlieger_storage')[$afkorting]['bevoegdheid']['rows'][0]['onderdeel'] ?? '';
-      $tabel_rows = array(
+      $tabel_rows = [
         '#tree' => TRUE,
-        array(
-          'soort' => array(
+        [
+          'soort' => [
             '#description' => 'Toekennen van een nieuwe bevoegdheid',
             '#type' => 'select',
             '#options' => $bv_list,
             '#default_value' => $soort, //<Geen wijziging>
-          ),
-          'onderdeel' => array(
+          ],
+          'onderdeel' => [
             '#description' => 'Bijvoorbeeld overland type',
             '#type' => 'textfield',
             '#required' => FALSE,
             '#default_value' => $onderdeel,
-          ),
-        ),
-      );
+          ],
+        ],
+      ];
 
       // bevoegdheid en onderdeel in tabel vormgeven
-      $form['vliegers']['data'][$afkorting]['bevoegdheid'] = array(
+      $form['vliegers']['data'][$afkorting]['bevoegdheid'] = [
         '#type' => 'table',
-        '#header' => array('bevoegdheid', 'onderdeel'),
+        '#header' => ['bevoegdheid', 'onderdeel'],
         '#tree' => TRUE,
         '#prefix' => "<div id='bevoegdheid-div'>",
         '#suffix' => '</div>',
         '#weight' => 10,
         'rows' => $tabel_rows,
-      );
+      ];
       // einde invoeren bevoegdheid
 
     } //if count($vliegers)
+
     //submit
-    $form['submit'] = array(
+    $form['submit'] = [
       '#type' => 'submit',
       '#description' => t('Verslag opslaan en via mail verzenden'),
       '#value' => t('Opslaan'),
       '#weight' => 99,
-    );
+    ];
 
     return $form;
   }
 
   /**
-   * Selects the piece of the form we want to use as replacement text and returns
-   * it as a form (renderable array).
+   * Selects the piece of the form we want to use as replacement text and
+   * returns it as a form (renderable array).
    *
    * @param $form
    * @param $form_state
    *
    * @return  array (the textfields element)
    */
-  function verslagCallback(array $form, FormStateInterface $form_state): array {
+  function verslagCallback(array $form, FormStateInterface $form_state) {
     return $form['vliegers']; //HTML for verslag form['vliegers']
   }
 
@@ -497,7 +493,7 @@ class EzacVbaVerslagForm extends FormBase {
     if (isset($vliegers_data)) {
       foreach ($vliegers_data['data'] as $afkorting => $verslag) {
         if (($verslag['opmerking'] <> '') ||
-          ($verslag['bevoegdheid']['rows'][0]['soort'] != '0')){
+          ($verslag['bevoegdheid']['rows'][0]['soort'] != '0')) {
           //opmerking of bevoegdheid is ingevoerd - sla op in vlieger_storage
           $s = $form_state->getValue('vlieger_storage');
           $s[$afkorting] = $verslag;
@@ -534,7 +530,7 @@ class EzacVbaVerslagForm extends FormBase {
     if ($dagverslag->weer . $dagverslag->verslag != '') { // verslag ingevuld
       $id = $dagverslag->create(); // write to database
       $message->addMessage("Dagverslag [$id] voor "
-        .EzacUtil::showDate($dagverslag->datum) .' aangemaakt', 'status');
+        . EzacUtil::showDate($dagverslag->datum) . ' aangemaakt', 'status');
     }
     //write verslag per vlieger
     $vlieger_storage = $form_state->getValue('vlieger_storage');
@@ -549,7 +545,7 @@ class EzacVbaVerslagForm extends FormBase {
           $dagverslagLid->verslag = htmlentities($verslag['opmerking']);
           $dagverslagLid->mutatie = date('Y-m-d h:m:s');
           $dagverslagLid = $dagverslagLid->create();
-          $message->addMessage('Verslag voor ' .$namen[$afkorting] .' aangemaakt', 'status');
+          $message->addMessage('Verslag voor ' . $namen[$afkorting] . ' aangemaakt', 'status');
         }
         //update bevoegdheden per vlieger
         if ($verslag['bevoegdheid']['rows'][0]['soort'] != '0') {
@@ -562,8 +558,8 @@ class EzacVbaVerslagForm extends FormBase {
           $bevoegdheid->instructeur = $form_state->getValue('instructeur');
           $bevoegdheid->actief = TRUE;
           $id = $bevoegdheid->create();
-          $message->addMessage('Bevoegdheid ' .$verslag['bevoegdheid']['rows'][0]['soort']
-            .' voor ' .$namen[$afkorting] ." aangemaakt [$id]", 'status');
+          $message->addMessage('Bevoegdheid ' . $verslag['bevoegdheid']['rows'][0]['soort']
+            . ' voor ' . $namen[$afkorting] . " aangemaakt [$id]", 'status');
         }
       }
     }
@@ -584,6 +580,7 @@ class EzacVbaVerslagForm extends FormBase {
 
   /**
    * Mail Verslag (dag en per lid)
+   *
    * @param string datum
    **/
   function verslagenMail($datum) {
@@ -601,7 +598,7 @@ class EzacVbaVerslagForm extends FormBase {
     $instructeurs = EzacLid::index($condition, 'e_mail');
     $to = '';
     foreach ($instructeurs as $email) {
-      $to .= $email .'; ';
+      $to .= $email . '; ';
     }
     $to .= 'webmaster@ezac.nl'; //instructie@ezac.nl //TEST DEBUG
 
@@ -617,9 +614,9 @@ class EzacVbaVerslagForm extends FormBase {
         $mail_instructeur = $namen($dagverslag->instructeur);
         $message .= "<p><h1>Verslag van $mail_instructeur</h1></p>/r/n";
         $message .= "<p><h2>Omstandigheden</h2></p>/r/n";
-        $message .= "<p>" .$dagverslag->weer ."</p>/r/n";
+        $message .= "<p>" . $dagverslag->weer . "</p>/r/n";
         $message .= "<p><h2>Verslag</h2></p>";
-        $message .= "<p>" .$dagverslag->verslag ."</p>/r/n";
+        $message .= "<p>" . $dagverslag->verslag . "</p>/r/n";
       }
     }
 
@@ -640,7 +637,7 @@ class EzacVbaVerslagForm extends FormBase {
     $bevoegdhedenIndex = EzacVbaBevoegdheid::index($condition);
     if (count($bevoegdhedenIndex)) {
       $message .= "<p><h2>Bevoegdheden toegekend per leerling</h2></p>";
-      foreach($bevoegdhedenIndex as $id) {
+      foreach ($bevoegdhedenIndex as $id) {
         $bevoegdheid = new EzacVbaBevoegdheid($id);
         $message .= "<p> $namen($bevoegdheid->afkorting) : $bevoegdheid->bevoegdheid";
         $message .= " door instructeur $namen($bevoegdheid->instructeur) </p>/r/n";
