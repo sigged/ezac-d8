@@ -57,13 +57,13 @@ class EzacVbaBevoegdheid extends EzacStorage
     /**
      * create - Create vba record
      *
-     * @return \Drupal\ezac_vba\Model\EzacVbaBevoegdheid
+     * @return int
      *   ID of record created
      */
-    public function create(): EzacVbaBevoegdheid {
+    public function create(): int {
 
         $this->id = $this->ezacCreate('vba_bevoegdheden');
-        return $this;
+        return $this->id;
     }
 
     /**

@@ -78,13 +78,13 @@ class EzacStart extends EzacStorage
     /**
      * create - Create starts record
      *
-     * @return EzacStart ID of record created
+     * @return int ID of record created
      *   ID of record created
      */
     public function create()
     {
         $this->id = $this->ezacCreate('starts');
-        return $this;
+        return $this->id;
     }
 
   /**

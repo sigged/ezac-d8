@@ -92,10 +92,9 @@ class EzacStartsUpdateForm extends FormBase {
     $ajax = [
       'callback' => '::formTweedeCallback',
       'wrapper' => 'tweezitter',
-      //'effect' => 'fade',
-      //'progress' => array('type' => 'throbber'),
     ];
-    // @todo use checkbox to allow entry of unknown plane registration using textfield - or add textfield when value == 'Onbekend'/''
+
+    // use checkbox to allow entry of unknown plane registration using textfield - or add textfield when value == 'Onbekend'/''
     // test if registratie exists
     $condition = ['registratie' => $start->registratie];
     $reg_bekend = EzacKist::counter($condition);
@@ -240,7 +239,7 @@ class EzacStartsUpdateForm extends FormBase {
 
     // delete record
     if ($form_state->getValue('op') == 'Verwijderen') {
-      if (!\Drupal::currentUser()->hasPermission('DLO_delete')) {
+      if (!\Drupal::currentUser()->hasPermission('EZAC_delete')) {
         $messenger->addMessage('Verwijderen niet toegestaan', $messenger::TYPE_ERROR);
         return;
       }

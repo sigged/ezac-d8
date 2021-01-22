@@ -267,7 +267,7 @@ class EzacRoosterTableForm extends FormBase
             $rooster->naam = $afkorting;
             $rooster->mutatie = date('Y-m-d H:i:s');
             $rooster->geruild = '';
-            $id = $rooster->create()->id;
+            $id = $rooster->create();
             $messenger->addMessage("Dienst $diensten[$dienst] $periode [$id] voor $naam aangemaakt");
           }
           elseif ($dienst == '-') {
