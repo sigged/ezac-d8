@@ -264,7 +264,6 @@ class EzacVbaVerslagForm extends FormBase {
       }
     }
 
-    dpm($vliegers, 'vliegers'); //debug
     //sorteer $vliegers array
     asort($vliegers);
 
@@ -294,10 +293,10 @@ class EzacVbaVerslagForm extends FormBase {
       $verslagen = $query->execute()->fetchAll();
       */
       $condition = ['afkorting' => $afkorting];
-      $dagverslagenIndex = EzacVbaDagverslag::index($condition);
+      $dagverslagenIndex = EzacVbaDagverslagLid::index($condition);
       $verslagen = [];
       foreach ($dagverslagenIndex as $id) {
-        $verslagen[] = new EzacVbaDagverslag($id);
+        $verslagen[] = new EzacVbaDagverslagLid($id);
       }
       $form['vliegers']['data'][$afkorting] = [
         '#title' => $helenaam,
@@ -350,9 +349,7 @@ class EzacVbaVerslagForm extends FormBase {
 
       // invoeren opmerking
       // lees uit ['vlieger_storage'] eventueel eerder ingevoerde waarde voor #default_value
-      $opmerking = (isset($form_state['vlieger_storage'][$afkorting]['opmerking']))
-        ? $form_state['vlieger_storage'][$afkorting]['opmerking']
-        : '';
+      $opmerking = $form_state->getValue('vlieger_storage')[$afkorting]['opmerking'] ?? '';
       $form['vliegers']['data'][$afkorting]['opmerking'] = [
         '#title' => t("Opmerkingen voor $helenaam"),
         '#type' => 'textarea',
@@ -611,7 +608,7 @@ class EzacVbaVerslagForm extends FormBase {
     if (count($dagverslagenIndex)) {
       foreach ($dagverslagenIndex as $id) {
         $dagverslag = new EzacVbaDagverslag($id);
-        $mail_instructeur = $namen($dagverslag->instructeur);
+        $mail_instructeur = $namen[$dagverslag->instructeur];
         $message .= "<p><h1>Verslag van $mail_instructeur</h1></p>/r/n";
         $message .= "<p><h2>Omstandigheden</h2></p>/r/n";
         $message .= "<p>" . $dagverslag->weer . "</p>/r/n";
