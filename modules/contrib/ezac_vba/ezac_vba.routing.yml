@@ -25,6 +25,15 @@ ezac_vba_dagverslag:
     _permission: 'EZAC_update'
     _user: ^[a-zA-Z0-9_]+
 
+ezac_vba_dagverslag_table:
+  path: '/ezac/vba/dagverslag'
+  defaults:
+    _title: 'VBA dagverslag invoer'
+    _form: '\Drupal\ezac_vba\Form\EzacVbaVerslagTableForm'
+  requirements:
+    _permission: 'EZAC_update'
+    _user: ^[a-zA-Z0-9_]+
+
 ezac_vba_dagverslag_lid:
   path: '/ezac/vba/dagverslaglid/{datum_start}/{datum_eind}'
   defaults:
