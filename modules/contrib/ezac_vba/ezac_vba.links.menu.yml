@@ -9,3 +9,9 @@ ezac_vba_dagverslag:
   route_name: ezac_vba_dagverslag
   description: EZAC VBA Dagverslag invoer
   weight: 05
+
+ezac_vba_dagverslag_table:
+  title: Invoeren dagverslag (tabel)
+  route_name: ezac_vba_dagverslag_table
+  description: EZAC VBA Dagverslag invoer (tabel)
+  weight: 06
