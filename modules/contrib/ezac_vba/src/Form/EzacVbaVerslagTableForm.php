@@ -199,15 +199,6 @@ class EzacVbaVerslagTableForm extends FormBase {
     // generate form element with vliegers for the selected day
     // get starts->gezagvoerder, starts->tweede in $leden
     //[vliegers] form wordt door AJAX opnieuw opgebouwd
-    $form['vliegers'] = [
-      '#title' => t('Opmerkingen per vlieger'),
-      '#type' => 'container',
-      '#weight' => 6,
-      '#prefix' => '<div id="vliegers-div">',
-      //This section replaced by AJAX callback
-      '#suffix' => '</div>',
-      '#tree' => TRUE,
-    ];
 
     // initialize vliegers array
     $vliegers = [];
@@ -259,14 +250,38 @@ class EzacVbaVerslagTableForm extends FormBase {
 
     //3. Build form entry table for each vlieger
     //@todo add option to show existing verslagen and bevoegdheid
-    foreach ($vliegers as $afkorting => $vlieger) {
+
+    //toon tabel met verslag en bevoegdheid / onderdeel per persoon
+    //prepare header
+    $header = array(t('Naam'));
+    $header = [
+      t('Naam'),
+      t('Verslag'),
+      t('Bevoegdheid'),
+      t('Onderdeel'),
+    ];
+    $caption = t("Verslag per vlieger");
+
+    $form['vliegers'] = array(
+      // Theme this part of the form as a table.
+      '#type' => 'table',
+      '#header' => $header,
+      '#caption' => $caption,
+      '#sticky' => TRUE,
+      '#weight' => 6,
+      '#prefix' => '<div id="vliegers-div">',
+      //This section replaced by AJAX callback
+      '#suffix' => '</div>',
+    );
+
+    foreach ($vliegers as $vlieger => $naam) {
       $form['vliegers'][$vlieger]['naam'] = [
-        '#type' => 'label',
-        '#value' => $leden[$vlieger],
+        '#type' => 'item',
+        '#title' => $naam,
       ];
       $form['vliegers'][$vlieger]['opmerking'] = [
-        '#title' => t("Opmerkingen voor $leden[$vlieger]"),
         '#type' => 'textarea',
+        '#size' => 40,
         '#rows' => 3,
         '#required' => FALSE,
       ];
@@ -278,10 +293,10 @@ class EzacVbaVerslagTableForm extends FormBase {
       $form['vliegers'][$vlieger]['onderdeel'] = [
         '#description' => 'Bijvoorbeeld overland type',
         '#type' => 'textfield',
+        '#size' => 20,
         '#required' => FALSE,
       ];
     }
-
 
     //4. add submit button
     $form['submit'] = [
