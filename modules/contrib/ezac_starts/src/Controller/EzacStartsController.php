@@ -191,7 +191,6 @@ class EzacStartsController extends ControllerBase {
    * @return array $content
    */
   public static function startOverzicht($datum_start, $datum_eind, $vlieger = NULL) {
-    //@TODO this routine to be removed here
     $content = array();
 
     $rows = [];
@@ -238,7 +237,6 @@ class EzacStartsController extends ControllerBase {
     $sortkey = 'start';
     $sortdir = 'ASC'; // newest first
     $limit = 100;
-    //$page = pager_default_initialize($total, $range); // deprecated
     $pager = \Drupal::service('pager.manager')
       ->createPager($total, $limit);
     $page = $pager

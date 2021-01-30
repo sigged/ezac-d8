@@ -51,3 +51,13 @@ ezac_vba_bevoegdheid_lid:
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
+
+ezac_vba_currency:
+  path: '/ezac/vba/currency'
+  defaults:
+    _title: 'VBA currency overzicht'
+    _form: '\Drupal\ezac_vba\Form\EzacVbaCurrencyForm'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+

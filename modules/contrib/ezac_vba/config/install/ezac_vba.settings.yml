@@ -126,6 +126,14 @@ vba:
       naam: 'Radio Telefonie'
       status: 3
       instructie: 0
+    LIERSTART:
+      naam: 'Lierstart'
+      status: 0
+      instructie: 0
+    SLEPEN:
+      naam: 'Sleepstart'
+      status: 0
+      instructie: 0
     SL:
       naam: 'Self Launch'
       status: 3
