@@ -92,7 +92,8 @@ class EzacUtil {
     $leden[''] = "Onbekend";
     foreach ($ledenIndex as $id) {
       $lid = new EzacLid($id);
-      $leden[$lid->afkorting] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
+      if ($lid->afkorting != '')
+        $leden[$lid->afkorting] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
     }
     return $leden;
   }
