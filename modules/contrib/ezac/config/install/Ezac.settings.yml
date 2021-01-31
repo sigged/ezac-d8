@@ -1,0 +1,6 @@
+database:
+  external: '1'
+  name: 'ezac'
+  prefix: ''
+
+langcode: 'nl'

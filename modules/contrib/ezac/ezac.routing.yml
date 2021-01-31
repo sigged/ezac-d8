@@ -1,0 +1,8 @@
+ezac:
+  path: '/ezac'
+  defaults:
+    _title: 'EZAC hoofdmenu'
+    _form: '\Drupal\ezac\Form\EzacHoofdMenuForm'
+  requirements:
+    _permission: 'EZAC_read'
+
