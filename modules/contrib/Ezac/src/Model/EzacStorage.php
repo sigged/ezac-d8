@@ -196,7 +196,7 @@ class EzacStorage {
    * @return object|void
    *   An object containing the loaded entry if found.
    */
-  protected function ezacRead(string $table): object {
+  protected function ezacRead(string $table): ?object {
 
     // define prefix for EZAC tables
     // $table = 'EZAC_' .$table;
