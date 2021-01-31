@@ -216,8 +216,8 @@ class EzacDagverslagResource extends ResourceBase {
       $verslag);
 
     // write dagverslag record to database
-    $record = $dagverslagRecord->create();
-    return new ModifiedResourceResponse($record->id, 200);
+    $id = $dagverslagRecord->create();
+    return new ModifiedResourceResponse($id, 200);
   } // post
 
   /**
@@ -261,7 +261,7 @@ class EzacDagverslagResource extends ResourceBase {
     $datum = Drupal::request()->query->get('datum');
     // check validity of datum is record to be deleted - as a protection
     $record = new EzacVbaDagverslag($id);
-    if ($record == FALSE) {
+    if ($record == null) {
       throw new NotFoundHttpException("Invalid ID: $id");
     }
     if ($datum != $record->datum) {
