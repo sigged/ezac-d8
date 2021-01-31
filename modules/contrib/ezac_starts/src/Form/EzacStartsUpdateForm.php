@@ -94,25 +94,28 @@ class EzacStartsUpdateForm extends FormBase {
       '#required' => TRUE,
     ];
 
-    // use checkbox to allow entry of unknown plane registration using textfield - or add textfield when value == 'Onbekend'/''
     // test if registratie exists
     $form['registratie_bekend'] = [
       '#type' => 'value',
       '#value' => key_exists($start->registratie, $kisten),
-      '#attributes' => ['name' => 'registratie_bekend'],
+      '#attributes' => [
+        'name' => 'registratie_bekend'
+      ],
     ];
 
+    // the form has two possible fields for registratie, one select and one textfield if unknown value
+    // the textfield is enabled when the select field is [''] <Onbekend>
     $form['registratie'] = [
       '#type' => 'select',
       '#title' => 'registratie',
       '#options' => $kisten,
-      // use ajax to set tweezitter value to dynamically show tweede field
+      // use ajax to set tweezitter value to dynamically show tweede field for tweezitters
       '#ajax' => [
         'callback' => '::formTweedeCallback',
         'wrapper' => 'tweezitter',
       ],
       '#attributes' => [
-        'name' => 'registratie',
+        'name' => 'registratie_select',
       ]
     ];
 
@@ -122,8 +125,9 @@ class EzacStartsUpdateForm extends FormBase {
       '#size' => 10,
       '#maxlength' => 10,
       '#states' => [
+        // show only when registratie == [''] <Onbekend>
         'visible' => [
-          ':input[name="registratie"]' => ['value' => ''],
+          ':input[name="registratie_select"]' => ['value' => ''],
          ],
        ],
     ];
