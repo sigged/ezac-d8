@@ -227,6 +227,7 @@ class EzacStorage {
     else {
       // read failed
       $this->id = NULL;
+      return $this;
       //throw new Drupal\Core\Database\DatabaseNotFoundException("record $this->id not found");
     }
   } //ezacRead

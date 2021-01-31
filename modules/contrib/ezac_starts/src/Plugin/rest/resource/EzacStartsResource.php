@@ -405,7 +405,7 @@ class EzacStartsResource extends ResourceBase {
     $datum = Drupal::request()->query->get('datum');
     // check validity of datum is record to be deleted - as a protection
     $record = new EzacStart($id);
-    if ($record == FALSE) {
+    if ($record->id == null) {
       throw new NotFoundHttpException("Invalid ID: $id");
     }
     if ($datum != $record->datum) {
