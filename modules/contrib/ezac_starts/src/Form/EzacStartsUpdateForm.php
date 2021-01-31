@@ -2,6 +2,7 @@
 
 namespace Drupal\ezac_starts\Form;
 
+use Drupal;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -19,7 +20,7 @@ class EzacStartsUpdateForm extends FormBase {
   /**
    * @inheritdoc
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'ezac_starts_update_form';
   }
 
@@ -33,7 +34,7 @@ class EzacStartsUpdateForm extends FormBase {
    *
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $id = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $id = NULL): array {
     // Wrap the form in a div.
     $form = [
       '#prefix' => '<div id="updateform">',
@@ -86,78 +87,193 @@ class EzacStartsUpdateForm extends FormBase {
     // get kisten details
     $kisten = EzacUtil::getKisten();
 
-    $form = EzacUtil::addField($form, 'datum', 'date', 'Datum', 'datum', $start->datum, 10, 10, TRUE, 1);
-
-    // use ajax to set tweezitter value to dynamically show tweede field
-    $ajax = [
-      'callback' => '::formTweedeCallback',
-      'wrapper' => 'tweezitter',
+    $form['datum'] = [
+      '#type' => 'date',
+      '#title' => 'datum',
+      '#default_value' => $start->datum,
+      '#required' => TRUE,
     ];
 
     // use checkbox to allow entry of unknown plane registration using textfield - or add textfield when value == 'Onbekend'/''
     // test if registratie exists
-    $condition = ['registratie' => $start->registratie];
-    $reg_bekend = EzacKist::counter($condition);
     $form['registratie_bekend'] = [
       '#type' => 'value',
-      '#value' => $reg_bekend,
+      '#value' => key_exists($start->registratie, $kisten),
       '#attributes' => ['name' => 'registratie_bekend'],
     ];
 
-    $form = EzacUtil::addField($form, 'registratie', 'select', 'registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2, $kisten, $ajax);
-    $form['registratie']['#attributes'] = ['name' => 'registratie'];
-    $form = EzacUtil::addField($form, 'registratie_onbekend', 'textffield', 'registratie', 'registratie', $start->registratie, 10, 1, TRUE, 2);
-    $form['registratie_onbekend']['#states'] = [
-      // show this field only when registratie not exists
-      // @todo dit werkt nog niet
-      'visible' => [
-        ':input[name="registratie_bekend"]' => ['value' => 0],
+    $form['registratie'] = [
+      '#type' => 'select',
+      '#title' => 'registratie',
+      '#options' => $kisten,
+      // use ajax to set tweezitter value to dynamically show tweede field
+      '#ajax' => [
+        'callback' => '::formTweedeCallback',
+        'wrapper' => 'tweezitter',
       ],
+      '#attributes' => [
+        'name' => 'registratie',
+      ]
     ];
+
+    $form['registratie_onbekend'] = [
+      '#type' => 'textfield',
+      '#title' => 'registratie',
+      '#size' => 10,
+      '#maxlength' => 10,
+      '#states' => [
+        'visible' => [
+          ':input[name="registratie"]' => ['value' => ''],
+         ],
+       ],
+    ];
+
+    if (key_exists($start->registratie, $kisten)) {
+      $form['registratie']['#default_value'] = $start->registratie;
+      $form['registratie_onbekend']['#default_value'] = '';
+    }
+    else {
+      $form['registratie']['#default_value'] = '';
+      $form['registratie_onbekend']['#default_value'] = $start->registratie;
+    }
 
     // @todo allow for unknown name using checkbox
-    $form = EzacUtil::addField($form, 'gezagvoerder', 'select', 'gezagvoerder', 'gezagvoerder', $start->gezagvoerder, 20, 1, TRUE, 3, $leden);
-    $form['gezagvoerder']['#attributes'] = [
-      'name' => 'field_gezagvoerder',
-    ];
-    $form = EzacUtil::addField($form, 'gezagvoerder_onbekend', 'textfield', 'gezagvoerder', 'onbekend', '', 20, 20, FALSE, 3.5);
-    //@see https://www.drupal.org/docs/drupal-apis/form-api/conditional-form-fields
-    $form['gezagvoerder_onbekend']['#states'] = [
-      // show this field only when Gezagvoerder = Onbekend
-      'visible' => [
-        ':input[name="field_gezagvoerder"]' => ['value' => ''],
+    $form['gezagvoerder'] = [
+      '#type' => 'select',
+      '#title' => 'gezagvoerder',
+      '#options' => $leden,
+      '#attributes' => [
+        'name' => 'gezagvoerder',
       ],
     ];
 
-    $form = EzacUtil::addField($form, 'tweede', 'select', 'tweede', 'tweede', $start->tweede, 20, 1, FALSE, 4, $leden);
-    $form['tweede']['#attributes'] = [
-      'name' => 'field_tweede',
-    ];
-    $form['tweede']['#states'] = [
-      // show this field only when tweezitter == TRUE
-      'visible' => [
-        ':input[name="tweezitter"]' => ['checked' => TRUE],
+    $form['gezagvoerder_onbekend'] = [
+      '#type' => 'textfield',
+      '#title' => 'gezagvoerder',
+      '#maxlength' => 20,
+      '#size' => 20,
+      '#attributes' => [
+        'name' => 'gezagvoerder_onbekend',
+      ],
+      '#states' => [
+        // show this field only when Gezagvoerder = Onbekend
+        //@see https://www.drupal.org/docs/drupal-apis/form-api/conditional-form-fields
+        'visible' => [
+          ':input[name="gezagvoerder"]' => ['value' => ''],
+        ],
       ],
     ];
-    $form = EzacUtil::addField($form, 'tweede_onbekend', 'textfield', 'tweede', 'onbekend', '', 20, 20, FALSE, 4.5);
-    $form['tweede_onbekend']['#states'] = [
-      // show this field only when Gezagvoerder = Onbekend
-      'visible' => [
-        ':input[name="tweezitter"]' => ['checked' => TRUE],
-        ':input[name="field_tweede"]' => ['value' => ''],
+
+    // set default values depending on gezagvoerder being known
+    if (key_exists($start->gezagvoerder, $leden)) {
+      $form['gezagvoerder']['#default_value'] = $start->gezagvoerder;
+      $form['gezagvoerder_onbekend']['#default_value'] = '';
+    }
+    else {
+      $form['gezagvoerder']['#default_value'] = '';
+      $form['gezagvoerder_onbekend']['#default_value'] = $start->gezagvoerder;
+    }
+
+    $form['tweede'] = [
+      '#type' => 'select',
+      '#title' => 'tweede inzittende',
+      '#options' => $leden,
+      '#attributes' => [
+        'name' => 'tweede',
+      ],
+      '#states' => [
+        // show this field only when tweede = Onbekend
+        'visible' => [
+          ':input[name="tweezitter"]' => ['checked' => true],
+        ],
       ],
     ];
-    $form = EzacUtil::addField($form, 'soort', 'select', 'soort', 'soort', $start->soort, 4, 1, FALSE, 5, EzacStart::$startSoort);
-    $form = EzacUtil::addField($form, 'startmethode', 'select', 'startmethode', 'startmethode', $start->startmethode, 1, 1, FALSE, 6, EzacStart::$startMethode);
-    $form = EzacUtil::addField($form, 'start', 'textfield', 'start', 'start', $start->start, 10, 10, FALSE, 7);
-    $form = EzacUtil::addField($form, 'landing', 'textfield', 'landing', 'landing', $start->landing, 10, 10, FALSE, 8);
-    $form = EzacUtil::addField($form, 'duur', 'textfield', 'duur', 'duur', $start->duur, 10, 10, FALSE, 9);
-    $form = EzacUtil::addField($form, 'instructie', 'checkbox', 'instructie', 'instructie', $start->instructie, 5, 1, FALSE, 10);
-    $form = EzacUtil::addField($form, 'opmerking', 'textfield', 'opmerking', 'opmerking', $start->opmerking, 30, 30, FALSE, 11);
+
+    $form['tweede_onbekend'] = [
+      '#type' => 'textfield',
+      '#title' => 'tweede inzittende',
+      '#maxlength' => 20,
+      '#size' => 20,
+      '#attributes' => [
+        'name' => 'tweede_onbekend',
+      ],
+      '#states' => [
+        // show this field only when tweede = Onbekend
+        'visible' => [
+          ':input[name="tweede"]' => ['value' => ''],
+          ':input[name="tweezitter"]' => ['checked' => true],
+        ],
+      ],
+    ];
+
+    // set default values
+    if (key_exists($start->tweede, $leden)) {
+      $form['tweede']['#default_value'] = $start->tweede;
+      $form['tweede_onbekend']['#default_value'] = '';
+    }
+    else {
+      $form['tweede']['#default_value'] = '';
+      $form['tweede_onbekend']['#default_value'] = $start->tweede;
+    }
+
+    $form['soort'] = [
+      '#type' => 'select',
+      '#title' => 'soort',
+      '#default_value' => $start->soort,
+      '#options' => EzacStart::$startSoort,
+    ];
+
+    $form['startmethode'] = [
+      '#type' => 'select',
+      '#title' => 'startmethode',
+      '#default_value' => $start->startmethode,
+      '#options' => EzacStart::$startMethode,
+    ];
+
+    $form['start'] = [
+      '#type' => 'textfield',
+      '#title' => 'start',
+      '#default_value' => substr($start->start, 0,5),
+      '#size' => 5,
+      '#maxlength' => 5,
+    ];
+
+    $form['landing'] = [
+      '#type' => 'textfield',
+      '#title' => 'landing',
+      '#default_value' => substr($start->landing, 0, 5),
+      '#size' => 5,
+      '#maxlength' => 5,
+    ];
+
+    $form['duur'] = [
+      '#type' => 'textfield',
+      '#title' => 'duur',
+      '#default_value' => substr($start->duur, 0, 5),
+      '#size' => 5,
+      '#maxlength' => 5,
+    ];
+
+    $form['instructie'] = [
+      '#type' => 'checkbox',
+      '#title' => 'instructie',
+      '#default_value' => $start->instructie,
+    ];
+
+    $form['opmerking'] = [
+      '#type' => 'textfield',
+      '#title' => 'opmerking',
+      '#default_value' => $start->opmerking,
+      '#maxlength' => 30,
+    ];
 
     //Id
     //Toon het het Id nummer van het record
-    $form = EzacUtil::addField($form, 'id', 'hidden', 'Record nummer (Id)', '', $start->id, 8, 8, FALSE, 28);
+    $form['id'] = [
+      '#type' => 'hidden',
+      '#title' => 'record number (id)',
+      '#default_value' => $start->id,
+    ];
 
     $form['actions'] = [
       '#type' => 'actions',
@@ -170,7 +286,7 @@ class EzacStartsUpdateForm extends FormBase {
     ];
 
     //insert Delete button  gevaarlijk ivm dependencies
-    if (\Drupal::currentUser()->hasPermission('EZAC_delete')) {
+    if (Drupal::currentUser()->hasPermission('EZAC_delete')) {
       if (!$newRecord) {
         $form = EzacUtil::addField($form, 'deletebox', 'checkbox', 'verwijder', 'verwijder record', FALSE, 1, 1, FALSE, 29);
         $form['actions']['delete'] = [
@@ -180,6 +296,7 @@ class EzacStartsUpdateForm extends FormBase {
         ];
       }
     }
+
     return $form;
   }
 
@@ -189,7 +306,7 @@ class EzacStartsUpdateForm extends FormBase {
    *
    * @return array|mixed
    */
-  function formTweedeCallback(array $form, FormStateInterface $form_state) {
+  function formTweedeCallback(array $form, FormStateInterface $form_state): array {
     // Check op tweezitter
     $kist = new EzacKist(EzacKist::getID($form_state->getValue('registratie')));
     $tweezitter = ($kist->inzittenden == 2);
@@ -235,11 +352,11 @@ class EzacStartsUpdateForm extends FormBase {
    * @throws \Exception
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $messenger = \Drupal::messenger();
+    $messenger = Drupal::messenger();
 
     // delete record
     if ($form_state->getValue('op') == 'Verwijderen') {
-      if (!\Drupal::currentUser()->hasPermission('EZAC_delete')) {
+      if (!Drupal::currentUser()->hasPermission('EZAC_delete')) {
         $messenger->addMessage('Verwijderen niet toegestaan', $messenger::TYPE_ERROR);
         return;
       }
@@ -259,7 +376,13 @@ class EzacStartsUpdateForm extends FormBase {
       foreach (EzacStart::$fields as $field => $description) {
         $start->$field = $form_state->getValue($field);
       }
-      //@todo check gezagvoerder_onbekend, tweede_onbekend, registratie_onbekend
+      //check gezagvoerder_onbekend, tweede_onbekend, registratie_onbekend
+      if (($start->gezagvoerder == '') && $form_state->getValue('gezagvoerder_onbekend') != '')
+        $start->gezagvoerder = $form_state->getValue('gezagvoerer_onbekend');
+      if (($start->tweede == '') && $form_state->getValue('tweede_onbekend') != '')
+        $start->tweede = $form_state->getValue('tweede_onbekend');
+      if (($start->registratie == '') && $form_state->getValue('registratie_onbekend') != '')
+        $start->registratie = $form_state->getValue('registratie_onbekend');
 
       //Check value newRecord to select insert or update
       if ($form_state->getValue('new') == TRUE) {
