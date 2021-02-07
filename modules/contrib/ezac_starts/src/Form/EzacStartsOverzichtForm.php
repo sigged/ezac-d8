@@ -134,6 +134,7 @@ class EzacStartsOverzichtForm extends FormBase {
         'operator' => 'BETWEEN',
       ],
     ];
+    $namen = [];
     $startsIndex = EzacStart::index($condition);
     foreach ($startsIndex as $id) {
       $start = new EzacStart($id);
@@ -152,15 +153,13 @@ class EzacStartsOverzichtForm extends FormBase {
         }
       }
     }
-    // sorteer namen op waardes
-    asort($namen);
-
-    //@todo selectie van persoon alleen indien toegestaan (#hidden)
 
     // haal de eigen afkorting op, is leeg indien niet aanwezig
     $eigen_afkorting = EzacUtil::getUser();
 
     if (count($namen)) {
+      // sorteer namen op waardes
+      asort($namen);
       // toon selectie box alleen indien namen aanwezig
       $form['startlijst']['persoon'] = [
         '#type' => 'select',
