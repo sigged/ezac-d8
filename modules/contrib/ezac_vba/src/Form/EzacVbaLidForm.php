@@ -91,6 +91,7 @@ class EzacVbaLidForm extends FormBase {
     ];
     $namen = EzacUtil::getLeden($condition);
     $namen[''] = '<selecteer>';
+    //@todo optie voor iedereen toevoegen
 
     $form['persoon'] = [
       '#type' => 'select',
