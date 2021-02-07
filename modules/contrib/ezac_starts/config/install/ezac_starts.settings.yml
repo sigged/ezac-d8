@@ -1,4 +1,12 @@
-database:
-  external: '1'
-  name: 'Ezac'
-  prefix: 'ezac_'
+soort:
+  '    ': algemeen
+  'CLUB': rekening club
+  'DONA': donateur
+  'PASS': passagier
+  '2E  ': tweede inzittende
+
+startmethode:
+  'L': lier
+  'M': motor
+  'S': sleep
+  'B': bungee

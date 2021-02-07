@@ -1,6 +1,20 @@
 ezac_starts:
-  title: Start administratie
+  title: 'Start administratie'
   route_name: ezac_starts
   description: EZAC start administratie
-  weight: 03
+  #weight: 03
 
+ezac_starts.startlijst:
+  title: 'Startlijst overzicht'
+  route_name: ezac_starts_startlijst
+  route_parameters: { periode: 'vandaag' }
+  description: EZAC startlijst overzicht
+  parent: ezac_starts
+  #weight: 03.5
+
+ezac_starts.invoer:
+  title: 'Invoer starts'
+  route_name: ezac_starts_create
+  description: EZAC starts invoer
+  parent: ezac_starts
+  weight: 03.6

@@ -3,6 +3,9 @@
 
 namespace Drupal\ezac\Util;
 
+use Drupal;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\ezac_kisten\Model\EzacKist;
 use Drupal\ezac_leden\Model\EzacLid;
 
@@ -120,6 +123,22 @@ class EzacUtil {
       $kisten[$kist->registratie] = "$kist->registratie $kist->callsign ($kist->inzittenden)";
     }
     return $kisten;
+  }
+
+  /**
+   * @file return EZAC afkorting for drupal user or '' when not found
+   * @return mixed|string
+   */
+  public static function getUser() {
+    //get current user afkorting
+    $condition = ['user' => Drupal::currentUser()->getAccountName()];
+    $afkortingen = EzacLid::index($condition,'afkorting');
+    if (count($afkortingen) == 1) {
+      return $afkortingen[0];
+    }
+    else { // geen ledenrecord voor deze drupal user aanwezig
+      return '';
+    }
   }
 
   public static function showDate($datum) {

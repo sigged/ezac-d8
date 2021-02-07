@@ -16,6 +16,15 @@ ezac_starts_overzicht:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
 
+ezac_starts_startlijst:
+  path: '/ezac/starts/startlijst/{periode}'
+  defaults:
+    _title: 'Startlijst overzicht'
+    _form: '\Drupal\ezac_starts\Form\EzacStartsOverzichtForm'
+  requirements:
+    _permission: 'EZAC_read'
+    _user: ^[a-zA-Z0-9_]+
+
 ezac_starts_overzicht_lid:
   path: '/ezac/starts/overzicht/{datum_start}/{datum_eind}/{vlieger}'
   defaults:
