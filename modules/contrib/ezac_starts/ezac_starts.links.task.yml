@@ -1,0 +1,23 @@
+ezac_starts.startlijst.vandaag:
+  route_name: ezac_starts_startlijst
+  route_parameters: { periode: 'vandaag' }
+  title: 'Vandaag'
+  base_route: ezac_starts.startlijst
+
+ezac_starts.startlijst.seizoen:
+  route_name: ezac_starts_startlijst
+  route_parameters: { periode: 'seizoen' }
+  title: 'Seizoen'
+  base_route: ezac_starts.startlijst
+
+ezac_starts.startlijst.jaar:
+  route_name: ezac_starts_startlijst
+  route_parameters: { periode: 'jaar' }
+  title: '12 maanden'
+  base_route: ezac_starts.startlijst
+
+ezac_starts.startlijst.tweejaar:
+  route_name: ezac_starts_startlijst
+  route_parameters: { periode: 'tweejaar' }
+  title: '24 maanden'
+  base_route: ezac_starts.startlijst
