@@ -49,9 +49,10 @@ class EzacStartsController extends ControllerBase {
       $count = $aantal;
       $total = $total+$count;
       $urlJaar = Url::fromRoute(
-        'ezac_starts_overzicht_jaar',
+        'ezac_starts_overzicht',
         [
-          'jaar' => $jaar
+          'datum_start' => "$jaar-01-01",
+          'datum_eind' => "$jaar-12-31",
         ]
       )->toString();
       $urlExport = Url::fromRoute(
@@ -191,6 +192,7 @@ class EzacStartsController extends ControllerBase {
    * @return array $content
    */
   public static function startOverzicht($datum_start, $datum_eind, $vlieger = NULL) {
+    //@todo maak overzicht van totalen
     $content = array();
 
     $rows = [];
@@ -234,8 +236,8 @@ class EzacStartsController extends ControllerBase {
     // prepare pager
     $total = EzacStart::counter($condition);
     $field = 'id';
-    $sortkey = 'start';
-    $sortdir = 'ASC'; // newest first
+    $sortkey = 'datum';
+    $sortdir = 'ASC'; // ascending
     $limit = 100;
     $pager = \Drupal::service('pager.manager')
       ->createPager($total, $limit);
@@ -288,7 +290,134 @@ class EzacStartsController extends ControllerBase {
         ($start->instructie) ? 'Ja' :'',
         $start->opmerking,
       ];
+
+      // start D7 code
+      // display results
+      // zet in de tabel
+      $registratie = $start->registratie;
+      $soort = $start->soort;
+      //$sm_soort = $startMethode .' ' .$soort;
+      //tel starts per startmethode
+      $startmethodes[$startMethode]['aantal'] =
+        (isset($startmethodes[$startMethode]['aantal']))
+          ? $startmethodes[$startMethode]['aantal'] + 1
+          : 1;
+
+      $duur_hhmm = explode(':', $start->duur);
+      $duur_minuten = $duur_hhmm[0] * 60 + $duur_hhmm[1];
+
+      $kist[$registratie] = [
+        'aantal' =>
+          (isset($kist[$registratie]['aantal']))
+            ? $kist[$registratie]['aantal'] + 1
+            : 1,//increase number of starts for kist
+        'duur'   =>
+          (isset($kist[$registratie]['duur']))
+            ? $kist[$registratie]['duur']+ $duur_minuten
+            : $duur_minuten,
+      ];
+
+      $soort_tellers[$soort]['aantal'] =
+        (isset($soort_tellers[$soort]['aantal']))
+          ? $soort_tellers[$soort]['aantal'] + 1
+          : 1;
+      $soort_tellers[$soort]['duur'] =
+        (isset($soort_tellers[$soort]['duur']))
+          ? $soort_tellers[$soort]['duur'] + $duur_minuten
+          : $duur_minuten;
+
+
     }
+
+    //toon totalen per kist
+    //Set up the table Headings
+    $header2 = array(
+      array('data' => t('kist')),
+      array('data' => t('aantal')),
+      array('data' => t('duur')),
+    );
+
+    if (isset($kist)) {
+      $total_count = 0;
+      $total_time = 0;
+      $outputat = '%02u:%02u';
+      foreach ($kist as $registratie => $value) {
+        $hours = intval($value['duur'] / 60);
+        $minutes = $value['duur'] - ($hours * 60);
+        $row2[] = array(
+          $registratie,
+          $value['aantal'],
+          sprintf($outputat, $hours, $minutes),
+        );
+        $total_count = $total_count + $value['aantal'];
+        $total_time = $total_time + $value['duur'];
+      } //foreach kist
+      $hours = intval($total_time / 60);
+      $minutes = $total_time - ($hours * 60);
+      $row2[] = array ( //provide totals line
+        t('Totaal'),
+        $total_count,
+        sprintf($outputat, $hours, $minutes),
+      );
+      $content[2]['#theme'] = 'table';
+      $content[2]['#header'] = $header2;
+      if (isset($row2)) $content[2]['#rows'] = $row2;
+      $content[2]['#empty'] = t('Geen gegevens beschikbaar');
+      $content[2]['#weight'] = 4;
+    } //if kist
+
+    //show starts per startmethode
+    $header3 = array(
+      array('data' => t('startmethode')),
+      array('data' => t('aantal')),
+    );
+
+    if (isset($startmethodes)) {
+      $total_count = 0;
+      foreach ($startmethodes as $soort => $value) {
+        $row3[] = array(
+          $soort,
+          $value['aantal'],
+        );
+        $total_count = $total_count + $value['aantal'];
+      }
+      $row3[] = array ( //provide totals line
+        t('Totaal'),
+        $total_count,
+      );
+      $content[3]['#theme'] = 'table';
+      $content[3]['#header'] = $header3;
+      if (isset($row3)) $content[3]['#rows'] = $row3;
+      $content[3]['#empty'] = t('Geen gegevens beschikbaar');
+      $content[3]['#weight'] = 5;
+    } //if startmethode
+
+    //show starts per soort
+    $header4 = array(
+      array('data' => t('soort')),
+      array('data' => t('aantal')),
+      array('data' => t('duur')),
+    );
+
+    if (isset($soort_tellers)) {
+      foreach ($soort_tellers as $teller => $value) {
+        $hours = intval($value['duur'] / 60);
+        $minutes = $value['duur'] - ($hours * 60);
+        $row4[] = array(
+          $teller, //@TODO make CASE for SOORTen NORM DONA PASS CLUB
+          $value['aantal'],
+          sprintf($outputat, $hours, $minutes),
+        );
+      } //foreach teller
+      $content[4]['#theme'] = 'table';
+      $content[4]['#header'] = $header4;
+      if (isset($row4)) $content[4]['#rows'] = $row4;
+      $content[4]['#empty'] = t('Geen gegevens beschikbaar');
+      $content[4]['#weight'] = 6;
+    } //if soort-tellers
+
+    // end D7 code
+
     $d = EzacUtil::showDate($datum_start);
     if ($datum_eind <> $datum_start) $d.= " tot " .EzacUtil::showDate($datum_eind);
     $caption = "Overzicht EZAC Starts bestand $d";
