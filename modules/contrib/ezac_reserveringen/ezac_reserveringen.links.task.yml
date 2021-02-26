@@ -1,0 +1,27 @@
+ezac_reserveringen_reservering.alle:
+  title: Alle soorten
+  route_name: ezac_reserveringen_reservering
+  route_parameters: { type: '' }
+  base_route: ezac_reserveringen_reservering
+  weight: 01
+
+ezac_reserveringen_reservering.vliegen:
+  title: Vliegen
+  route_name: ezac_reserveringen_reservering
+  route_parameters: { type: 'vliegen' }
+  base_route: ezac_reserveringen_reservering
+  weight: 02
+
+ezac_reserveringen_reservering.kader:
+  title: Kader
+  route_name: ezac_reserveringen_reservering
+  route_parameters: { type: 'kader' }
+  base_route: ezac_reserveringen_reservering
+  weight: 03
+
+ezac_reserveringen_reservering.werken:
+  title: Werken
+  route_name: ezac_reserveringen_reservering
+  route_parameters: { type: 'werken' }
+  base_route: ezac_reserveringen_reservering
+  weight: 04

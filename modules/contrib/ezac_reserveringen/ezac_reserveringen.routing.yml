@@ -1,0 +1,40 @@
+ezac_reserveringen:
+  path: '/ezac/reserveringen'
+  defaults:
+    _title: 'Reserveringen overzicht'
+    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::overzicht'
+  requirements:
+    _permission: 'EZAC_read'
+
+ezac_reserveringen_overzicht:
+  path: '/ezac/reserveringen/overzicht/{datum}'
+  defaults:
+    _title: 'Reserveringen overzicht'
+    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::overzicht'
+  requirements:
+    _permission: 'EZAC_read'
+
+ezac_reserveringen_reservering:
+  path: '/ezac/reserveringen/reservering/{type}'
+  defaults:
+    _title: 'EZAC reservering plaatsen'
+    _form: '\Drupal\ezac_reserveringen\Form\EzacReserveringenForm'
+    type: ''
+  requirements:
+    _permission: 'EZAC_update'
+
+ezac_reserveringen_annulering:
+  path: '/ezac/reserveringen/annulering/{id}/{hash}'
+  defaults:
+    _title: 'Reservering annuleren'
+    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::annulering'
+  requirements:
+    _permission: 'EZAC_update'
+
+ezac_reserveringen_annulering_form:
+  path: '/ezac/reserveringen/annulering_form/{id}'
+  defaults:
+    _title: 'EZAC reservering annuleren'
+    _form: '\Drupal\ezac_reserveringen\Form\EzacReserveringenAnnuleringForm'
+  requirements:
+    _permission: 'EZAC_update'

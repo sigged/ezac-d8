@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\ezac_vba\Model;
+namespace Drupal\ezac_reserveringen\Model;
 
 use Drupal\ezac\Model\EzacStorage;
 
 /**
- * @file Ezac/EzacDagverslag.php
- * The EZAC class definitions for the vba dagverslagen table
+ * @file Ezac/EzacReservering.php
+ * The EZAC class definitions for the reserveringen table
  *
  * @author Evert Fekkes evert@efekkes.nl
  */
@@ -14,38 +14,28 @@ use Drupal\ezac\Model\EzacStorage;
 /**
  * Provides the implementation of the EzacVbaBevoegdheden class
  */
-class EzacVbaDagverslag extends EzacStorage
+class EzacReservering extends EzacStorage
 {
-
-    //Define vba dagverslagen fields
-    public static $fields = array(
-      'id' => 'Record ID (uniek, auto_increment)',
-      'datum' => 'Datum',
-      'instructeur' => 'Instructeur',
-      'weer' => 'Weer',
-      'verslag' => 'Verslag',
-      'mutatie' => 'Mutatie'
-    );
-
-    // define the fields for the vba dagverslag table
+    // define the fields for the reserveringen table
     public $id = 0;
     public $datum = '';
-    public $instructeur = '';
-    public $weer = '';
-    public $verslag = '';
-    public $mutatie = null;
+    public $periode = '';
+    public $soort = '';
+    public $leden_id = 0;
+    public $doel = '';
+    public $aangemaakt = 0;
+    public $reserve = 0;
 
     /**
-     * constructor for vba_bevoegdheden
+     * constructor for reserveringen
      * @param null $id
      */
     public function __construct($id = NULL)
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->ezacRead('vba_dagverslagen');
+            $this->ezacRead('reserveringen');
         }
-        return $this;
     }
 
     /**
@@ -55,7 +45,8 @@ class EzacVbaDagverslag extends EzacStorage
      *   ID of record created
      */
     public function create(): ?int {
-        $this->id = $this->ezacCreate('vba_dagverslagen');
+
+        $this->id = $this->ezacCreate('reserveringen');
         return $this->id;
     }
 
@@ -69,8 +60,7 @@ class EzacVbaDagverslag extends EzacStorage
     {
       if (isset($id)) {
         $this->id = $id;
-        //@todo className parameter is overbodig
-        $this->ezacRead('vba_dagverslagen');
+        $this->ezacRead('reserveringen');
         if ($this->id == null) {
           // read failed
           return null;
@@ -86,9 +76,9 @@ class EzacVbaDagverslag extends EzacStorage
      * @return int
      *   records_updated
      */
-    public function update(): int {
+    public function update(): ?int {
         // build $condition
-        return $this->ezacUpdate('vba_dagverslagen');
+        return $this->ezacUpdate('reserveringen');
     }
 
     /**
@@ -97,8 +87,8 @@ class EzacVbaDagverslag extends EzacStorage
      * @return int
      *   records_deleted
      */
-    public function delete(): int {
-        return $this->ezacDelete('vba_dagverslagen');
+    public function delete(): ?int {
+        return $this->ezacDelete('reserveringen');
     }
 
     /***
@@ -109,8 +99,8 @@ class EzacVbaDagverslag extends EzacStorage
      * @return int
      *   number of records
      */
-    public static function counter($condition): int {
-      return EzacStorage::ezacCount('vba_dagverslagen', $condition);
+    public static function counter($condition): ?int {
+      return EzacStorage::ezacCount('reserveringen', $condition);
     }
 
     /***
@@ -126,7 +116,7 @@ class EzacVbaDagverslag extends EzacStorage
      * @return array of id values
      */
     public static function index($condition = NULL, $field = 'id', $sortkey = 'datum', $sortdir = 'ASC', $from = NULL, $range = NULL, $unique = FALSE): array {
-        return EzacStorage::ezacIndex('vba_dagverslagen', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
+        return EzacStorage::ezacIndex('reserveringen', $condition, $field, $sortkey, $sortdir, $from, $range, $unique);
     }
 
 }

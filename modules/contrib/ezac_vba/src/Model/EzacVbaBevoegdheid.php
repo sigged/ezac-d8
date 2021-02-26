@@ -2,7 +2,7 @@
 
 namespace Drupal\ezac_vba\Model;
 
-use Drupal\Ezac\Model\EzacStorage;
+use Drupal\ezac\Model\EzacStorage;
 
 /**
  * @file Ezac/EzacBevoegdheidLid.php
@@ -60,7 +60,7 @@ class EzacVbaBevoegdheid extends EzacStorage
      * @return int
      *   ID of record created
      */
-    public function create(): int {
+    public function create(): ?int {
 
         $this->id = $this->ezacCreate('vba_bevoegdheden');
         return $this->id;
