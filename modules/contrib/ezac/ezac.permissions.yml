@@ -1,24 +1,29 @@
 EZAC_create:
-  title: 'Aanmaken EZAC gegevens'
+  title: 'aanmaken EZAC gegevens'
   description: 'Invoeren leden, vloot etc'
   restrict_access: false
   
 EZAC_read:
-  title: 'Lezen EZAC gegevens'
+  title: 'lezen eigen EZAC gegevens'
   description: 'Onderhoud van EZAC gegevens'
   restrict access: false
   
-EZAC_update:
-  title: 'Bijwerken EZAC gegevens'
-  description: 'Wijzigen leden, vloot, etc'
-  restrict access: false
-  
-EZAC_delete:
-  title: 'Verwijderen EZAC gegevens'
-  description: 'Verwijderen records (alleen bij uitzondering gebruiken)'
+EZAC_read_all:
+  title: 'lezen alle EZAC gegevens'
+  description: 'Lezen van alle EZAC gegevens'
   restrict access: true
 
-EZAC_edit:
-  title: 'Wijzigen EZAC gegevens'
-  description: 'Wijzigen records'
+EZAC_update:
+  title: 'wijzigen eigen EZAC gegevens'
+  description: 'Wijzigen leden, vloot, etc'
+  restrict access: false
+
+EZAC_update_all:
+  title: 'wijzigen alle EZAC gegevens'
+  description: 'Wijzigen alle leden, vloot, etc'
+  restrict access: true
+  
+EZAC_delete:
+  title: 'verwijderen EZAC gegevens'
+  description: 'Verwijderen records (alleen bij uitzondering gebruiken)'
   restrict access: true

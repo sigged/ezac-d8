@@ -1,0 +1,96 @@
+langcode: 'nl'
+
+reservering:
+  mededeling: '<h2>Je kunt per periode een reservering doen</h2>'
+
+  periodes:
+    A: 'ochtend'
+    B: 'middag'
+    #C: 'avond'
+
+  types:
+    #types resources
+    vliegen: 'vliegen'
+    kader: 'kader'
+    werken: 'werken'
+
+  resources:
+    vliegen:
+      ASK-23:
+        naam: 'ASK-23'
+        capaciteit: 3
+        #vliegers per periode
+        aantal: 1
+        #aantal per boeking
+      LS-4:
+        naam: 'LS-4'
+        capaciteit: 6
+        #starts per periode
+        aantal: 1
+        #aantal per boeking
+      ASK-21:
+        naam: 'ASK-21'
+        capaciteit: 3
+        #starts per periode
+        aantal: 1
+        #aantal per boeking
+      Twin:
+        naam: 'Twin Astir'
+        capaciteit: 3
+        #starts per periode
+        aantal: 1
+        #aantal per boeking
+      DDT:
+        naam: 'Duo Discus'
+        capaciteit: 3
+        #starts per periode
+        aantal: 1
+        #aantal per boeking
+      Baby:
+        naam: 'Grunau Baby'
+        capaciteit: 3
+        #starts per periode
+        aantal: 1
+        #aantal per boeking
+      Prive:
+        naam: 'Prive vliegtuig'
+        capaciteit: 3
+        #starts per periode
+        aantal: 1
+        #aantal per boeking
+
+    kader:
+      Startofficier:
+        naam: 'Startofficier'
+        capaciteit: 2
+        aantal: 1
+      Lierist:
+        naam: 'Lierist'
+        capaciteit: 3
+        aantal: 1
+      Kader:
+        naam: 'Kader'
+        capaciteit: 10
+        aantal: 1
+
+    werken:
+      Gebouwen:
+        naam: 'Gebouwen'
+        capaciteit: 4
+        aantal: 1
+      Veld:
+        naam: 'Veld'
+        capaciteit: 10
+        aantal: 1
+      Leslokaal:
+        naam: 'Leslokaal'
+        capaciteit: 8
+        aantal: 1
+      Vliegtuigen:
+        naam: 'Vliegtuigen'
+        capaciteit: 4
+        aantal: 1
+      Voertuigen:
+        naam: 'Voertuigen'
+        capaciteit: 4
+        aantal: 1
