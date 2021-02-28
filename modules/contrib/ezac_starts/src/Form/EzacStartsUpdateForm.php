@@ -58,25 +58,6 @@ class EzacStartsUpdateForm extends FormBase {
       '#value' => $newRecord, // TRUE or FALSE
     ];
 
-    if ($form_state->getValue('registratie')) {
-      // Check op tweezitter via (changed) form element
-      //@TODO bij invoeren nieuwe start komt toch een non-object fout in else tak
-      $kist = new EzacKist(EzacKist::getID($form_state->getValue('registratie')));
-    }
-    else {
-      // Check op tweezitter via start record
-      $kist = new EzacKist(EzacKist::getID($start->registratie));
-    }
-    $tweezitter = ($kist->inzittenden == 2);
-    $form['tweezitter'] = [
-      '#prefix' => '<div id="tweezitter">',
-      '#type' => 'checkbox',
-      '#title' => 'Tweezitter',
-      '#value' => $tweezitter,
-      '#checked' => $tweezitter,
-      '#attributes' => ['name' => 'tweezitter'],
-    ];
-
     // get names of leden
     $condition = [
       'actief' => TRUE,
@@ -86,6 +67,29 @@ class EzacStartsUpdateForm extends FormBase {
 
     // get kisten details
     $kisten = EzacUtil::getKisten();
+
+    if ($form_state->getValue('registratie') != '') {
+      // Check op tweezitter via (changed) form element
+      $kist = new EzacKist(EzacKist::getID($form_state->getValue('registratie')));
+      $tweezitter = ($kist->inzittenden == 2);
+    }
+    else {
+      // Check op tweezitter via start record
+      if (($start->registratie != '') and key_exists($start->registratie, $kisten)) {
+        $kist = new EzacKist(EzacKist::getID($start->registratie));
+        $tweezitter = ($kist->inzittenden == 2);
+      }
+      else $tweezitter = true;
+    }
+
+    $form['tweezitter'] = [
+      '#prefix' => '<div id="tweezitter">',
+      '#type' => 'checkbox',
+      '#title' => 'Tweezitter',
+      '#value' => $tweezitter,
+      '#checked' => $tweezitter,
+      '#attributes' => ['name' => 'tweezitter'],
+    ];
 
     $form['datum'] = [
       '#type' => 'date',
@@ -97,7 +101,7 @@ class EzacStartsUpdateForm extends FormBase {
     // test if registratie exists
     $form['registratie_bekend'] = [
       '#type' => 'value',
-      '#value' => key_exists($start->registratie, $kisten),
+      '#value' => ($start->registratie != '') ? key_exists($start->registratie, $kisten) : false,
       '#attributes' => [
         'name' => 'registratie_bekend'
       ],
@@ -115,7 +119,7 @@ class EzacStartsUpdateForm extends FormBase {
         'wrapper' => 'tweezitter',
       ],
       '#attributes' => [
-        'name' => 'registratie_select',
+        'name' => 'registratie',
       ]
     ];
 
@@ -127,12 +131,12 @@ class EzacStartsUpdateForm extends FormBase {
       '#states' => [
         // show only when registratie == [''] <Onbekend>
         'visible' => [
-          ':input[name="registratie_select"]' => ['value' => ''],
+          ':input[name="registratie"]' => ['value' => ''],
          ],
        ],
     ];
 
-    if (key_exists($start->registratie, $kisten)) {
+    if (($start->registratie != '') and key_exists($start->registratie, $kisten)) {
       $form['registratie']['#default_value'] = $start->registratie;
       $form['registratie_onbekend']['#default_value'] = '';
     }
@@ -186,7 +190,7 @@ class EzacStartsUpdateForm extends FormBase {
         'name' => 'tweede',
       ],
       '#states' => [
-        // show this field only when tweede = Onbekend
+        // show this field only when tweezitter
         'visible' => [
           ':input[name="tweezitter"]' => ['checked' => true],
         ],

@@ -2,6 +2,7 @@
 
 namespace Drupal\ezac_starts\Form;
 
+use Drupal;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -126,58 +127,64 @@ class EzacStartsOverzichtForm extends FormBase {
       '#value' => $datum_eind,
     ];
 
-    // Kies gewenste vlieger voor overzicht dagverslagen
-    // vul namen uit starts in periode
-    $condition = [
-      'datum' => [
-        'value' => [$datum_start, $datum_eind],
-        'operator' => 'BETWEEN',
-      ],
-    ];
-    $namen = [];
-    $startsIndex = EzacStart::index($condition);
-    foreach ($startsIndex as $id) {
-      $start = new EzacStart($id);
-      if (!isset($namen[$start->gezagvoerder]) && ($start->gezagvoerder != '')) {
-        $lidId = EzacLid::getID($start->gezagvoerder);
-        if (isset($lidId)) {
-          $lid = new EzacLid($lidId);
-          $namen[$start->gezagvoerder] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
-        }
-      }
-      if (!isset($namen[$start->tweede]) && ($start->tweede != '')) {
-        $lidId = EzacLid::getID($start->tweede);
-        if (isset($lidId)) {
-          $lid = new EzacLid($lidId);
-          $namen[$start->tweede] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
-        }
-      }
-    }
-
     // haal de eigen afkorting op, is leeg indien niet aanwezig
     $eigen_afkorting = EzacUtil::getUser();
 
-    if (count($namen)) {
-      // sorteer namen op waardes
-      asort($namen);
-      // toon selectie box alleen indien namen aanwezig
-      $form['startlijst']['persoon'] = [
-        '#type' => 'select',
-        '#title' => 'Vlieger',
-        '#options' => $namen,
-        '#default_value' => $eigen_afkorting,
-        '#weight' => 3,
-        '#ajax' => [
-          'wrapper' => 'startlijst-div',
-          'callback' => '::formPersoonCallback',
-          'effect' => 'fade',
+    //check permission EZAC_read_all voor selectie, anders alleen eigen starts te selecteren
+    $permission_read_all = Drupal::currentUser()->hasPermission('EZAC_read_all');
+    if ($permission_read_all) {
+
+      // Kies gewenste vlieger voor overzicht dagverslagen
+      // vul namen uit starts in periode
+      $condition = [
+        'datum' => [
+          'value' => [$datum_start, $datum_eind],
+          'operator' => 'BETWEEN',
         ],
       ];
-    }
+      //@todo dit is heel traag bij grote periodes
+      $namen = [];
+      $startsIndex = EzacStart::index($condition);
+      foreach ($startsIndex as $id) {
+        $start = new EzacStart($id);
+        if (!isset($namen[$start->gezagvoerder]) && ($start->gezagvoerder != '')) {
+          $lidId = EzacLid::getID($start->gezagvoerder);
+          if (isset($lidId)) {
+            $lid = new EzacLid($lidId);
+            $namen[$start->gezagvoerder] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
+          }
+        }
+        if (!isset($namen[$start->tweede]) && ($start->tweede != '')) {
+          $lidId = EzacLid::getID($start->tweede);
+          if (isset($lidId)) {
+            $lid = new EzacLid($lidId);
+            $namen[$start->tweede] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
+          }
+        }
+      }
+      if (count($namen)) {
+        // sorteer namen op waardes
+        $namen[0] = '<iedereen>';
+        asort($namen);
+        // toon selectie box alleen indien namen aanwezig
+        $form['startlijst']['persoon'] = [
+          '#type' => 'select',
+          '#title' => 'Vlieger',
+          '#options' => $namen,
+          '#default_value' => $eigen_afkorting,
+          '#weight' => 3,
+          '#ajax' => [
+            'wrapper' => 'startlijst-div',
+            'callback' => '::formPersoonCallback',
+            'effect' => 'fade',
+          ],
+        ];
+      }
+      $persoon = $form_state->getValue('persoon');
+    } // permission_read_all
 
-    $persoon = $form_state->getValue('persoon');
-    if (!isset($persoon)) {
-      // nog geen selectie gedaan
+    if (!isset($persoon) or (!$permission_read_all)) {
+      // geen selectie gedaan of niet toegestaan
       if ($eigen_afkorting != '') {
         $persoon = $eigen_afkorting;
       }
@@ -200,16 +207,25 @@ class EzacStartsOverzichtForm extends FormBase {
       ],
     ];
 
+    /*
+     * voor periode == 'vandaag' worden alle starts getoond (inzage startlijst)
+     * voor andere periodes alleen de eigen starts of via selectie indien permission aanwezig
+     */
+    if ($permission_read_all) { // persoon selectie mogelijk
+      $p = ($persoon != '0') ? $persoon : null; // 0: <iedereen>
+    }
+    else $p = ($periode == 'vandaag') ? null : $eigen_afkorting; // toon voor vandaag alle starts
+
+    // toon gegevens per vlucht
     $details = $form_state->getValue('details');
-    if (isset($persoon) && $persoon != '') {
-      //toon vluchten dit jaar
-      $form['startlijst']['starts'] = EzacStartsController::startOverzicht(
-        $ds,
-        $de,
-        $persoon,
-        $details);
-      $form['startlijst']['starts']['#weight'] = 5;
-    } //isset(persoon)
+
+    //toon vluchten dit jaar
+    $form['startlijst']['starts'] = EzacStartsController::startOverzicht(
+      $ds,
+      $de,
+      $p,
+      $details);
+    $form['startlijst']['starts']['#weight'] = 5;
 
     return $form;
   }

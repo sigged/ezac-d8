@@ -31,10 +31,11 @@ class EzacVbaVerslagTableForm extends FormBase {
    *
    * @param array $form
    * @param FormStateInterface $form_state
+   * @param int $id id van verslag voor edit
    *
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state): array {
+  public function buildForm(array $form, FormStateInterface $form_state, $id = NULL): array {
     // prepare message area
     $messenger = Drupal::messenger();
 
@@ -64,11 +65,9 @@ class EzacVbaVerslagTableForm extends FormBase {
     $leden = EzacUtil::getLeden($condition);
     $leden[''] = '<selecteer>';
 
-    //opslag voor ingevoerde opmerkingen en bevoegdheden per vlieger
-    //dit is een array van $vlieger['data'] gegevens (opmerking en bevoegdheid)
-    $form['vlieger_storage'] = [
+    $form['leden'] = [
       '#type' => 'value',
-      '#value' => NULL,
+      '#value' => $leden,
     ];
 
     //maak lijst van bevoegdheden voor dropdown menu
@@ -98,15 +97,32 @@ class EzacVbaVerslagTableForm extends FormBase {
       : date('Y-m-d');
 
     // 2. build form contents
+
+    // if id is set, read dagverslag for edit
+    if ($id != null) {
+      $dagverslag = new EzacVbaDagverslag($id);
+      $newRecord = false;
+    }
+    else {
+      $dagverslag = new EzacVbaDagverslag();
+      $newRecord = true;
+    }
+    $form['newRecord'] = [
+    '#type' => 'value',
+    '#value' => $newRecord,
+    '#attributes' => ['name' => 'newRecord'],
+    ];
+
     // datum selector dropdown list
     $form['datum_select'] = [
       '#title' => t('Datum'),
       '#type' => 'select',
       '#options' => $start_dates,
-      '#default_value' => key($start_dates),  //most recent date
+      '#default_value' => ($newRecord) ? key($start_dates) : $dagverslag->datum,  //most recent date
       '#states' => [
         'visible' => [
           ':input[name="datum_other"]' => ['checked' => FALSE],
+          ':input[name="newRecord"]' => ['value' => TRUE],
         ],
       ],
     ];
@@ -114,9 +130,9 @@ class EzacVbaVerslagTableForm extends FormBase {
     // Enter datum manually if requested or no list available
     $form['datum_entry'] = [
       '#title' => t('Datum'),
-      '#type' => 'date', //extension to 'date'
+      '#type' => 'date_select', //extension to 'date'
       '#date_format' => 'Y-m-d',
-      '#default_value' => $datum, //today
+      '#default_value' => ($newRecord) ? $datum : $dagverslag->datum, //today
       '#states' => [
         'visible' => [
           ':input[name="datum_other"]' => ['checked' => TRUE],
@@ -133,26 +149,16 @@ class EzacVbaVerslagTableForm extends FormBase {
     ];
 
     // set instructeur default to value of current user
-    // present drop list with leden
-    // via AJAX wordt vervolgens de lijst van vliegers voor die instructeur getoond
+    // via AJAX wordt de lijst van vliegers voor die instructeur getoond
+
     //get current user details
-    $user = $this->currentUser();
-    $user_name = $user->getAccountName();
-    $condition = ['user' => $user_name];
-    $id = EzacLid::index($condition);
-    if (count($id) == 1) {
-      $lid = new EzacLid($id);
-      $afkorting = $lid->afkorting;
-    }
-    else {
-      $afkorting = '';
-    } // geen lid gevonden
+    $afkorting = EzacUtil::getUser();
 
     $form['instructeur'] = [
       '#title' => t('Instructeur / verantwoordelijke'),
       '#type' => 'select',
       '#options' => $leden,  //@TODO select only instructeur from leden
-      '#default_value' => $afkorting,
+      '#default_value' => ($newRecord) ? $afkorting : $dagverslag->instructeur,
       //'#description' => t('Instructeur of verantwoordelijke'),
       '#weight' => 2,
       '#ajax' => [
@@ -166,7 +172,7 @@ class EzacVbaVerslagTableForm extends FormBase {
       '#title' => t('Weer en baanrichting'),
       '#type' => 'textarea',
       '#rows' => 2,
-      //'#default_value' => $verslag_waarde,
+      '#default_value' => ($newRecord) ? '' : nl2br($dagverslag->weer),
       '#weight' => 3,
       '#prefix' => '<div id="weer">',
       '#suffix' => '</div>',
@@ -177,7 +183,7 @@ class EzacVbaVerslagTableForm extends FormBase {
       '#title' => t('Algemeen verslag'),
       '#type' => 'textarea',
       '#rows' => 10,
-      //'#default_value' => $verslag,
+      '#default_value' => ($newRecord) ? '' : nl2br($dagverslag->verslag),
       '#required' => TRUE,
       '#weight' => 4,
       '#prefix' => '<div id="verslag">',
@@ -365,32 +371,34 @@ class EzacVbaVerslagTableForm extends FormBase {
     // $vliegers[afkorting] has keys naam opmerking bevoegdheid onderdeel
     $vliegers = $form_state->getValue('vliegers');
     if (isset($vliegers)) {
-      foreach ($vliegers as $vlieger) {
+      foreach ($vliegers as $afkorting => $vlieger) {
 
-        if (isset($vliegers[$vlieger]['opmerking']) && $vliegers[$vlieger]['opmerking'] <> '') {
+        if (isset($vlieger['opmerking']) && $vlieger['opmerking'] <> '') {
           //opmerking is ingevoerd
           $dagverslagLid = new EzacVbaDagverslagLid();
           $dagverslagLid->datum = $datum;
-          $dagverslagLid->afkorting = $vlieger;
+          $dagverslagLid->afkorting = $afkorting;
           $dagverslagLid->instructeur = $form_state->getValue('instructeur');
-          $dagverslagLid->verslag = htmlentities($vliegers[$vlieger]['opmerking']);
+          $dagverslagLid->verslag = htmlentities($vlieger['opmerking']);
           $dagverslagLid->mutatie = date('Y-m-d h:m:s');
-          $dagverslagLid = $dagverslagLid->create();
-          $message->addMessage('Verslag voor ' . $leden[$vlieger] . ' aangemaakt', 'status');
+          $id = $dagverslagLid->create();
+          $message->addMessage('Verslag voor ' . $leden[$afkorting] . ' aangemaakt', 'status');
         }
         //update bevoegdheden per vlieger
-        if (isset($vliegers[$vlieger]['bevoegdheid']) && $vliegers[$vlieger]['bevoegdheid'] <> '') {
+        if (isset($vlieger['bevoegdheid']) && $vlieger['bevoegdheid'] <> '') {
           //Bevoegdheid ingevoerd
           $bevoegdheid = new EzacVbaBevoegdheid();
-          $bevoegdheid->bevoegdheid = $vliegers[$vlieger]['bevoegdheid'];
-          $bevoegdheid->onderdeel = htmlentities($vliegers[$vlieger]['onderdeel']);
+          $bevoegdheid->bevoegdheid = $vlieger['bevoegdheid'];
+          $bevoegdheid->onderdeel = htmlentities($vlieger['onderdeel']);
           $bevoegdheid->datum_aan = $datum;
-          $bevoegdheid->afkorting = $vlieger;
+          $bevoegdheid->datum_uit = null;
+          $bevoegdheid->afkorting = $afkorting;
           $bevoegdheid->instructeur = $form_state->getValue('instructeur');
           $bevoegdheid->actief = TRUE;
+          $bevoegdheid->mutatie = date('Y-m-d h:m:s');
           $id = $bevoegdheid->create();
-          $message->addMessage('Bevoegdheid ' . $vliegers[$vlieger]['bevoegdheid']
-            . ' voor ' . $leden[$vlieger] . " aangemaakt [$id]", 'status');
+          $message->addMessage('Bevoegdheid ' . $vlieger['bevoegdheid']
+            . ' voor ' . $leden[$afkorting] . " aangemaakt [$id]", 'status');
         }
       }
     }

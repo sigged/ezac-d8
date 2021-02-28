@@ -2,16 +2,13 @@
 
 namespace Drupal\ezac_vba\Controller;
 
-use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
-use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-
+use Drupal;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-
-use Drupal\ezac_vba\Model\EzacVbaDagverslag;
 use Drupal\ezac\Util\EzacUtil;
+use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
+use Drupal\ezac_vba\Model\EzacVbaDagverslag;
+use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
 
 /**
  * Controller for EZAC start administration.
@@ -28,26 +25,24 @@ class EzacVbaController extends ControllerBase {
    *  renderable array
    */
   public function dagverslagen($datum_start, $datum_eind) {
-    $content = array();
+    $content = [];
 
     $rows = [];
     $headers = [
-        t('Datum'),
-        t('Verslag'),
+      t('Datum'),
+      t('Verslag'),
     ];
 
     // build dagverslagen table - rows
 
-    // START D7 code
     $condition = [];
     $namen = EzacUtil::getLeden($condition);
-    // $bevoegdheden = EzacVba_get_bevoegdheden();
 
     //lees dagverslag index
     $condition = [
       'datum' => [
         'value' => [$datum_start, $datum_eind],
-        'operator' => 'BETWEEN'
+        'operator' => 'BETWEEN',
       ],
     ];
     $dagverslagIndex = EzacVbaDagverslag::index($condition);
@@ -59,16 +54,20 @@ class EzacVbaController extends ControllerBase {
     $condition = [
       'datum_aan' => [
         'value' => [$datum_start, $datum_eind],
-        'operator' => 'BETWEEN'
+        'operator' => 'BETWEEN',
       ],
     ];
     $bevoegdheidLidIndex = EzacVbaBevoegdheid::index($condition);
 
-    $header = array(
-      array('data' => 'datum', 'width' => '20%'),
-      array('data' => 'verslag'),
-    );
-    $rows = array();
+    $header = [
+      ['data' => 'datum', 'width' => '20%'],
+      ['data' => 'verslag'],
+    ];
+    $rows = [];
+
+    // check permission for update
+    $permission_update_all = Drupal::currentUser()
+      ->hasPermission('EZAC_update_all');
 
     foreach ($dagverslagIndex as $id) {
       $dagverslag = new EzacVbaDagverslag($id);
@@ -83,7 +82,7 @@ class EzacVbaController extends ControllerBase {
 
     foreach ($dagverslagLidIndex as $id) {
       $dl = new EzacVbaDagverslagLid($id);
-      $p_naam  = $namen[$dl->afkorting];
+      $p_naam = $namen[$dl->afkorting];
       $p_instr = $namen[$dl->instructeur];
       $p_verslag = nl2br($dl->verslag);
       $overzicht[$dl->datum]['dagverslag_lid'][$dl->id] =
@@ -93,7 +92,7 @@ class EzacVbaController extends ControllerBase {
     //verwerk bevoegdheid_lid
     foreach ($bevoegdheidLidIndex as $id) {
       $bl = new EzacVbaBevoegdheid($id);
-      $p_naam  = $namen[$bl->afkorting];
+      $p_naam = $namen[$bl->afkorting];
       $p_instr = $namen[$bl->instructeur];
       $p_onderdeel = nl2br($bl->onderdeel);
       $p_opmerking = nl2br($bl->opmerking);
@@ -107,46 +106,56 @@ class EzacVbaController extends ControllerBase {
       foreach ($overzicht as $datum => $ovz) {
         if (isset($ovz['dagverslag'])) {
           foreach ($ovz['dagverslag'] as $id => $verslag) {
-            $rows[] = array(
-              ezacUtil::showDate($datum),
-              $verslag,
-            );
+            if ($permission_update_all) {
+              // allow dagverslag edit
+              $urlString = Url::fromRoute(
+                'ezac_vba_dagverslag_table',  // edit dagverslag record
+                ['id' => $id]
+              )->toString();
+              $d = t("<a href=$urlString>" . EzacUtil::showDate($datum) . "</a>");
+            }
+            else {
+              $d = EzacUtil::showDate($datum);
+            }
           }
+          $rows[] = [
+            $d,
+            $verslag,
+          ];
         }
-        if (isset($ovz['dagverslag_lid'])) {
-          foreach ($ovz['dagverslag_lid'] as $id => $verslag) {
-            $rows[] = array(
-              ezacUtil::showDate($datum),
-              $verslag,
-            );
-          }
+      } // foreach
+      if (isset($ovz['dagverslag_lid'])) {
+        foreach ($ovz['dagverslag_lid'] as $id => $verslag) {
+          $rows[] = [
+            ezacUtil::showDate($datum),
+            $verslag,
+          ];
         }
-        if (isset($ovz['bevoegdheid_lid'])) {
-          foreach ($ovz['bevoegdheid_lid'] as $id => $verslag) {
-            $rows[] = array(
-              ezacUtil::showDate($datum),
-              $verslag,
-            );
-          }
+      }
+      if (isset($ovz['bevoegdheid_lid'])) {
+        foreach ($ovz['bevoegdheid_lid'] as $id => $verslag) {
+          $rows[] = [
+            ezacUtil::showDate($datum),
+            $verslag,
+          ];
         }
       }
     }
-    // END D7 code
 
     // define table for output
     $caption = "Overzicht EZAC VBA verslagen van $datum_start tot $datum_eind";
     $content['table'] = [
-        '#type' => 'table',
-        '#caption' => $caption,
-        '#header' => $header,
-        '#rows' => $rows,
-        '#empty' => t('Geen gegevens beschikbaar.'),
-        '#sticky' => TRUE,
+      '#type' => 'table',
+      '#caption' => $caption,
+      '#header' => $header,
+      '#rows' => $rows,
+      '#empty' => t('Geen gegevens beschikbaar.'),
+      '#sticky' => TRUE,
     ];
     // add pager
     $content['pager'] = [
-        '#type' => 'pager',
-        '#weight' => 5
+      '#type' => 'pager',
+      '#weight' => 5,
     ];
     // Don't cache this page.
     $content['#cache']['max-age'] = 0;
@@ -154,55 +163,18 @@ class EzacVbaController extends ControllerBase {
     return $content;
   } // dagverslagen
 
-    /**
-     * Render a list of entries in the database.
-     * @param string $datum_start
-     *  $jaar - categorie (optional)
-     * @param $datum_eind
-     * @return array
-     */
-    public function dagverslagLid($datum_start, $datum_eind) {
-      //@todo move to form
-        $content = array();
-
-        $rows = [];
-        $headers = [
-            t('start'),
-        ];
-
-        $leden = EzacUtil::getLeden();
-        // $kisten = EzacUtil::getKisten();
-
-        $caption = "Overzicht EZAC vba bestand";
-        $content['table'] = [
-            '#type' => 'table',
-            '#caption' => $caption,
-            '#header' => $headers,
-            '#rows' => $rows,
-            '#empty' => t('Geen gegevens beschikbaar.'),
-            '#sticky' => TRUE,
-        ];
-        // add pager
-        $content['pager'] = [
-            '#type' => 'pager',
-            '#weight' => 5
-        ];
-        // Don't cache this page.
-        $content['#cache']['max-age'] = 0;
-
-        return $content;
-    } // dagverslagLid
-
-
   /**
    * Render a list of entries in the database.
-   * @param string
+   *
+   * @param string $datum_start
    *  $jaar - categorie (optional)
+   * @param $datum_eind
+   *
    * @return array
    */
-  public function bevoegdheidLid($datum_start, $datum_eind) {
+  public function dagverslagLid($datum_start, $datum_eind) {
     //@todo move to form
-    $content = array();
+    $content = [];
 
     $rows = [];
     $headers = [
@@ -210,6 +182,7 @@ class EzacVbaController extends ControllerBase {
     ];
 
     $leden = EzacUtil::getLeden();
+    // $kisten = EzacUtil::getKisten();
 
     $caption = "Overzicht EZAC vba bestand";
     $content['table'] = [
@@ -223,7 +196,71 @@ class EzacVbaController extends ControllerBase {
     // add pager
     $content['pager'] = [
       '#type' => 'pager',
-      '#weight' => 5
+      '#weight' => 5,
+    ];
+    // Don't cache this page.
+    $content['#cache']['max-age'] = 0;
+
+    return $content;
+  } // dagverslagLid
+
+
+  /**
+   * Render a list of entries in the database.
+   *
+   * @param string
+   *  $jaar - categorie (optional)
+   *
+   * @return array
+   */
+  public function bevoegdheidLid($datum_start, $datum_eind) {
+    //@todo move to form
+    $content = [];
+
+    $rows = [];
+    $headers = [
+      t('datum'),
+      t('naam'),
+      t('instructeur'),
+      t('bevoegdheid'),
+    ];
+
+    $leden = EzacUtil::getLeden();
+
+    $condition = [
+      'datum_aan' => [
+        'value' => [$datum_start, $datum_eind],
+        'operator' => 'BETWEEN',
+      ],
+    ];
+    $bevoegdhedenIndex = EzacVbaBevoegdheid::index($condition);
+
+    $rows = [];
+    foreach ($bevoegdhedenIndex as $id) {
+      $bevoegdheid = new EzacVbaBevoegdheid($id);
+      $rows[] = [
+        EzacUtil::showDate($bevoegdheid->datum_aan),
+        $leden[$bevoegdheid->afkorting],
+        $leden[$bevoegdheid->instructeur],
+        "$bevoegdheid->bevoegdheid - $bevoegdheid->onderdeel",
+      ];
+    }
+
+    $ds = EzacUtil::showDate($datum_start);
+    $de = EzacUtil::showDate($datum_eind);
+    $caption = "Overzicht EZAC vba bestand - bevoegdheden $ds - $de";
+    $content['table'] = [
+      '#type' => 'table',
+      '#caption' => $caption,
+      '#header' => $headers,
+      '#rows' => $rows,
+      '#empty' => t('Geen gegevens beschikbaar.'),
+      '#sticky' => TRUE,
+    ];
+    // add pager
+    $content['pager'] = [
+      '#type' => 'pager',
+      '#weight' => 5,
     ];
     // Don't cache this page.
     $content['#cache']['max-age'] = 0;

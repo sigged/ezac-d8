@@ -128,7 +128,7 @@ class EzacStartsController extends ControllerBase {
 
     // prepare pager
     $range = 120;
-    $pager = \Drupal::service('pager.manager')
+    $pager = Drupal::service('pager.manager')
       ->createPager($total, $range);
     $page = $pager
       ->getCurrentPage();
@@ -198,7 +198,7 @@ class EzacStartsController extends ControllerBase {
     //@todo maak overzicht van totalen
     $d = EzacUtil::showDate($datum_start);
     $intro = "<h2>Starts van $d";
-    if (isset($datum_eind)) {
+    if (isset($datum_eind) and $datum_eind != $datum_start) {
       $d = EzacUtil::showDate($datum_eind);
       $intro .= " tot $d";
     }
@@ -254,11 +254,12 @@ class EzacStartsController extends ControllerBase {
     // prepare pager
     $total = EzacStart::counter($condition);
     $field = 'id';
-    $sortkey = 'datum';
+    $sortkey = 'datum'; //@todo binnen datum ook op tijd te sorteren
     $sortdir = 'ASC'; // ascending
     if ($detail) {
+      // @todo pager werkt niet goed, error bij display 2e pagina
       $limit = 100; // set only when details requested
-      $pager = \Drupal::service('pager.manager')
+      $pager = Drupal::service('pager.manager')
         ->createPager($total, $limit);
       $page = $pager
         ->getCurrentPage();
@@ -274,11 +275,6 @@ class EzacStartsController extends ControllerBase {
     $startsIndex = EzacStart::index($condition, $field, $sortkey, $sortdir, $from, $limit, $unique);
     foreach ($startsIndex as $id) {
       $start = new EzacStart($id);
-
-      $urlString = Url::fromRoute(
-        'ezac_starts_update',  // edit starts record
-        ['id' => $start->id]
-      )->toString();
 
       if (isset($leden[$start->gezagvoerder]) && $start->gezagvoerder <> '') {
         $gezagvoerder = $leden[$start->gezagvoerder];
@@ -300,10 +296,26 @@ class EzacStartsController extends ControllerBase {
       }
       else $startMethode = $start->startmethode;
 
+      // start mag worden gewijzigd als het een eigen start is of permission EZAC_update_all aanwezig
+      $eigen_afkorting = EzacUtil::getUser();
+      if (($start->gezagvoerder == $eigen_afkorting) or ($start->tweede == $eigen_afkorting)
+      or Drupal::currentUser()->hasPermission('EZAC_update_all')) {
+        // toon tijd als link naar edit start
+        $urlString = Url::fromRoute(
+          'ezac_starts_update',  // edit starts record
+          ['id' => $start->id]
+        )->toString();
+        $tijd = t("<a href=$urlString>" .substr($start->start, 0, 5) ."</a>");
+      }
+      else {
+        // toon tijd zonder link
+        $tijd = substr($start->start, 0, 5);
+      }
+
       $rows[] = [
         //link each record to edit route
         $start->datum,
-        t("<a href=$urlString>" .substr($start->start, 0, 5) ."</a>"),
+        $tijd,
         substr($start->landing,0,5),
         substr($start->duur, 0,5),
         $start->registratie,
@@ -463,6 +475,9 @@ class EzacStartsController extends ControllerBase {
         '#weight' => 6,
       ];
     }
+    // Don't cache this page.
+    $content['#cache']['max-age'] = 0;
+
     return $content;
   }
     /**
@@ -471,14 +486,15 @@ class EzacStartsController extends ControllerBase {
      * @param string $datum_eind
      * @return array
      */
+    /*
     public function overzicht($datum_start = NULL, $datum_eind = NULL) {
-      //@todo add filter params for vlieger and registratie
       $content = self::startOverzicht($datum_start, $datum_eind, NULL, False);
       // Don't cache this page.
       $content['#cache']['max-age'] = 0;
 
       return $content;
     } // overzicht
+    */
 
     /**
      * Maak exportbestand uit Starts tabel
