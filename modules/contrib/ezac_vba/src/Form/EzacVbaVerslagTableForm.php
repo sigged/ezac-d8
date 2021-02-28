@@ -102,6 +102,10 @@ class EzacVbaVerslagTableForm extends FormBase {
     if ($id != null) {
       $dagverslag = new EzacVbaDagverslag($id);
       $newRecord = false;
+      $form['id'] = [
+        '#type' => 'value',
+        '#value' => $id,
+      ];
     }
     else {
       $dagverslag = new EzacVbaDagverslag();
@@ -308,9 +312,26 @@ class EzacVbaVerslagTableForm extends FormBase {
     $form['submit'] = [
       '#type' => 'submit',
       '#description' => t('Verslag opslaan en via mail verzenden'),
-      '#value' => t('Opslaan'),
-      '#weight' => 99,
+      '#value' => ($newRecord) ? t('Opslaan') : t('Bijwerken'),
+      '#weight' => 97,
     ];
+
+    //5. add delete button
+    if (Drupal::currentUser()->hasPermission('EZAC_delete')) {
+      $form['delete_checkbox'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Verwijder'),
+        '#checked' => false,
+        '#weight' => 98
+      ];
+      $form['delete'] = [
+        '#type' => 'submit',
+        '#description' => t('Verslag verwijderen'),
+        '#value' => t('Verwijderen'),
+        '#weight' => 99,
+      ];
+    }
+
 
     return $form;
   }
@@ -335,7 +356,7 @@ class EzacVbaVerslagTableForm extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    //$vliegers_data = $form_state->getValue('vliegers');
+    // @todo check delete validation
   }
 
   /**
@@ -348,12 +369,32 @@ class EzacVbaVerslagTableForm extends FormBase {
 
     $message = Drupal::messenger();
 
+    // delete record
+    if ($form_state->getValue('op') == 'Verwijderen') {
+      if (!Drupal::currentUser()->hasPermission('EZAC_delete')) {
+        $message->addMessage('Verwijderen niet toegestaan', $message::TYPE_ERROR);
+        return;
+      }
+      if ($form_state->getValue('delete_checkbox') == FALSE) {
+        $message->addMessage('Verwijdering niet geselecteerd', $message::TYPE_ERROR);
+        return;
+      }
+      $dagverslag = new EzacVbaDagverslag($form_state->getValue('id')); // initiate Start instance
+      $count = $dagverslag->delete(); // delete record in database
+      $message->addMessage("$count record verwijderd");
+      return;
+    }
+
     // if datum_other is checked, take datum from entry, else from select
     $datum = ($form_state->getValue('datum_other') == 1)
       ? $form_state->getValue('datum_entry')
       : $form_state->getValue('datum_select');
 
-    $dagverslag = new EzacVbaDagverslag();
+    if ($form_state->getValue('newRecord')) $dagverslag = new EzacVbaDagverslag();
+    else {
+      $dagverslag = new EzacVbaDagverslag($form_state->getValue('id'));
+    }
+
     $leden = $form_state->getValue('leden');
     $dagverslag->datum = $datum;
     $dagverslag->instructeur = $form_state->getValue('instructeur');
@@ -363,9 +404,23 @@ class EzacVbaVerslagTableForm extends FormBase {
 
     //write verslag to vba_dagverslagen
     if ($dagverslag->weer . $dagverslag->verslag != '') { // verslag ingevuld
-      $id = $dagverslag->create(); // write to database
-      $message->addMessage("Dagverslag [$id] voor "
-        . EzacUtil::showDate($dagverslag->datum) . ' aangemaakt', 'status');
+      if ($form_state->getValue('newRecord')) {
+        $id = $dagverslag->create(); // write to database
+        $message->addMessage("Dagverslag [$id] voor "
+          . EzacUtil::showDate($dagverslag->datum) . ' aangemaakt', 'status');
+      }
+      else {
+        // update record
+        $nr = $dagverslag->update();
+      }
+      if ($nr == 1) {
+        $message->addMessage("Dagverslag [$dagverslag->id] voor "
+          . EzacUtil::showDate($dagverslag->datum) . ' bijgewerkt', 'status');
+      }
+      else {
+        // update niet gelukt
+        $message->addMessage("Dagverslag [$dagverslag->id] kon niet worden bijgewerkt", 'error');
+      }
     }
     //write verslag per vlieger
     // $vliegers[afkorting] has keys naam opmerking bevoegdheid onderdeel
