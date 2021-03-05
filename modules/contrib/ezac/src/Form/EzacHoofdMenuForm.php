@@ -33,25 +33,6 @@ class EzacHoofdMenuForm extends FormBase {
       '#suffix' => '</div>',
     );
 
-    /*
-    $form['jaar'] = array(
-    '#type' => 'select',
-    '#options' => $jaren,
-    '#title' => 'Jaar',
-    '#default_value' => $jaar,
-    '#weight' => 1,
-    '#ajax' => array(
-        'callback' => array($this, 'jaarCallback'),
-        'event' => 'change',
-        'effect' => 'fade',
-        'wrapper' => 'menu-div',
-        'progress' => array(
-          'type' => 'throbber',
-          'message' => t('Bijwerken menu...'),
-          ),
-        ),
-    );
-    */
     $form['menu'] = self::buildMenu();
 
     // Don't cache this page.
@@ -85,7 +66,7 @@ class EzacHoofdMenuForm extends FormBase {
   }
   
   /**
-   * Build the DLO main menu.
+   * Build the EZAC main menu.
    * @param varchar $jaar
    * @return array menu table
    */
@@ -101,19 +82,19 @@ class EzacHoofdMenuForm extends FormBase {
       t(""),
     );
     $rows[]= array(
-      t("<a href= Ezac/leden/>Leden administratie</a>"),
+      t("<a href= ezac/leden/>Leden administratie</a>"),
       t("Inzage en wijzigen leden informatie"),
     );
     $rows[] = array(
-      t("<a href= Ezac/leden/update>Lid toevoegen</a>"),
+      t("<a href= ezac/leden/update>Lid toevoegen</a>"),
       t("Invoeren gegevens nieuw lid"),
     );
     $rows[] = array(
-      t("<a href= Ezac/kisten/>Vloot administratie</a>"),
+      t("<a href= ezac/kisten/>Vloot administratie</a>"),
       t("Inzage en wijzigen vloot informatie"),
     );
     $rows[] = array(
-      t("<a href= Ezac/kisten/update>Kist toevoegen</a>"),
+      t("<a href= ezac/kisten/update>Kist toevoegen</a>"),
       t("Invoeren gegevens nieuw vliegtuig"),
     );
     $rows[] = array(
@@ -121,11 +102,11 @@ class EzacHoofdMenuForm extends FormBase {
       t(""),
     );
     $rows[] = array(
-      t("<a href= Ezac/starts>Startadministratie</a>"),
+      t("<a href= ezac/starts>Startadministratie</a>"),
       t("Overzicht startadministratie"),
     );
     $rows[] = array(
-      t("<a href= Ezac/starts/create/>Start invoer</a>"),
+      t("<a href= ezac/starts/create/>Start invoer</a>"),
       t("Invoeren nieuwe start"),
     );
     $rows[] = array(
@@ -133,11 +114,11 @@ class EzacHoofdMenuForm extends FormBase {
       t(""),
     );
     $rows[] = array(
-      t("<a href= Ezac/vba>Overzicht</a>"),
+      t("<a href= ezac/vba>Overzicht</a>"),
       t("Overzicht VBA gegevens"),
     );
     $rows[] = array(
-      t("<a href= Ezac/vba>Invoeren</a>"),
+      t("<a href= ezac/vba>Invoeren</a>"),
       t("Invoeren verslagen en bevoegdheden"),
     );
 

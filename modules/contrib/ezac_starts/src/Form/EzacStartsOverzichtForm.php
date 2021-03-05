@@ -142,26 +142,21 @@ class EzacStartsOverzichtForm extends FormBase {
           'operator' => 'BETWEEN',
         ],
       ];
-      //@todo dit is heel traag bij grote periodes
+
       $namen = [];
-      $startsIndex = EzacStart::index($condition);
-      foreach ($startsIndex as $id) {
-        $start = new EzacStart($id);
-        if (!isset($namen[$start->gezagvoerder]) && ($start->gezagvoerder != '')) {
-          $lidId = EzacLid::getID($start->gezagvoerder);
-          if (isset($lidId)) {
-            $lid = new EzacLid($lidId);
-            $namen[$start->gezagvoerder] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
-          }
-        }
-        if (!isset($namen[$start->tweede]) && ($start->tweede != '')) {
-          $lidId = EzacLid::getID($start->tweede);
-          if (isset($lidId)) {
-            $lid = new EzacLid($lidId);
-            $namen[$start->tweede] = "$lid->voornaam $lid->voorvoeg $lid->achternaam";
-          }
-        }
+      $leden = EzacUtil::getLeden();
+      $gezagvoerders = array_unique(EzacStart::index($condition,'gezagvoerder'));
+      $tweedes = array_unique(EzacStart::index($condition, 'tweede'));
+      foreach ($gezagvoerders as $afkorting) {
+        if (isset($leden[$afkorting])) $namen[$afkorting] = $leden[$afkorting];
+        else $namen[$afkorting] = "$afkorting *"; // onbekende afkorting
       }
+      foreach ($tweedes as $afkorting) {
+        if (isset($leden[$afkorting])) $namen[$afkorting] = $leden[$afkorting];
+        // onbekende tweede inzittenden worden niet in de lijst meegenomen
+      }
+      unset($namen['']); // verwijder lege naam
+
       if (count($namen)) {
         // sorteer namen op waardes
         $namen[0] = '<iedereen>';

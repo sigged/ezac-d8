@@ -1,0 +1,37 @@
+ezac_leden_ledenlijst:
+  title: Ledenlijst
+  route_name: ezac_leden_lijst
+  base_route: ezac_leden_lijst
+  weight: 01
+
+ezac_leden_etiketten:
+  title: Etikettenbestand
+  route_name: ezac_leden_etiketten
+  base_route: ezac_leden_lijst
+  weight: 02
+
+ezac_leden_mail:
+  title: Mail adressen
+  route_name: ezac_leden_mail
+  base_route: ezac_leden_lijst
+  weight: 03
+
+ezac_leden_davilex:
+  title: Davilex
+  route_name: ezac_leden_davilex
+  base_route: ezac_leden_lijst
+  weight: 04
+
+ezac_leden_overzicht:
+  title: Overzicht
+  route_name: ezac_leden
+  base_route: ezac_leden_lijst
+  weight: 05
+
+ezac_leden_nieuw:
+  title: Nieuw
+  route_name: ezac_leden_update
+  base_route: ezac_leden_lijst
+  weight: 06
+
+
