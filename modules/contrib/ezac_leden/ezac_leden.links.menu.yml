@@ -1,6 +1,5 @@
 ezac_leden:
   title: Leden administratie
-  route_name: ezac_leden
+  route_name: ezac_leden_lijst
   description: EZAC leden administratie
   weight: 01
-

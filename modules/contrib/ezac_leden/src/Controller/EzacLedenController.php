@@ -11,7 +11,7 @@ use Drupal\Core\Url;
 use Drupal\ezac_leden\Model\EzacLid;
 
 /**
- * Controller for DLO administration.
+ * Controller for EZAC leden administration.
  */
 class EzacLedenController extends ControllerBase {
 
@@ -188,8 +188,8 @@ class EzacLedenController extends ControllerBase {
      * @return mixed Response output text in csv format
      *   output text in csv format
      */
-  public function export($filename = 'Ezac.txt', $code = NULL) {
-
+  public function export_oud($filename = 'Ezac.txt', $code = NULL) {
+    //@todo deze functie kan hier weg - nu in EzacLedenExportController
     $messenger = \Drupal::messenger();
 
     if ($filename == '') $filename = 'Ezac.txt';
