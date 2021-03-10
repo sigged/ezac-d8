@@ -30,7 +30,7 @@ ezac_vba_dagverslag_table:
   defaults:
     _title: 'VBA dagverslag invoer'
     _form: '\Drupal\ezac_vba\Form\EzacVbaVerslagTableForm'
-    id: null;
+    id:
   requirements:
     _permission: 'EZAC_vba_update'
 

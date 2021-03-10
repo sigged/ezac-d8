@@ -1,0 +1,15 @@
+ezac_vba.overzicht:
+  route_name: ezac_vba
+  title: 'Overzicht'
+  base_route: ezac_vba
+
+ezac_vba.invoer:
+  route_name: ezac_vba_dagverslag_table
+  title: 'Invoer dagverslag'
+  base_route: ezac_vba
+
+ezac_vba.currency:
+  route_name: ezac_vba_currency
+  title: 'Currency'
+  base_route: ezac_vba
+

@@ -1,0 +1,11 @@
+ezac_rooster_invoer:
+  title: Rooster invoer
+  route_name: ezac_rooster_table
+  base_route: ezac_rooster
+  weight: 01
+
+ezac_rooster_overzicht:
+  title: Overzicht
+  route_name: ezac_rooster
+  base_route: ezac_rooster
+  weight: 02

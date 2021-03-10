@@ -92,10 +92,15 @@ class EzacVbaVerslagTableForm extends FormBase {
     foreach ($starts as $start) {
       $start_dates[$start] = EzacUtil::showDate($start); //list of dates for selection
     }
-    $datum = (isset($start_dates[0]))
+    if (isset($starts)) {
+      $datum = $starts[array_key_first($starts)]; // most recent date
+    }
+    else $datum = date('Y-m-d');
+
+    /*$datum = (isset($start_dates[0]))
       ? $start_dates[0]->datum // most recent date value
       : date('Y-m-d');
-
+    */
     // 2. build form contents
 
     // if id is set, read dagverslag for edit
@@ -125,7 +130,7 @@ class EzacVbaVerslagTableForm extends FormBase {
       '#default_value' => ($newRecord) ? key($start_dates) : $dagverslag->datum,  //most recent date
       '#states' => [
         'visible' => [
-          ':input[name="datum_other"]' => ['checked' => FALSE],
+          //':input[name="datum_other"]' => ['checked' => FALSE],
           ':input[name="newRecord"]' => ['value' => TRUE],
         ],
       ],
@@ -214,10 +219,20 @@ class EzacVbaVerslagTableForm extends FormBase {
     $vliegers = [];
 
     // get datum from entry or select depending on checkbox datum_other
-    $datum = ($form_state->getValue('datum_other') == 1)
-      ? $form_state->getValue('datum_entry')
-      : $form_state->getValue('datum_select');
+    //@todo - DIT WERKT NIET - datum blijft null
+    $do = $form_state->getValue('datum_other');
+    $de = $form_state->getValue('datum_entry');
+    $ds = $form_state->getValue('datum_select');
 
+    if ($do) $datum = $de;
+    else $datum = $ds;
+
+    // als datum door gebruiker is ingevuld, deze overnemen
+    if ($form_state->getValue('datum_other') != null) {
+      $datum = ($form_state->getValue('datum_other') == TRUE)
+        ? $form_state->getValue('datum_entry')
+        : $form_state->getValue('datum_select');
+    }
     // select only own students depending on checkbox
     $eigen_leerling = $form_state->getValue('leerling') ?? TRUE;
 
@@ -440,7 +455,7 @@ class EzacVbaVerslagTableForm extends FormBase {
           $message->addMessage('Verslag voor ' . $leden[$afkorting] . ' aangemaakt', 'status');
         }
         //update bevoegdheden per vlieger
-        if (isset($vlieger['bevoegdheid']) && $vlieger['bevoegdheid'] <> '') {
+        if (isset($vlieger['bevoegdheid']) && $vlieger['bevoegdheid'] <> 0) {
           //Bevoegdheid ingevoerd
           $bevoegdheid = new EzacVbaBevoegdheid();
           $bevoegdheid->bevoegdheid = $vlieger['bevoegdheid'];

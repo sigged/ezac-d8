@@ -48,9 +48,10 @@ ezac_rooster_table:
   defaults:
     _title: 'Rooster aanpassen'
     _form: '\Drupal\ezac_rooster\Form\EzacRoosterTableForm'
+    datum:
   requirements:
     _permission: 'EZAC_update'
-    _user: ^[a-zA-Z0-9_]+
+    #_user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_switch:
   path: '/ezac/rooster/switch/{id}'

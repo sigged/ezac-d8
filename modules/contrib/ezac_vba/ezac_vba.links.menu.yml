@@ -3,21 +3,3 @@ ezac_vba:
   route_name: ezac_vba
   description: EZAC Voortgang en Bevoegdheid Administratie
   weight: 04
-
-ezac_vba_dagverslag:
-  title: Invoeren dagverslag
-  route_name: ezac_vba_dagverslag
-  description: EZAC VBA Dagverslag invoer
-  weight: 05
-
-ezac_vba_dagverslag_table:
-  title: Invoeren dagverslag (tabel)
-  route_name: ezac_vba_dagverslag_table
-  description: EZAC VBA Dagverslag invoer (tabel)
-  weight: 06
-
-ezac_vba_currency:
-  title: Currency overzicht
-  route_name: ezac_vba_currency
-  description: EZAC VBA Currenct overzicht
-  weight: 07
