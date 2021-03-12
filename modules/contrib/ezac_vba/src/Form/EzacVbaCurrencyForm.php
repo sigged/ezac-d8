@@ -144,7 +144,7 @@ class EzacVbaCurrencyForm extends FormBase {
     // currency: naam | startmethode = aantal, [laatste] = datum
     // naam | instructie = aantal, [laatste] = datum
     $currency = [];
-    $startsIndex = EzacStart::index($condition);
+    $startsIndex = EzacStart::index($condition, 'id', 'datum');
     foreach ($startsIndex as $id) {
       $start = (new EzacStart($id));
       // voor gezagvoerder telt alles
@@ -156,6 +156,12 @@ class EzacVbaCurrencyForm extends FormBase {
           $currency[$start->gezagvoerder][$start->startmethode]['aantal'] = 1;
         }
         $currency[$start->gezagvoerder][$start->startmethode]['laatste'] = $start->datum;
+        if (!isset($currency[$start->gezagvoerder][$start->startmethode]['eerste'])) {
+          $currency[$start->gezagvoerder][$start->startmethode]['eerste'] = $start->datum;
+        }
+        else if ($start->datum < $currency[$start->gezagvoerder][$start->startmethode]['eerste']) {
+          $currency[$start->gezagvoerder][$start->startmethode]['eerste'] = $start->datum;
+        }
         if ($start->instructie) {
           if (isset($currency[$start->gezagvoerder]['instructie'])) {
             $currency[$start->gezagvoerder]['instructie']['aantal']++;
@@ -164,15 +170,27 @@ class EzacVbaCurrencyForm extends FormBase {
             $currency[$start->gezagvoerder]['instructie']['aantal'] = 1;
           }
           $currency[$start->gezagvoerder]['instructie']['laatste'] = $start->datum;
+          if (!isset($currency[$start->gezagvoerder]['instructie']['eerste'])) {
+            $currency[$start->gezagvoerder]['instructie']['eerste'] = $start->datum;
+          }
+          else if ($start->datum < $currency[$start->gezagvoerder]['instructie']['eerste']) {
+            $currency[$start->gezagvoerder]['instructie']['eerste'] = $start->datum;
+          }
         }
       }
-      // voor tweede telt currency alleen bij instructie start
+      // voor tweede inzittende telt currency alleen bij instructie start
       if (($start->instructie) && isset($leden[$start->tweede])) {
         if (isset($currency[$start->tweede][$start->startmethode])) {
           $currency[$start->tweede][$start->startmethode]['aantal']++;
         }
         else $currency[$start->tweede][$start->startmethode]['aantal'] = 1;
         $currency[$start->tweede][$start->startmethode]['laatste'] = $start->datum;
+        if (!isset($currency[$start->tweede][$start->startmethode]['eerste'])) {
+          $currency[$start->tweede][$start->startmethode]['eerste'] = $start->datum;
+        }
+        else if ($start->datum < $currency[$start->tweede][$start->startmethode]['eerste']) {
+          $currency[$start->tweede][$start->startmethode]['eerste'] = $start->datum;
+        }
       }
     }
 
@@ -204,15 +222,17 @@ class EzacVbaCurrencyForm extends FormBase {
 
       // instructie
       if (isset($cur['instructie'])) {
-        $cell = $cur['instructie']['aantal'] .'<br>';
-        $cell .= EzacUtil::showDate($cur['instructie']['laatste']);
+        $cell = ('aantal: ') .$cur['instructie']['aantal'] .'<br>';
+        $cell .= t('van ') .EzacUtil::showDate($cur['instructie']['eerste']) .'<br>';
+        $cell .= t('tot ') .EzacUtil::showDate($cur['instructie']['laatste']);
         $row[] = t($cell);
       }
       else $row[] = '';
       foreach (EzacStart::$startMethode as $m => $methode) {
         if (isset($cur[$m])) {
-          $cell = $cur[$m]['aantal'] .'<br>';
-          $cell .= EzacUtil::showDate($cur[$m]['laatste']);
+          $cell  = t('aantal: ') .$cur[$m]['aantal'] .'<br>';
+          $cell .= t('van ') .EzacUtil::showDate($cur[$m]['eerste']) .'<br>';
+          $cell .= t('tot ') .EzacUtil::showDate($cur[$m]['laatste']);
           $row[] = t($cell);
         }
         else $row[] = '';

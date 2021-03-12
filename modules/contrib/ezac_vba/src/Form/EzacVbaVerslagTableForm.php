@@ -78,15 +78,20 @@ class EzacVbaVerslagTableForm extends FormBase {
       }
     }
 
-    // find this year's flight days, descending
-    $errmsg = EzacUtil::checkDatum(date('Y'), $datumStart, $datumEnd);
-    $condition = [
-      'datum' => [
-        'value' => [$datumStart, $datumEnd],
-        'operator' => 'BETWEEN',
-      ],
-    ];
-    $starts = array_unique(EzacStart::index($condition, 'datum', 'datum', 'DESC'));
+    // find this or previous year's flight days, descending
+    $year = date('Y');
+    $starts = [];
+    while ($starts == []) {
+      $condition = [
+        'datum' => [
+          'value' => ["$year-01-01", "$year-12-31"],
+          'operator' => 'BETWEEN',
+        ],
+      ];
+      $starts = array_unique(EzacStart::index($condition, 'datum', 'datum', 'DESC'));
+      $year--;
+    }
+    $year++; // set year to the one used
 
     $start_dates = [];
     foreach ($starts as $start) {
@@ -95,18 +100,16 @@ class EzacVbaVerslagTableForm extends FormBase {
     if (isset($starts)) {
       $datum = $starts[array_key_first($starts)]; // most recent date
     }
-    else $datum = date('Y-m-d');
+    else {
+      $datum = date('Y-m-d');
+    }
 
-    /*$datum = (isset($start_dates[0]))
-      ? $start_dates[0]->datum // most recent date value
-      : date('Y-m-d');
-    */
     // 2. build form contents
 
     // if id is set, read dagverslag for edit
-    if ($id != null) {
+    if ($id != NULL) {
       $dagverslag = new EzacVbaDagverslag($id);
-      $newRecord = false;
+      $newRecord = FALSE;
       $form['id'] = [
         '#type' => 'value',
         '#value' => $id,
@@ -114,12 +117,12 @@ class EzacVbaVerslagTableForm extends FormBase {
     }
     else {
       $dagverslag = new EzacVbaDagverslag();
-      $newRecord = true;
+      $newRecord = TRUE;
     }
     $form['newRecord'] = [
-    '#type' => 'value',
-    '#value' => $newRecord,
-    '#attributes' => ['name' => 'newRecord'],
+      '#type' => 'value',
+      '#value' => $newRecord,
+      '#attributes' => ['name' => 'newRecord'],
     ];
 
     // datum selector dropdown list
@@ -127,11 +130,12 @@ class EzacVbaVerslagTableForm extends FormBase {
       '#title' => t('Datum'),
       '#type' => 'select',
       '#options' => $start_dates,
-      '#default_value' => ($newRecord) ? key($start_dates) : $dagverslag->datum,  //most recent date
+      '#default_value' => ($newRecord) ? key($start_dates) : $dagverslag->datum,
+      //most recent date
       '#states' => [
         'visible' => [
-          //':input[name="datum_other"]' => ['checked' => FALSE],
-          ':input[name="newRecord"]' => ['value' => TRUE],
+          ':input[name="datum_other"]' => ['checked' => FALSE],
+          //':input[name="newRecord"]' => ['value' => TRUE],
         ],
       ],
     ];
@@ -139,7 +143,7 @@ class EzacVbaVerslagTableForm extends FormBase {
     // Enter datum manually if requested or no list available
     $form['datum_entry'] = [
       '#title' => t('Datum'),
-      '#type' => 'date_select', //extension to 'date'
+      '#type' => 'date', // date_select is extension to 'date'
       '#date_format' => 'Y-m-d',
       '#default_value' => ($newRecord) ? $datum : $dagverslag->datum, //today
       '#states' => [
@@ -224,11 +228,15 @@ class EzacVbaVerslagTableForm extends FormBase {
     $de = $form_state->getValue('datum_entry');
     $ds = $form_state->getValue('datum_select');
 
-    if ($do) $datum = $de;
-    else $datum = $ds;
+    if ($do) {
+      $datum = $de;
+    }
+    else {
+      $datum = $ds;
+    }
 
     // als datum door gebruiker is ingevuld, deze overnemen
-    if ($form_state->getValue('datum_other') != null) {
+    if ($form_state->getValue('datum_other') != NULL) {
       $datum = ($form_state->getValue('datum_other') == TRUE)
         ? $form_state->getValue('datum_entry')
         : $form_state->getValue('datum_select');
@@ -278,7 +286,7 @@ class EzacVbaVerslagTableForm extends FormBase {
 
     //toon tabel met verslag en bevoegdheid / onderdeel per persoon
     //prepare header
-    $header = array(t('Naam'));
+    $header = [t('Naam')];
     $header = [
       t('Naam'),
       t('Verslag'),
@@ -287,7 +295,7 @@ class EzacVbaVerslagTableForm extends FormBase {
     ];
     $caption = t("Verslag per vlieger");
 
-    $form['vliegers'] = array(
+    $form['vliegers'] = [
       // Theme this part of the form as a table.
       '#type' => 'table',
       '#header' => $header,
@@ -297,7 +305,7 @@ class EzacVbaVerslagTableForm extends FormBase {
       '#prefix' => '<div id="vliegers-div">',
       //This section replaced by AJAX callback
       '#suffix' => '</div>',
-    );
+    ];
 
     foreach ($vliegers as $vlieger => $naam) {
       $form['vliegers'][$vlieger]['naam'] = [
@@ -335,9 +343,9 @@ class EzacVbaVerslagTableForm extends FormBase {
     if (Drupal::currentUser()->hasPermission('EZAC_delete')) {
       $form['delete_checkbox'] = [
         '#type' => 'checkbox',
-        '#title' => t('Verwijder'),
-        '#checked' => false,
-        '#weight' => 98
+        '#title' => t('Verwijder dagverslag'),
+        '#checked' => FALSE,
+        '#weight' => 96,
       ];
       $form['delete'] = [
         '#type' => 'submit',
@@ -405,7 +413,9 @@ class EzacVbaVerslagTableForm extends FormBase {
       ? $form_state->getValue('datum_entry')
       : $form_state->getValue('datum_select');
 
-    if ($form_state->getValue('newRecord')) $dagverslag = new EzacVbaDagverslag();
+    if ($form_state->getValue('newRecord')) {
+      $dagverslag = new EzacVbaDagverslag();
+    }
     else {
       $dagverslag = new EzacVbaDagverslag($form_state->getValue('id'));
     }
@@ -427,14 +437,14 @@ class EzacVbaVerslagTableForm extends FormBase {
       else {
         // update record
         $nr = $dagverslag->update();
-      }
-      if ($nr == 1) {
-        $message->addMessage("Dagverslag [$dagverslag->id] voor "
-          . EzacUtil::showDate($dagverslag->datum) . ' bijgewerkt', 'status');
-      }
-      else {
-        // update niet gelukt
-        $message->addMessage("Dagverslag [$dagverslag->id] kon niet worden bijgewerkt", 'error');
+        if ($nr == 1) {
+          $message->addMessage("Dagverslag [$dagverslag->id] voor "
+            . EzacUtil::showDate($dagverslag->datum) . ' bijgewerkt', 'status');
+        }
+        else {
+          // update niet gelukt
+          $message->addMessage("Dagverslag [$dagverslag->id] kon niet worden bijgewerkt", 'error');
+        }
       }
     }
     //write verslag per vlieger
@@ -461,7 +471,7 @@ class EzacVbaVerslagTableForm extends FormBase {
           $bevoegdheid->bevoegdheid = $vlieger['bevoegdheid'];
           $bevoegdheid->onderdeel = htmlentities($vlieger['onderdeel']);
           $bevoegdheid->datum_aan = $datum;
-          $bevoegdheid->datum_uit = null;
+          $bevoegdheid->datum_uit = NULL;
           $bevoegdheid->afkorting = $afkorting;
           $bevoegdheid->instructeur = $form_state->getValue('instructeur');
           $bevoegdheid->actief = TRUE;
