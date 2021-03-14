@@ -177,7 +177,7 @@ class EzacRoosterSwitchForm extends FormBase {
       $form['table'][$rooster_dag] = [];
       $form['table'][$rooster_dag]['datum'] = [
         '#type' => 'markup',
-        '#markup' => $rooster_dag, // @todo format datum
+        '#markup' => EzacUtil::showDate($rooster_dag),
       ];
 
       // initialize periodes

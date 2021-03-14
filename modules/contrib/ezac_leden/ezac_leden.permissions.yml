@@ -2,3 +2,8 @@ EZAC_leden_read:
   title: 'Lezen EZAC alle leden'
   description: 'Lezen gegevens alle leden'
   restrict access: true
+
+EZAC_leden_create:
+  title: 'Aanmaken nieuw lid'
+  description: 'Invoeren gegevens voor een nieuw lid'
+  restrict access: true

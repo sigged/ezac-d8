@@ -8,8 +8,14 @@ ezac_vba.invoer:
   title: 'Invoer dagverslag'
   base_route: ezac_vba
 
-ezac_vba.currency:
+ezac_vba.currency.starts:
   route_name: ezac_vba_currency
-  title: 'Currency'
+  title: 'Currency starts'
+  route_parameters: { soort: 'starts' }
   base_route: ezac_vba
 
+ezac_vba.currency.bevoegdheid:
+  route_name: ezac_vba_currency
+  title: 'Geldigheid bevoegdheden'
+  route_parameters: { soort: 'bevoegdheid' }
+  base_route: ezac_vba

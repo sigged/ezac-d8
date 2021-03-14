@@ -1,6 +1,10 @@
 ezac_rooster:
-  title: Rooster administratie
-  route_name: ezac_rooster_table
-  description: EZAC rooster administratie
+  title: EZAC Rooster overzicht
+  route_name: ezac_rooster_overzicht_jaar
   weight: 04
 
+ezac_rooster.administratie:
+  title: EZAC Rooster administratie
+  route_name: ezac_rooster
+  description: EZAC rooster administratie
+  weight: 04

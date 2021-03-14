@@ -10,7 +10,6 @@ use Drupal\ezac\Util\EzacUtil;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_starts\Model\EzacStart;
 use Drupal\ezac_vba\Model\EzacVbaBevoegdheid;
-use Drupal\ezac_vba\Model\EzacVbaDagverslagLid;
 
 /**
  * UI to show status of VBA records
@@ -33,12 +32,12 @@ class EzacVbaCurrencyForm extends FormBase {
    * @param array $form
    * @param FormStateInterface $form_state
    *
-   * @param $datum_start
+   * @param string $soort starts | bevoegdheid
    * @param $datum_eind
    *
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $datum_start = NULL, $datum_eind = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, string $soort = 'starts'): array {
     // read settings
     $settings = Drupal::config('ezac_vba.settings');
     //set up bevoegdheden
@@ -47,6 +46,21 @@ class EzacVbaCurrencyForm extends FormBase {
       '#type' => 'value',
       '#value' => $bevoegdheden,
     ];
+
+    //set up bevoegdheden
+    $bevoegdheden = $settings->get('vba.bevoegdheden');
+    $form['bevoegdheden'] = [
+      '#type' => 'value',
+      '#value' => $bevoegdheden,
+    ];
+
+    // selecteer bevoegdheden met vervaldatum
+    foreach ($bevoegdheden as $bevoegdheid => $onderdeel) {
+      if ($onderdeel['vervalt'] == TRUE) {
+        // deze bevoegdheid heeft een vervaldatum
+        $vervalt_list[] = $bevoegdheid;
+      }
+    }
 
     // set up status van bevoegdheden
     $status = $settings->get('vba.status');
@@ -61,14 +75,9 @@ class EzacVbaCurrencyForm extends FormBase {
       '#suffix' => '</div>',
     ];
 
-    // when datum not given, set default for this year
-    //@todo params datum_start, datum_eind are selected in dropdown, to be removed here?
-    if ($datum_start == NULL) {
-      $datum_start = date('Y') . "-01-01";
-    }
-    if ($datum_eind == NULL) {
-      $datum_eind = date('Y') . "-12-31";
-    }
+    $datum_start = date('Y') . "-01-01";
+    $datum_eind = date('Y') . "-12-31";
+
     $form['datum_start'] = [
       '#type' => 'value',
       '#value' => $datum_start,
@@ -78,30 +87,33 @@ class EzacVbaCurrencyForm extends FormBase {
       '#value' => $datum_eind,
     ];
 
-    //@todo put periode_list in settings
-    $periode_list = [
-      'seizoen' => 'dit seizoen',
-      'tweejaar' => '24 maanden',
-      'jaar' => '12 maanden',
-      'maand' => '1 maand',
-      'vandaag' => 'vandaag',
-      //'anders' => 'andere periode',
-    ];
+    if ($soort == 'starts') {
+      //@todo put periode_list in settings
+      $periode_list = [
+        'seizoen' => 'dit seizoen',
+        'tweejaar' => '24 maanden',
+        'jaar' => '12 maanden',
+        'maand' => '1 maand',
+        'vandaag' => 'vandaag',
+        //'anders' => 'andere periode',
+      ];
 
-    $form['periode'] = [
-      '#type' => 'select',
-      '#title' => 'Periode',
-      '#options' => $periode_list,
-      '#weight' => 2,
-      '#ajax' => [
-        'wrapper' => 'currency-div',
-        'callback' => '::formPeriodeCallback',
-        'effect' => 'fade',
-        'progress' => array('type' => 'throbber'),
-      ],
-    ];
+      $form['periode'] = [
+        '#type' => 'select',
+        '#title' => 'Periode',
+        '#options' => $periode_list,
+        '#weight' => 2,
+        '#ajax' => [
+          'wrapper' => 'currency-div',
+          'callback' => '::formPeriodeCallback',
+          'effect' => 'fade',
+          'progress' => ['type' => 'throbber'],
+        ],
+      ];
 
-    $periode = $form_state->getValue('periode', key($periode_list)); // default is current pointed key in periode_list
+      $periode = $form_state->getValue('periode', key($periode_list)); // default is current pointed key in periode_list
+    }
+    else $periode = 'jaar';
 
     switch ($periode) {
       case 'vandaag' :
@@ -144,67 +156,114 @@ class EzacVbaCurrencyForm extends FormBase {
     // currency: naam | startmethode = aantal, [laatste] = datum
     // naam | instructie = aantal, [laatste] = datum
     $currency = [];
-    $startsIndex = EzacStart::index($condition, 'id', 'datum');
-    foreach ($startsIndex as $id) {
-      $start = (new EzacStart($id));
-      // voor gezagvoerder telt alles
-      if ($start->gezagvoerder != '') { // gezagvoerder moet ingevuld zijn
-        if (isset($currency[$start->gezagvoerder][$start->startmethode])) {
-          $currency[$start->gezagvoerder][$start->startmethode]['aantal']++;
-        }
-        else {
-          $currency[$start->gezagvoerder][$start->startmethode]['aantal'] = 1;
-        }
-        $currency[$start->gezagvoerder][$start->startmethode]['laatste'] = $start->datum;
-        if (!isset($currency[$start->gezagvoerder][$start->startmethode]['eerste'])) {
-          $currency[$start->gezagvoerder][$start->startmethode]['eerste'] = $start->datum;
-        }
-        else if ($start->datum < $currency[$start->gezagvoerder][$start->startmethode]['eerste']) {
-          $currency[$start->gezagvoerder][$start->startmethode]['eerste'] = $start->datum;
-        }
-        if ($start->instructie) {
-          if (isset($currency[$start->gezagvoerder]['instructie'])) {
-            $currency[$start->gezagvoerder]['instructie']['aantal']++;
+
+    // currency for soort == starts
+    if ($soort == 'starts') {
+      $startsIndex = EzacStart::index($condition, 'id', 'datum');
+      foreach ($startsIndex as $id) {
+        $start = (new EzacStart($id));
+        // voor gezagvoerder telt alles
+        if ($start->gezagvoerder != '') { // gezagvoerder moet ingevuld zijn
+          if (isset($currency[$start->gezagvoerder][$start->startmethode])) {
+            $currency[$start->gezagvoerder][$start->startmethode]['aantal']++;
           }
           else {
-            $currency[$start->gezagvoerder]['instructie']['aantal'] = 1;
+            $currency[$start->gezagvoerder][$start->startmethode]['aantal'] = 1;
           }
-          $currency[$start->gezagvoerder]['instructie']['laatste'] = $start->datum;
-          if (!isset($currency[$start->gezagvoerder]['instructie']['eerste'])) {
-            $currency[$start->gezagvoerder]['instructie']['eerste'] = $start->datum;
+          $currency[$start->gezagvoerder][$start->startmethode]['laatste'] = $start->datum;
+          if (!isset($currency[$start->gezagvoerder][$start->startmethode]['eerste'])) {
+            $currency[$start->gezagvoerder][$start->startmethode]['eerste'] = $start->datum;
           }
-          else if ($start->datum < $currency[$start->gezagvoerder]['instructie']['eerste']) {
-            $currency[$start->gezagvoerder]['instructie']['eerste'] = $start->datum;
+          else {
+            if ($start->datum < $currency[$start->gezagvoerder][$start->startmethode]['eerste']) {
+              $currency[$start->gezagvoerder][$start->startmethode]['eerste'] = $start->datum;
+            }
+          }
+          if ($start->instructie) {
+            if (isset($currency[$start->gezagvoerder]['instructie'])) {
+              $currency[$start->gezagvoerder]['instructie']['aantal']++;
+            }
+            else {
+              $currency[$start->gezagvoerder]['instructie']['aantal'] = 1;
+            }
+            $currency[$start->gezagvoerder]['instructie']['laatste'] = $start->datum;
+            if (!isset($currency[$start->gezagvoerder]['instructie']['eerste'])) {
+              $currency[$start->gezagvoerder]['instructie']['eerste'] = $start->datum;
+            }
+            else {
+              if ($start->datum < $currency[$start->gezagvoerder]['instructie']['eerste']) {
+                $currency[$start->gezagvoerder]['instructie']['eerste'] = $start->datum;
+              }
+            }
+          }
+        }
+        // voor tweede inzittende telt currency alleen bij instructie start
+        if (($start->instructie) && isset($leden[$start->tweede])) {
+          if (isset($currency[$start->tweede][$start->startmethode])) {
+            $currency[$start->tweede][$start->startmethode]['aantal']++;
+          }
+          else {
+            $currency[$start->tweede][$start->startmethode]['aantal'] = 1;
+          }
+          $currency[$start->tweede][$start->startmethode]['laatste'] = $start->datum;
+          if (!isset($currency[$start->tweede][$start->startmethode]['eerste'])) {
+            $currency[$start->tweede][$start->startmethode]['eerste'] = $start->datum;
+          }
+          else {
+            if ($start->datum < $currency[$start->tweede][$start->startmethode]['eerste']) {
+              $currency[$start->tweede][$start->startmethode]['eerste'] = $start->datum;
+            }
           }
         }
       }
-      // voor tweede inzittende telt currency alleen bij instructie start
-      if (($start->instructie) && isset($leden[$start->tweede])) {
-        if (isset($currency[$start->tweede][$start->startmethode])) {
-          $currency[$start->tweede][$start->startmethode]['aantal']++;
-        }
-        else $currency[$start->tweede][$start->startmethode]['aantal'] = 1;
-        $currency[$start->tweede][$start->startmethode]['laatste'] = $start->datum;
-        if (!isset($currency[$start->tweede][$start->startmethode]['eerste'])) {
-          $currency[$start->tweede][$start->startmethode]['eerste'] = $start->datum;
-        }
-        else if ($start->datum < $currency[$start->tweede][$start->startmethode]['eerste']) {
-          $currency[$start->tweede][$start->startmethode]['eerste'] = $start->datum;
+    }
+
+    // currency for soort == bevoegdheid
+    if ($soort != 'starts') {
+      // add bevoegdheden from vervalt_list
+      $condition = [
+        'code' => 'VL',
+        'actief' => TRUE,
+      ];
+      $ledenIndex = EzacLid::index($condition, 'id', 'achternaam');
+      foreach ($ledenIndex as $id) {
+        $lid = new EzacLid($id);
+        $condition = [
+          'afkorting' => $lid->afkorting,
+          'bevoegdheid' => [
+            'value' => $vervalt_list,
+            'operator' => 'IN',
+          ],
+        ];
+        $bevoegdhedenIndex = EzacVbaBevoegdheid::index($condition);
+        foreach ($bevoegdhedenIndex as $bevId) {
+          $bevoegdheid = new EzacVbaBevoegdheid($bevId);
+          $currency[$lid->afkorting][$bevoegdheid->bevoegdheid]['datum_aan'] = $bevoegdheid->datum_aan;
+          $currency[$lid->afkorting][$bevoegdheid->bevoegdheid]['datum_uit'] = $bevoegdheid->datum_uit;
         }
       }
     }
 
     $header = [
       t('Naam'),
-      t('Instructie'),
     ];
-    // voeg startmethodes toe
-    foreach (EzacStart::$startMethode as $methode) {
-      $header[] = $methode;
+    if ($soort == 'starts') {
+      $header[] = 'instructie';
+      // voeg startmethodes toe
+      foreach (EzacStart::$startMethode as $methode) {
+        $header[] = $methode;
+      }
+    }
+    else {
+      // voeg bevoegdheden met vervaldatum toe
+      foreach ($vervalt_list as $bevoegdheid) {
+        $header[] = $bevoegdheid;
+      }
     }
 
     $rows = [];
     // vul tabel met currency waardes
+
     foreach ($currency as $person => $cur) {
       $row = [];
       $urlString = Url::fromRoute(
@@ -218,24 +277,47 @@ class EzacVbaCurrencyForm extends FormBase {
       if (isset($leden[$person])) {
         $row[] = t("<a href=$urlString>$leden[$person]</a>");
       }
-      else $row[] = t("<a href=$urlString>$person *</a>"); // onbekende afkorting
+      else {
+        $row[] = t("<a href=$urlString>$person *</a>");
+      } // onbekende afkorting
 
-      // instructie
-      if (isset($cur['instructie'])) {
-        $cell = ('aantal: ') .$cur['instructie']['aantal'] .'<br>';
-        $cell .= t('van ') .EzacUtil::showDate($cur['instructie']['eerste']) .'<br>';
-        $cell .= t('tot ') .EzacUtil::showDate($cur['instructie']['laatste']);
-        $row[] = t($cell);
-      }
-      else $row[] = '';
-      foreach (EzacStart::$startMethode as $m => $methode) {
-        if (isset($cur[$m])) {
-          $cell  = t('aantal: ') .$cur[$m]['aantal'] .'<br>';
-          $cell .= t('van ') .EzacUtil::showDate($cur[$m]['eerste']) .'<br>';
-          $cell .= t('tot ') .EzacUtil::showDate($cur[$m]['laatste']);
+      if ($soort == 'starts') {
+
+        // instructie
+        if (isset($cur['instructie'])) {
+          $cell = ('aantal: ') . $cur['instructie']['aantal'] . '<br>';
+          $cell .= t('van ') . EzacUtil::showDate($cur['instructie']['eerste']) . '<br>';
+          $cell .= t('tot ') . EzacUtil::showDate($cur['instructie']['laatste']);
           $row[] = t($cell);
         }
-        else $row[] = '';
+        else {
+          $row[] = '';
+        }
+        foreach (EzacStart::$startMethode as $m => $methode) {
+          if (isset($cur[$m])) {
+            $cell = t('aantal: ') . $cur[$m]['aantal'] . '<br>';
+            $cell .= t('van ') . EzacUtil::showDate($cur[$m]['eerste']) . '<br>';
+            $cell .= t('tot ') . EzacUtil::showDate($cur[$m]['laatste']);
+            $row[] = t($cell);
+          }
+          else {
+            $row[] = '';
+          }
+        }
+      }
+      else {
+        // bevoegdheden met vervaldatum
+        foreach ($vervalt_list as $bevoegdheid) {
+          if (isset($cur[$bevoegdheid])) {
+            $cell = t('van ') . $cur[$bevoegdheid]['datum_aan'];
+            if ($cur[$bevoegdheid]['datum_uit'] != '')
+            $cell .= '<br>' .t('tot ') . $cur[$bevoegdheid]['datum_uit'];
+            $row[] = t($cell);
+          }
+          else {
+            $row[] = '';
+          }
+        }
       }
       $rows[] = $row;
     }

@@ -4,5 +4,5 @@ ezac:
     _title: 'EZAC hoofdmenu'
     _form: '\Drupal\ezac\Form\EzacHoofdMenuForm'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
 

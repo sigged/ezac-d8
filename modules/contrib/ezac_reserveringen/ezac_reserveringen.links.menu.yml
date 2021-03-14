@@ -1,5 +1,5 @@
 ezac_reserveringen_reservering:
-  title: Reserveringen voor leden
+  title: EZAC Reserveringen voor leden
   route_name: ezac_reserveringen_reservering
   #route_parameters: { type: '' }
   description: EZAC reservering invoeren

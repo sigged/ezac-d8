@@ -201,6 +201,9 @@ class EzacRoosterController extends ControllerBase {
       '#value' => $diensten,
     );
 
+    // if jaar not given, set to current year
+    if (!isset($jaar) or !is_numeric($jaar)) $jaar = date('Y');
+
     //set up periode
     $periodes = $settings->get('rooster.periodes');
     //store header info for periodes reference in submit function
@@ -218,7 +221,7 @@ class EzacRoosterController extends ControllerBase {
 
     //get current user details
     $user = $this->currentUser();
-    $may_edit = $user->hasPermission('EZAC_edit');
+    $may_edit = $user->hasPermission('EZAC_update_all');
 
     // read own leden record
     $user_name = $user->getAccountName();
@@ -236,6 +239,7 @@ class EzacRoosterController extends ControllerBase {
     $content = array();
     $rows = [];
 
+    /*
     //set up ajax selection
     //@todo build java buttons voor eigen diensten en diensten vanaf vandaag
     $content['select'] = [
@@ -254,6 +258,7 @@ class EzacRoosterController extends ControllerBase {
         'progress' => ['type' => 'throbber'],
       ],
     ];
+    */
 
     //prepare header
     $header = array(t('Datum'));
@@ -370,6 +375,7 @@ class EzacRoosterController extends ControllerBase {
   } // overzichtJaar
 
   private function datumCallback($select) {
+    //@todo does not work in a controller
     switch ($select) {
       case 'A':
         // select alle dagen
