@@ -28,10 +28,14 @@ ezac_leden_overzicht:
   base_route: ezac_leden_lijst
   weight: 05
 
+ezac_leden_update:
+  title: Bijwerken
+  route_name: ezac_leden_user_update
+  base_route: ezac_leden_lijst
+  weight: 06
+
 ezac_leden_nieuw:
   title: Nieuw
   route_name: ezac_leden_update
   base_route: ezac_leden_lijst
-  weight: 06
-
-
+  weight: 07

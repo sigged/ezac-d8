@@ -4,7 +4,7 @@ ezac_vba:
     _title: 'EZAC Voortgang en Bevoegdheid Administratie'
     _form: '\Drupal\ezac_vba\Form\EzacVbaStatusForm'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_vba_dagverslagen:
@@ -13,7 +13,7 @@ ezac_vba_dagverslagen:
     _title: 'VBA dagverslagen overzicht'
     _controller: '\Drupal\ezac_vba\Controller\EzacVbaController::dagverslagen'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_vba_dagverslag:
@@ -40,7 +40,7 @@ ezac_vba_dagverslag_lid:
     _title: 'VBA dagverslagen leden overzicht'
     _form: '\Drupal\ezac_vba\Form\EzacVbaLidForm'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_vba_bevoegdheid_lid:
@@ -49,15 +49,16 @@ ezac_vba_bevoegdheid_lid:
     _title: 'VBA bevoegdheden leden overzicht'
     _controller: '\Drupal\ezac_vba\Controller\EzacVbaController::bevoegdheidLid'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_vba_currency:
-  path: '/ezac/vba/currency'
+  path: '/ezac/vba/currency/{soort}'
   defaults:
     _title: 'VBA currency overzicht'
     _form: '\Drupal\ezac_vba\Form\EzacVbaCurrencyForm'
+    soort: 'starts'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 

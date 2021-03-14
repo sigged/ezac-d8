@@ -66,9 +66,12 @@ class EzacKistenResource extends ResourceBase {
         return (new ResourceResponse((array) $kistenIndex))->addCacheableDependency($build);
       }
       // return record for id
-      $record = new EzacKist($id);
-      if (!empty($record)) {
-        return (new ResourceResponse((array) $record))->addCacheableDependency($build);
+      $kist = new EzacKist($id);
+      if (!empty($kist)) {
+        foreach ($kist as $key => $value) {
+          if ($value == null) $kist->$key = '';
+        }
+        return (new ResourceResponse((array) $kist))->addCacheableDependency($build);
       }
       throw new NotFoundHttpException("Invalid ID: $id");
     }
@@ -90,7 +93,11 @@ class EzacKistenResource extends ResourceBase {
       $kistenIndex = EzacKist::index($condition);
       $result = [];
       foreach ($kistenIndex as $id) {
-        $result[] = (array) new EzacKist($id);
+        $kist = new EzacKist($id);
+        foreach ($kist as $key => $value) {
+          if ($value == null) $kist->$key = '';
+        }
+        $result[] = (array) $kist;
       }
       return (new ResourceResponse($result))->addCacheableDependency($build);
     }

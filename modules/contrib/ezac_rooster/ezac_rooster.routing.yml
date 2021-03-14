@@ -4,7 +4,7 @@ ezac_rooster:
     _title: 'EZAC rooster administratie'
     _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::status'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_overzicht:
@@ -12,6 +12,7 @@ ezac_rooster_overzicht:
   defaults:
     _title: 'Rooster overzicht'
     _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::overzicht'
+    datum:
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -21,6 +22,7 @@ ezac_rooster_overzicht_jaar:
   defaults:
     _title: 'Rooster overzicht'
     _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::overzichtJaar'
+    jaar:
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
@@ -31,7 +33,7 @@ ezac_rooster_update:
     _title: 'Rooster wijzigen'
     _form: '\Drupal\ezac_rooster\Form\EzacRoosterUpdateForm'
   requirements:
-    _permission: 'EZAC_update'
+    _permission: 'EZAC_rooster_update'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_create:
@@ -40,7 +42,7 @@ ezac_rooster_create:
     _title: 'Rooster aanmaken'
     _form: '\Drupal\ezac_rooster\Form\EzacRoosterUpdateForm'
   requirements:
-    _permission: 'EZAC_update'
+    _permission: 'EZAC_rooster_update'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_table:
@@ -50,7 +52,7 @@ ezac_rooster_table:
     _form: '\Drupal\ezac_rooster\Form\EzacRoosterTableForm'
     datum:
   requirements:
-    _permission: 'EZAC_update'
+    _permission: 'EZAC_rooster_update'
     #_user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_switch:
@@ -68,7 +70,7 @@ ezac_rooster_export_form:
     _title: 'Rooster export'
     _form: '\Drupal\ezac_rooster\Form\EzacRoosterExportForm'
   requirements:
-    _permission: 'EZAC_read'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_export:
@@ -77,7 +79,7 @@ ezac_rooster_export:
     _title: 'Rooster export'
     _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::export'
   requirements:
-    _permission: 'access content'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_export_jaar:
@@ -86,5 +88,5 @@ ezac_rooster_export_jaar:
     _title: 'Rooster export'
     _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::export'
   requirements:
-    _permission: 'access content'
+    _permission: 'EZAC_read_all'
     _user: ^[a-zA-Z0-9_]+

@@ -5,7 +5,6 @@ ezac_leden:
     _controller: '\Drupal\ezac_leden\Controller\EzacLedenController::status'
   requirements:
     _permission: 'EZAC_read_all'
-
 ezac_leden_overzicht:
   path: '/ezac/leden/overzicht'
   defaults:
@@ -38,6 +37,15 @@ ezac_leden_create:
   defaults:
     _title: 'Lid aanmaken'
     _form: '\Drupal\ezac_leden\Form\EzacLedenUpdateForm'
+  requirements:
+    _permission: 'EZAC_leden_create'
+
+ezac_leden_user_update:
+  path: '/ezac/leden/update/user/{id}'
+  defaults:
+    _title: 'Aanpassen gegevens voor lid'
+    _form: '\Drupal\ezac_leden\Form\EzacLedenUserForm'
+    id:
   requirements:
     _permission: 'EZAC_update'
 
@@ -81,7 +89,7 @@ ezac_leden_lijst:
     _title: 'Ledenlijst'
     _form: '\Drupal\ezac_leden\Form\EzacLedenLijstForm'
   requirements:
-    _permission: 'EZAC_read_all'
+    _permission: 'EZAC_read'
 
 ezac_leden_etiketten:
   path: /ezac/leden/etiketten

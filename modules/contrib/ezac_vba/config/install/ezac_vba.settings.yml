@@ -66,7 +66,7 @@ vba:
       naam: 'Overige ratings'
       status: 3
       instructeur: 0
-      vervalt: 1
+      vervalt: 0
     MEDICAL:
       naam: 'Medical'
       status: 0
