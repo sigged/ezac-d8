@@ -1,11 +1,17 @@
-ezac_rooster_invoer:
-  title: Rooster invoer
-  route_name: ezac_rooster_table
-  base_route: ezac_rooster
+ezac_rooster.overzicht:
+  title: 'Overzicht'
+  route_name: ezac_rooster_overzicht_jaar
+  base_route: ezac_rooster_overzicht_jaar
   weight: 01
 
-ezac_rooster_overzicht:
-  title: Overzicht
-  route_name: ezac_rooster
-  base_route: ezac_rooster
+ezac_rooster.invoer:
+  title: 'Rooster invoer'
+  route_name: ezac_rooster_table
+  base_route: ezac_rooster_overzicht_jaar
   weight: 02
+
+ezac_rooster.administratie:
+  title: 'Rooster administratie'
+  route_name: ezac_rooster
+  base_route: ezac_rooster_overzicht_jaar
+  weight: 03

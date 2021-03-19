@@ -15,7 +15,7 @@ ezac_reserveringen_overzicht:
     _permission: 'EZAC_read'
 
 ezac_reserveringen_reservering:
-  path: '/ezac/reserveringen/reservering/{type}'
+  path: '/ezac/reserveringen/reservering'
   defaults:
     _title: 'EZAC reservering plaatsen'
     _form: '\Drupal\ezac_reserveringen\Form\EzacReserveringenForm'

@@ -344,15 +344,15 @@ class EzacReserveringenForm extends FormBase
       $naam = sprintf('%s %s %s', $lid->voornaam, $lid->voorvoeg, $lid->achternaam);
 
       // write to database
-      $reserverering = new EzacReservering();
-      $reserverering->datum = $datum;
-      $reserverering->periode = $periode;
-      $reserverering->soort = $soort;
-      $reserverering->leden_id = $leden_id;
-      $reserverering->doel = $doel;
-      $reserverering->aangemaakt = date('Y-m-d h:m:s');
-      $reserverering->reserve = 0; // wachtlijst is niet in gebruik
-      $id = $reserverering->create();
+      $reservering = new EzacReservering();
+      $reservering->datum = $datum;
+      $reservering->periode = $periode;
+      $reservering->soort = $soort;
+      $reservering->leden_id = $leden_id;
+      $reservering->doel = $doel;
+      $reservering->aangemaakt = date('Y-m-d h:m:s');
+      $reservering->reserve = 0; // wachtlijst is niet in gebruik
+      $id = $reservering->create();
       if ($id) {
         $show_datum = EzacUtil::showDate($datum);
         $messenger->addMessage("$soort gereserveerd voor periode $periode op $show_datum [$id]",'message');
