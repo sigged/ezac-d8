@@ -1,4 +1,4 @@
-ezac_reserveringen_reservering:
+ezac_reserveringen:
   title: EZAC Reserveringen voor leden
   route_name: ezac_reserveringen_reservering
   #route_parameters: { type: '' }

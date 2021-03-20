@@ -16,10 +16,10 @@ use Drupal\ezac\Util\EzacUtil;
    * Provides a resource for reserveringen table reads
    *
    * @RestResource(
-   *   id = "ezac_reserveringen_resource",
-   *   label = @Translation("EZAC reserveringen"),
+   *   id = "ezac_passagiers_resource",
+   *   label = @Translation("EZAC passagiers"),
    *   uri_paths = {
-   *     "canonical" = "/api/v2/reserveringen",
+   *     "canonical" = "/api/v2/passagiers",
    *   }
    * )
    */
