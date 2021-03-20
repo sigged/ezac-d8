@@ -1,0 +1,4 @@
+EZAC_reserveringen_edit:
+  title: 'Wijzigen EZAC reseveringen'
+  description: 'Wijzigen EZAC reserveringen alle leden'
+  restrict access: true

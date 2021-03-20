@@ -53,7 +53,7 @@ ezac_rooster_table:
     datum:
   requirements:
     _permission: 'EZAC_rooster_update'
-    #_user: ^[a-zA-Z0-9_]+
+    _user: ^[a-zA-Z0-9_]+
 
 ezac_rooster_switch:
   path: '/ezac/rooster/switch/{id}'

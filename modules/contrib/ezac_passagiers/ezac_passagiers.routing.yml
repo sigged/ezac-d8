@@ -1,0 +1,73 @@
+ezac_passagiers:
+  path: '/ezac/passagiers'
+  defaults:
+    _title: 'passagiers overzicht'
+    _controller: '\Drupal\ezac_passagiers\Controller\EzacPassagiersController::overzicht'
+  requirements:
+    _permission: 'EZAC_read'
+
+ezac_passagiers_overzicht:
+  path: '/ezac/passagiers/overzicht/{datum}'
+  defaults:
+    _title: 'passagiers overzicht'
+    _controller: '\Drupal\ezac_passagiers\Controller\EzacPassagiersController::overzicht'
+    datum:
+  requirements:
+    _permission: 'EZAC_read'
+
+ezac_passagiers_reservering:
+  path: '/ezac/passagiers/reservering'
+  defaults:
+    _title: 'EZAC vlucht kiezen'
+    _controller: '\Drupal\ezac_passagiers\Controller\EzacPassagiersSlotsController::slots'
+  requirements:
+    _permission: 'access content'
+
+ezac_passagiers_boeking:
+  path: '/ezac/passagiers/boeking/{datum}/{tijd}'
+  defaults:
+    _title: 'EZAC boeking plaatsen'
+    _form: '\Drupal\ezac_passagiers\Form\EzacPassagiersBoekingForm'
+  requirements:
+    _permission: 'access content'
+
+ezac_passagiers_verwijdering_form:
+  path: '/ezac/passagiers/annulering_form/{id}'
+  defaults:
+    _title: 'EZAC reservering verwijderen'
+    _form: '\Drupal\ezac_passagiers\Form\EzacPassagiersVerwijderingForm'
+  requirements:
+    _permission: 'EZAC_update'
+
+ezac_passagiers_annulering_form:
+  path: '/ezac/passagiers/annulering_form/{id}/{hash}'
+  defaults:
+    _title: 'EZAC reservering annuleren'
+    _form: '\Drupal\ezac_passagiers\Form\EzacPassagiersAnnuleringForm'
+  requirements:
+    _permission: 'access content'
+
+ezac_passagiers_annulering:
+  #niet in gebruik, zie annulering_form
+  path: '/ezac/passagiers/annulering/{id}/{hash}'
+  defaults:
+    _title: 'EZAC Reservering annulering verwerken'
+    _controller: '\Drupal\ezac_passagiers\Controller\EzacPassagiersController::annulering'
+  requirements:
+    _permission: 'access content'
+
+ezac_passagiers_bevestiging:
+  path: '/ezac/passagiers/bevestiging/{id}/{hash}'
+  defaults:
+    _title: 'EZAC reservering bevestigen'
+    _controller: '\Drupal\ezac_passagiers\Controller\EzacPassagiersBevestigingController::bevestiging'
+  requirements:
+    _permission: 'access content'
+
+ezac_passagiers_dagen:
+  path: '/ezac/passagiers/dagen'
+  defaults:
+    _title: 'EZAC dagen voor meevliegen instellen'
+    _form: '\Drupal\ezac_passagiers\Form\EzacPassagiersDagenForm'
+  requirements:
+    _permission: 'EZAC_update_all'

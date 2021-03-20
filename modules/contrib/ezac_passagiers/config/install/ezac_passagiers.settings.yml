@@ -1,0 +1,45 @@
+langcode: 'nl'
+
+slots:
+  13:30:
+    zaterdag: 1
+    zondag: 0
+  14:15:
+    zaterdag: 1
+    zondag: 1
+  15:00:
+    zaterdag: 1
+    zondag: 1
+  15:45:
+    zaterdag: 1
+    zondag: 1
+  16:30:
+    zaterdag: 1
+    zondag: 1
+  17:15:
+    zaterdag: 1
+    zondag: 0
+
+texts:
+  mededeling: '<h1>Momenteel is meevliegen helaas niet mogelijk</h1>'
+  kies_dag: '<p><h2>Kies een dag en tijd</h2>'
+  advies: '<p>Elke reservering geldt voor <strong>EEN (1)</strong> persoon
+  Indien meerdere personen willen meevliegen, dient voor iedere persoon
+  <strong>apart</strong> een reservering te worden gemaakt.
+  <p>Er geldt een maximum gewicht voor passagiers van <strong>100 kg</strong>.
+  Vrouwen wordt geadviseerd om geen lange jurk of korte rok te dragen ivm de veiligheidsgordel en parachute.'
+  nog_bevestigen: 'Er is een mail naar u verstuurd om de reservering te bevestigen. Dit moet binnen een uur gebeuren.'
+  reservering_geplaatst: 'De reservering is geplaatst.'
+  geen_plaatsen: 'Er zijn helaas geen plaatsen meer beschikbaar'
+  verwijder_item: 'Verwijder gemarkeerde item(s)'
+  verwijder_reservering: 'Verwijder reservering'
+  verwijder_waarschuwing: 'Verwijder de reservering alleen als de passagier is geinformeerd'
+  voeg_toe: 'Voeg toe'
+  datum_reeks: 'Maak datum reeks aan'
+
+parameters:
+  #seconden waarbinnen bevestigd moet worden
+  optie_tijd: 3600
+  # indicator of reservering is bevestigd
+  reservering_optie: 'optie'
+  reservering_bevestigd: 'bevestigd'

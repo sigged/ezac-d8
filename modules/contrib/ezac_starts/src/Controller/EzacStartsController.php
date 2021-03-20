@@ -510,6 +510,16 @@ class EzacStartsController extends ControllerBase {
 
     $messenger = Drupal::messenger();
 
+    // lees alle leden met een afkorting
+    $condition = [
+      'afkorting' => [
+        'value' => '',
+        'operator' => '<>',
+      ],
+    ];
+    $leden = EzacUtil::getLeden($condition);
+    unset($leden['']); // remove 'Onbekend'
+
     if ($filename == '') $filename = 'Ezac.txt';
 
     // Determine Jaar  from Starts for export
@@ -534,13 +544,20 @@ class EzacStartsController extends ControllerBase {
     }
     //remove last ";" 
     $output = rtrim($output, ";") ."\r\n";
-    
+
     // export all records
     foreach ($records as $id) {
       $start = new EzacStart($id);
       // add all fields
       foreach (EzacStart::$fields as $field => $description) {
-        $output .= sprintf('"%s";',$start->$field);
+        // replace afkorting with naam
+        if ($field == 'gezagvoerder' or $field == 'tweede') {
+          if (key_exists($start->$field, $leden))
+            $naam = $leden[$start->$field];
+          else $naam = $start->$field;
+          $output .= sprintf('"%s";', $naam);
+        }
+        else $output .= sprintf('"%s";',$start->$field);
       }
       //remove last ";" 
       $output = rtrim($output, ";") ."\r\n";
