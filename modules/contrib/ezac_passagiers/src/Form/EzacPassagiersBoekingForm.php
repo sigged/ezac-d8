@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezac_reserveringen\Form;
+namespace Drupal\ezac_passagiers\Form;
 
 use Drupal;
 use Drupal\Core\Form\FormBase;
@@ -103,7 +103,7 @@ class EzacPassagiersBoekingForm extends FormBase {
     );
     $form['email'] = array(
       '#title' => t('E-mail'),
-      '#type' => 'textfield',
+      '#type' => 'email',
       '#description' => t('E-mail adres voor de bevestiging'),
       '#maxlength' => 50,
       '#required' => TRUE,
@@ -164,12 +164,11 @@ class EzacPassagiersBoekingForm extends FormBase {
       $form_state->setValue('telefoon', $telefoon); // clean up number
     }
     //validate mail
-    /*
+
     $email = $form_state->getValue('email');
-    if (!valid_email_address($email)) {
-      form_set_error('mail', t("$email is een ongeldig mail adres"));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $form_state->setErrorByName('email', t("$email is een ongeldig mail adres"));
     }
-    */
   }
 
   /**
@@ -185,13 +184,13 @@ class EzacPassagiersBoekingForm extends FormBase {
 
     // start D7 code
     // vastleggen reservering
-    $naam = $form_state['values']['naam'];
-    $telefoon = $form_state['values']['telefoon'];
-    $email = $form_state['values']['email'];
-    $datum = $form_state['values']['datum'];
-    $tijd = $form_state['values']['tijd'];
-    $gevonden = $form_state['values']['gevonden'];
-    $mail_list = $form_state['values']['mail_list'];
+    $naam = $form_state->getValue('naam');
+    $telefoon = $form_state->getValue('telefoon');
+    $email = $form_state->getValue('email');
+    $datum = $form_state->getValue('datum');
+    $tijd = $form_state->getValue('tijd');
+    $gevonden = $form_state->getValue('gevonden');
+    $mail_list = $form_state->getValue('mail_list');
 
     $afkorting = EzacUtil::getUser();
     if ($afkorting != '') {
@@ -209,6 +208,7 @@ class EzacPassagiersBoekingForm extends FormBase {
     $passagier->naam = $naam;
     $passagier->telefoon = $telefoon;
     $passagier->mail = $email;
+    $passagier->aangemaakt = date('Y-m-d H:m:s');
     $passagier->aanmaker = ($afkorting != '') ? $afkorting : 'anoniem';
     $passagier->soort = 'passagier';
     $passagier->status = $status;
@@ -236,11 +236,6 @@ class EzacPassagiersBoekingForm extends FormBase {
 
     $eindtijd = date('G:i', strtotime('+1H')); // 1 uur na nu
 
-    // passagiers/edit/id/datum/tijd/naam/telefoon/hash
-    
-    //$url_bevestiging = $base_url ."/passagiers/confirm/$id/$hash";
-    //$url_verwijderen = $base_url ."/passagiers/delete/$id/$hash";
-
     $url_bevestiging = Url::fromRoute(
       'ezac_passagiers_bevestiging',
       [
@@ -248,18 +243,17 @@ class EzacPassagiersBoekingForm extends FormBase {
         'hash' => $hash,
       ],
     )->toString();
+
     $url_verwijderen = Url::fromRoute(
-      'ezac_passagiers_verwijderen',
+      'ezac_passagiers_annulering',
       [
         'id' => $id,
         'hash' => $hash,
       ],
     )->toString();
+
     $show_datum = EzacUtil::showDate($datum);
-    // Maak boarding card met disclaimer tekst (pdf)
-    //   disclaimer tekst in disclaimer.txt file
-    //   EZAC logo in ezaclogo.jpg
-    //   Aanmaken html file met de juiste elementen, opmaak met css
+    // Maak boarding card met disclaimer tekst
     $subject = "Reservering meevliegen EZAC op $show_datum $tijd";
     unset($body);
     $body  = "<html lang='nl'><body>";
@@ -284,16 +278,15 @@ class EzacPassagiersBoekingForm extends FormBase {
     $body .= "<br>Met vriendelijke groet,";
     $body .= "<br>Eerste Zeeuws Vlaamse Aero Club";
     $body .= "</body></html>";
-    //   Genereren PDF
-    //   Mailen PDF als attachment of download via button
+
+    //   Mailen van bevestiging
     EzacMail::mail('ezac_passagiers', 'boeking', $email, $subject, $body);
 
-    //drupal_set_message("Reservering $id aangemaakt met code $hash", 'status');
-
-    // toon bevestiging
-    $form_state['redirect'] = "passagiers/bevestigen/$id";
-    // end D7 code
-
+    if ($status == $parameters['reservering_optie']) {
+      $messenger->addMessage($texts['nog_bevestigen']);
+    }
+    else $messenger->addMessage($texts['reservering_geplaatst']);
+    $form_state->setRedirect('ezac_passagiers_reservering');
   } //submitForm
 
 }

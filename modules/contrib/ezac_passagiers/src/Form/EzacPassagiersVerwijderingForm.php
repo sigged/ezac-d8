@@ -13,7 +13,7 @@ use Drupal\ezac_passagiers\Model\EzacPassagier;
  * UI to show passagiers verwijder form
  * Verwijdering reservering door EZAC lid
  */
-class EzacPassagierrVerwijderingForm extends FormBase {
+class EzacPassagiersVerwijderingForm extends FormBase {
 
   /**
    * @inheritdoc
@@ -97,13 +97,13 @@ class EzacPassagierrVerwijderingForm extends FormBase {
 
     $form['remove'] = array(
       '#type'  => 'submit',
-      '#value' => t('Verwijder_reservering'),
+      '#value' => 'Verwijder reservering',
       '#weight' => 4,
     );
 
     $form['cancel'] = array(
       '#type'  => 'submit',
-      '#value' => t('Annuleren'),
+      '#value' => 'Annuleren',
       '#weight' => 5,
     );
 
@@ -126,15 +126,15 @@ class EzacPassagierrVerwijderingForm extends FormBase {
 
     $op = $form_state->getValue('op');
     if ($op == 'Verwijder reservering') {
-      $id = $form_state['values']['id'];
-      $reden = $form_state['values']['reden'];
+      $id = $form_state->getValue('id');
+      $reden = $form_state->getValue('reden');
       // verwijder reservering en mail passagier
       EzacPassagiersController::verwijderen($id, $reden);
     }
     else {
       $messenger->addMessage("Geen reservering verwijderd", 'status');
     }
-    $form_state->setRedirect('passagiers');
+    $form_state->setRedirect('ezac_passagiers');
   }
 
 }

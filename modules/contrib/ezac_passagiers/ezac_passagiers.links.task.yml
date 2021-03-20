@@ -1,3 +1,9 @@
+ezac_passagiers_overzicht:
+  title: Overzicht
+  route_name: ezac_passagiers
+  base_route: ezac_passagiers_reservering
+  weight: 00
+
 ezac_passagiers_reservering.boeking:
   title: Reservering
   route_name: ezac_passagiers_reservering
@@ -6,6 +12,7 @@ ezac_passagiers_reservering.boeking:
 
 ezac_reserveringen_reservering.dagen:
   title: 'Invoeren dagen voor meevliegen'
-  route_name: ezac_reserveringen_dagen
-  base_route: ezac_reserveringen_reservering
+  route_name: ezac_passagiers_dagen
+  base_route: ezac_passagiers_reservering
   weight: 02
+

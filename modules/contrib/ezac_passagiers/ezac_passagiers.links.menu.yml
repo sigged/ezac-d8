@@ -1,6 +1,5 @@
 ezac_passagiers_reservering:
   title: EZAC Meevliegen en introductiestarts
   route_name: ezac_passagiers_reservering
-  #route_parameters: { type: '' }
   description: EZAC passagiersreservering invoeren
-  #weight: 05
+  weight: 05

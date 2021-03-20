@@ -28,6 +28,8 @@ texts:
   <strong>apart</strong> een reservering te worden gemaakt.
   <p>Er geldt een maximum gewicht voor passagiers van <strong>100 kg</strong>.
   Vrouwen wordt geadviseerd om geen lange jurk of korte rok te dragen ivm de veiligheidsgordel en parachute.'
+  nog_bevestigen: 'Er is een mail naar u verstuurd om de reservering te bevestigen. Dit moet binnen een uur gebeuren.'
+  reservering_geplaatst: 'De reservering is geplaatst.'
   geen_plaatsen: 'Er zijn helaas geen plaatsen meer beschikbaar'
   verwijder_item: 'Verwijder gemarkeerde item(s)'
   verwijder_reservering: 'Verwijder reservering'

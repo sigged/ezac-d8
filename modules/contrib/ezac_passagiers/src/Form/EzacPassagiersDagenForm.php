@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ezac_reserveringen\Form;
+namespace Drupal\ezac_passagiers\Form;
 
 use Drupal;
 use Drupal\Core\Form\FormBase;
@@ -32,12 +32,12 @@ class EzacPassagiersDagenForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $messenger = Drupal::messenger();
+    /* Set locale to Dutch */
+    setlocale(LC_ALL, 'nl_NL');
 
     // read settings
-    $settings = Drupal::config('ezac_passgiers.settings');
-    $mededeling = $settings->get('reservering.mededeling');
-    $slots = $settings->get('slots');
-    $dagen = $settings->get('dagen');
+    $settings = Drupal::config('ezac_passagiers.settings');
+    $mededeling = $settings->get('texts.mededeling');
 
     // Wrap the form in a div.
     $form = [
@@ -45,11 +45,13 @@ class EzacPassagiersDagenForm extends FormBase {
       '#suffix' => '</div>',
     ];
 
-    $form['mededeling'] = [
-      '#type' => 'markup',
-      '#markup' => t($mededeling),
-      '#weight' => 0,
-    ];
+    if ($mededeling != '') {
+      $form['mededeling'] = [
+        '#type' => 'markup',
+        '#markup' => t($mededeling),
+        '#weight' => 0,
+      ];
+    }
 
     // present in list
     // create intro
@@ -59,7 +61,7 @@ class EzacPassagiersDagenForm extends FormBase {
 
     $form['dagenlist'] = [
       '#type' => 'fieldlist',
-      '#title' => t('Dagen voor meevliegen'),
+      '#title' => 'Dagen voor meevliegen',
       '#prefix' => '<div id="dagenlist-div">',
       '#suffix' => '</div>',
       '#weight' => 1,
@@ -74,15 +76,15 @@ class EzacPassagiersDagenForm extends FormBase {
     $i = 0;
     foreach ($dagenIndex as $id) {
       $dag = (new EzacPassagierDag($id))->datum;
-      $form['dagenlist'][$i] = [
+      $form['dagenlist']['checkboxes'][$i] = [
         '#type' => 'checkbox',
-        '#title' => $dag . ' ' . t(date('l', strtotime($dag))),
+        '#title' => $dag . ' ' . date('l j F Y', strtotime($dag)),
         '#value' => 0,
         '#tree' => TRUE,
         '#weight' => 1 + ($i / 100),
       ];
       $form['dagenlist']['dagen'][$i] = [
-        '#type' => 'hidden',
+        '#type' => 'value',
         '#value' => $dag,
         '#tree' => TRUE,
       ];
@@ -90,14 +92,13 @@ class EzacPassagiersDagenForm extends FormBase {
     }
 
     $form['nr_dagen'] = [
-      '#type' => 'hidden',
-      '#title' => t('aantal dagen'),
+      '#type' => 'value',
       '#value' => $i,
     ];
 
     $form['remove'] = [
       '#type' => 'submit',
-      '#value' => t('Verwijder gemarkeerde items'),
+      '#value' => 'Verwijder gemarkeerde items',
       '#prefix' => '<div id="verwijder-div">',
       '#suffix' => '</div>',
       '#weight' => 2,
@@ -112,7 +113,7 @@ class EzacPassagiersDagenForm extends FormBase {
     // find first weekend after March 13 (two weeks into the season)
     $first_date = date('Y-m-d', strtotime('saturday', strtotime(date('Y') . '-04-13')));
     $form['serie_start'] = [
-      '#title' => t('Nieuwe datum serie vanaf zaterdag'),
+      '#title' => 'Nieuwe datum serie vanaf zaterdag',
       '#type' => 'textfield',
       '#size' => 10,
       '#default_value' => $first_date,
@@ -120,16 +121,16 @@ class EzacPassagiersDagenForm extends FormBase {
       '#weight' => 4,
     ];
     $form['serie_aantal'] = [
-      '#title' => t('Aantal weekends'),
+      '#title' => 'Aantal weekends',
       '#type' => 'textfield',
       '#size' => 2,
       '#default_value' => 26,
-      '#description' => t('aantal weekends voor reguliere passagiers'),
+      '#description' => 'aantal weekends voor reguliere passagiers',
       '#weight' => 5,
     ];
     $form['reeks'] = [
       '#type' => 'submit',
-      '#value' => t('Maak datum reeks aan'),
+      '#value' => 'Maak datum reeks aan',
       '#prefix' => '<div id="reeks-div">',
       '#suffix' => '</div>',
       '#weight' => 6,
@@ -142,17 +143,17 @@ class EzacPassagiersDagenForm extends FormBase {
     $form[2]['#weight'] = 7;
 
     $form['dag'] = [
-      '#title' => t('Nieuwe beschikbare datum'),
+      '#title' => 'Nieuwe beschikbare datum',
       '#type' => 'textfield',
       '#size' => 10,
       '#default_value' => '',
-      '#description' => t('Datum in JJJJ-MM-DD formaat'),
+      '#description' => 'Datum in JJJJ-MM-DD formaat',
       '#weight' => 8,
     ];
 
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Voeg toe'),
+      '#value' => 'Voeg toe',
       '#weight' => 9,
     ];
 
@@ -167,18 +168,19 @@ class EzacPassagiersDagenForm extends FormBase {
     $messenger = Drupal::messenger();
     $op = $form_state->getValue('op');
 
-    if ($op == t('Verwijder gemarkeerde items')) {
+    if ($op == 'Verwijder gemarkeerde items') {
       // geen database actie?
-      //drupal_set_message('Verwijderen'); //debug
       $nr_dagen = $form_state->getValue('nr_dagen');
-      //drupal_set_message("nr_slots: $nr_slots");
+      $dagenlist = $form_state->getValue('dagenlist');
+      // checked status must be verified via user input rather than via value
+      $input = $form_state->getUserInput();
       for ($i=0; $i < $nr_dagen; $i++) {
-        $dag = $form_state->getValue('dagenlist')['dagen'][$i];
-        if (!empty($form_state->getValue('dagenlist')[$i])) {
-          $checked = $form_state->getValue('dagenlist')[$i];
+        $dag = $dagenlist['dagen'][$i];
+        if (key_exists($i, $input['dagenlist']['checkboxes'])) {
+          $checked = $input['dagenlist']['checkboxes'][$i];
         }
         else $checked = false;
-        if (!empty($form_state->getValue('dagenlist')) && $checked) {
+        if ($checked) {
           //remove dag
           $dag_remove = new EzacPassagierDag(EzacPassagierDag::getId($dag));
           $num_deleted = $dag_remove->delete();
@@ -187,9 +189,9 @@ class EzacPassagiersDagenForm extends FormBase {
           }
         }
       }
-      $form_state['rebuild'] = TRUE;
+      $form_state->setRebuild(true);
     }
-    elseif ($op == t('Maak datum reeks aan')) { // aanmaken datum reeks
+    elseif ($op == 'Maak datum reeks aan') { // aanmaken datum reeks
       $serie_start = $form_state->getValue('serie_start');
       if (empty($serie_start)) {
         $form_state->setErrorByName('serie_start', 'Geen datum ingevuld');
@@ -264,13 +266,13 @@ class EzacPassagiersDagenForm extends FormBase {
     // start D7 code
 
     // create slot in database
-    $op = $form_state['values']['op'];
+    $op = $form_state->getValue('op');
     if ($op == t('Verwijder gemarkeerde items')) { //verwijderen datum
       // geen database actie?
     }
     elseif ($op == t('Maak datum reeks aan')) { //aanmaken datum reeks
-      $serie_start = $form_state['values']['serie_start'];
-      $serie_aantal = $form_state['values']['serie_aantal'];
+      $serie_start = $form_state->getValue('serie_start');
+      $serie_aantal = $form_state->getValue('serie_aantal');
       $datum = $serie_start;
       for ($i=0; $i<$serie_aantal; $i++) {
         //aanmaken zaterdag
@@ -300,7 +302,7 @@ class EzacPassagiersDagenForm extends FormBase {
       return;
     }
     else { //opvoeren datum
-      $dag = $form_state['values']['dag'];
+      $dag = $form_state->getValue('dag');
       $datum = explode('-', $dag);
       $datum2 = sprintf('%04u-%02u-%02u', $datum[0], $datum[1], $datum[2]);
       $dag = new EzacPassagierDag();

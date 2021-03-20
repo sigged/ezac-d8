@@ -16,6 +16,7 @@ class EzacPassagiersSlotsController extends ControllerBase {
 
   public static function slots() {
     $messenger = Drupal::messenger();
+    setlocale(LC_ALL, 'NL-nl');
 
     // read settings
     $settings = Drupal::config('ezac_passagiers.settings');
@@ -58,7 +59,7 @@ class EzacPassagiersSlotsController extends ControllerBase {
         $reden = "De reservering van $aangemaakt is niet op tijd bevestigd";
         //verwijder reservering en mail passagier
         EzacPassagiersController::verwijderen($id, $reden);
-        if (!empty($user->name)) { // toon alleen voor aangemelde gebruikers
+        if (!empty(Drupal::currentUser()->getAccountName())) { // toon alleen voor aangemelde gebruikers
           $messenger->addMessage("Optie van $naam op $datum $tijd is vervallen wegens te late bevestiging", 'status');
         }
       }
@@ -72,10 +73,10 @@ class EzacPassagiersSlotsController extends ControllerBase {
     $aantal_slots_zaterdag = 0;
     $aantal_slots_zondag = 0;
     foreach ($slots as $slot) {
-      if ($slot->zaterdag) {
+      if ($slot['zaterdag'] == 1) {
         $aantal_slots_zaterdag++;
       }
-      if ($slot->zondag) {
+      if ($slot['zondag'] == 1) {
         $aantal_slots_zondag++;
       }
     }
@@ -104,14 +105,14 @@ class EzacPassagiersSlotsController extends ControllerBase {
       }
 
       // $slots_vrij += $aantal_slots; // initialize potential number of free slots - old version
-      foreach ($slots as $slot) {
+      foreach ($slots as $tijd => $slot) {
         //$plaatsen[$dag][$slot] = ''; // indicate free slot
         // changed 200314
-        if (($slot->zaterdag) && ($weekday == 'Saturday')) {
-          $plaatsen[$dag][$slot] = '';
+        if (($slot['zaterdag'] == 1) && ($weekday == 'Saturday')) {
+          $plaatsen[$dag][$tijd] = '';
         } // indicate free slot Saturday
-        if (($slot->zondag) && ($weekday == 'Sunday')) {
-          $plaatsen[$dag][$slot] = '';
+        if (($slot['zondag'] == 1) && ($weekday == 'Sunday')) {
+          $plaatsen[$dag][$tijd] = '';
         } // indicate free slot Sunday
       }
     }
@@ -154,42 +155,37 @@ class EzacPassagiersSlotsController extends ControllerBase {
 
     //Set up the table Headings
     $header[]['data'] = t('Datum');
-    foreach ($slots as $slot) {
-      $header[]['data'] = $slot;
+    foreach ($slots as $tijd => $slot) {
+      $header[]['data'] = t($tijd);
     }
     if (isset($plaatsen)) { //tabel alleen aanmaken als er plaatsen zijn
-      foreach ($plaatsen as $plaats) {
+      foreach ($plaatsen as $dag => $plaats) {
         // table rows
-        $dat = $plaats['datum'];
-        unset($col);
-        $col[] = t(date('D', strtotime($dat))) . " "// dag
-          . t(date('j', strtotime($dat))) . " "  // dd
-          . t(date('M', strtotime($dat))) . " "  // mmm
-          . t(date('Y', strtotime($dat))); // jjjj
-        foreach ($slots as $slot) {
-          $tijd = $slot->slot_tijd;
-          if (empty($plaats[$tijd])) {
+        unset($row);
+        $row[] = t(date('D j M Y', strtotime($dag))); // dag dd mmm jjjj
+        foreach ($slots as $tijd => $slot) {
+          if (key_exists($tijd, $plaats) and $plaats[$tijd] == '') {
             $url = Url::fromRoute(
               'ezac_passagiers_boeking',
               [
-                'datum' => $dat,
+                'datum' => $dag,
                 'tijd' => $tijd,
               ]
             )->toString();
-            $col[] = "<a href=$url>vrij</a>";
+            $row[] = t("<a href=$url>vrij</a>");
           }
           else {
-            $col[] = '';
+            $row[] = '';
           } // no link
         }
-        $row[] = $col;
+        $rows[] = $row;
       }
     }
     if (isset($row)) {
       $form[1]['#theme'] = 'table';
       $form[1]['#attributes'] = $attributes;
       $form[1]['#header'] = $header;
-      $form[1]['#rows'] = $row;
+      $form[1]['#rows'] = $rows;
       $form[1]['#empty'] = t('Geen gegevens beschikbaar');
       $form[1]['#weight'] = 1;
     }
@@ -201,7 +197,8 @@ class EzacPassagiersSlotsController extends ControllerBase {
       $form[1]['#prefix'] = '<div class="ezacpass-intro-div">';
       $form[1]['#suffix'] = '</div>';
     }
-    // @TODOmaand vooruit en achteruit functie
+    // Don't cache this page.
+    $form['#cache']['max-age'] = 0;
 
     //D7 code ends
     return $form;

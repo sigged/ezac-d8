@@ -43,7 +43,7 @@ class EzacPassagiersController extends ControllerBase {
       t('Mail'),
     ];
 
-    if (!isset($datum)) $datum = date('Y-m-d') .':' .date('Y') .'12-31'; //toon passagiers tot einde jaar
+    if (!isset($datum)) $datum = date('Y-m-d') .':' .date('Y') .'-12-31'; //toon passagiers tot einde jaar
     $errmsg = EzacUtil::checkDatum($datum,
       $datum_start,
       $datum_eind);
@@ -64,12 +64,29 @@ class EzacPassagiersController extends ControllerBase {
     foreach ($resIndex as $id) {
       $passagier = new EzacPassagier($id);
       // add link for delete for own or all passagiers
+
+      //   aanmaken sleutel met hash functie
+      /* niet nodig bij verwijderen door ezac lid
+      $hash_fields = array(
+        'id' => $id,
+        'datum' => $passagier->datum,
+        'tijd' => $passagier->tijd,
+        'naam' => $passagier->naam,
+        'mail' => $passagier->mail,
+        'telefoon' => $passagier->telefoon,
+      );
+      $data = implode('/', $hash_fields);
+      $hash = hash('sha256', $data, FALSE);
+      */
+
       $urlAnnulering = Url::fromRoute(
-        'ezac_passagiers_annulering_form',
+        'ezac_passagiers_verwijdering_form',
         [
           'id' => $id,
+          //'hash' => $hash,
         ]
       )->toString();
+
       $lid = new EzacLid($passagier->aanmaker);
       $show_date = EzacUtil::showDate($passagier->datum);
       $afkorting = EzacUtil::getUser();
@@ -86,9 +103,9 @@ class EzacPassagiersController extends ControllerBase {
       $rows[] = [
         t($datum_with_link),
         $passagier->tijd,
-        sprintf("%s %s %s", $lid->voornaam, $lid->voorvoeg, $lid-> achternaam),
+        $passagier->naam,
         $passagier->telefoon,
-        t("mailto:$passagier->mail"),
+        $passagier->mail,
       ];
     }
 
@@ -111,7 +128,7 @@ class EzacPassagiersController extends ControllerBase {
     $content['#cache']['max-age'] = 0;
 
     return $content;
-  } // passagiers
+  } // overzicht
 
   //@TODO add annulering function
 
