@@ -41,7 +41,7 @@ class EzacReserveringenController extends ControllerBase {
       t('Doel'),
     ];
 
-    if (!isset($datum)) $datum = date('Y-m-d') .':' .date('Y') .'12-31'; //toon reserveringen tot einde jaar
+    if (!isset($datum)) $datum = date('Y'); //-m-d') .':' .date('Y') .'-12-31'; //toon reserveringen voor dit jaar
     $errmsg = EzacUtil::checkDatum($datum,
       $datum_start,
       $datum_eind);
