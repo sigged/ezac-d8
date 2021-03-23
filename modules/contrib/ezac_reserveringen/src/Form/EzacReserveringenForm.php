@@ -144,6 +144,7 @@ class EzacReserveringenForm extends FormBase
         $reserveringen[$id] = new EzacReservering($id);
       }
 
+      $res_tabel = [];
       // maak tabel met per dag | periode | reservering gegevens
       foreach ($reserveringen as $id => $res) {
         $res_tabel[$res->datum][$res->periode][$res->id] = [
@@ -202,15 +203,17 @@ class EzacReserveringenForm extends FormBase
       );
 
       // verwerk reserveringen in beschikbare capaciteit
-      foreach ($res_tabel as $datum => $periode_reserveringen) {
-        foreach ($periode_reserveringen as $periode => $reserveringen) {
-          foreach ($reserveringen as $id => $reservering) {// soort | naam | doel | reserve
-            $soort = $reservering['soort'];
-            if (isset($rsc_tabel[$datum][$periode][$soort])) {
-              // de reservering is voor een bestaande resource soort
-              // muteer aantal per boeking in aantal gereserveerd en aantal vrij
-              $rsc_tabel[$datum][$periode][$soort]['gereserveerd'] += $resources[$soort]['aantal'];
-              $rsc_tabel[$datum][$periode][$soort]['vrij'] -= $resources[$soort]['aantal'];
+      if (isset($res_tabel)) {
+        foreach ($res_tabel as $datum => $periode_reserveringen) {
+          foreach ($periode_reserveringen as $periode => $reserveringen) {
+            foreach ($reserveringen as $id => $reservering) { //  soort | naam | doel | reserve
+              $soort = $reservering['soort'];
+              if (isset($rsc_tabel[$datum][$periode][$soort])) {
+                // de reservering is voor een bestaande resource soort
+                // muteer aantal per boeking in aantal gereserveerd en aantal vrij
+                $rsc_tabel[$datum][$periode][$soort]['gereserveerd'] += $resources[$soort]['aantal'];
+                $rsc_tabel[$datum][$periode][$soort]['vrij'] -= $resources[$soort]['aantal'];
+              }
             }
           }
         }
