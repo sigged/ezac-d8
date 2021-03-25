@@ -16,23 +16,28 @@ vba:
       naam: 'Zweefvliegbewijs'
       status: 3
       instructeur: 0
-      vervalt: 1
+      vervalt: 0
     SPL:
       naam: 'SPL'
       status: 3
       instructeur: 0
-      vervalt: 1
+      vervalt: 0
     LAPL(S)-TMG:
       naam: 'Touring Motorglider'
       status: 3
       instructeur: 0
-      vervalt: 1
+      vervalt: 0
     LAPL(S)-FI:
       naam: 'Instructeur'
       status: 4
-      instructeur: 1
-      vervalt: 1
-    LAPL(S)-FIE:
+      instructeur: 0
+      vervalt: 0
+    SPL-FI:
+      naam: 'Instructeur'
+      status: 4
+      instructeur: 0
+      vervalt: 0
+    SPL-F(I)E:
       naam: 'Examinator'
       status: 5
       instructeur: 1
@@ -41,27 +46,27 @@ vba:
       naam: 'Instructeur TMG'
       status: 4
       instructeur: 1
-      vervalt: 1
+      vervalt: 0
     LAPL(S)-FIE-TMG:
       naam: 'Examinator TMG'
       status: 5
       instructeur: 1
-      vervalt: 1
+      vervalt: 0
     LAPL(S)-Aerobatics:
       naam: 'Aerobatics'
       status: 3
       instructeur: 0
-      vervalt: 1
+      vervalt: 0
     LAPL(S)-FI-Aerobatic:
       naam: 'Instructeur aerobatics'
       status: 4
       instructeur: 1
-      vervalt: 1
+      vervalt: 0
     LAPL(S)-FIE-Aerobatics:
       naam: 'Examinator aerobatics'
       status: 5
       instructeur: 1
-      vervalt: 1
+      vervalt: 0
     LAPL(S)-Overig:
       naam: 'Overige ratings'
       status: 3
@@ -69,7 +74,7 @@ vba:
       vervalt: 0
     MEDICAL:
       naam: 'Medical'
-      status: 0
+      status: 6
       instructie: 0
       vervalt: 1
     REFRESHER:
@@ -77,36 +82,6 @@ vba:
       status: 0
       instructie: 1
       vervalt: 1
-    LICHTGEVEN:
-      naam: 'Lichtgeven'
-      status: 0
-      instructeur: 0
-      vervalt: 0
-    AANHAKEN:
-      naam: 'Aanhaken lierkabel'
-      status: 0
-      instructeur: 0
-      vervalt: 0
-    AANHAKEN-SLEEP:
-      naam: 'Aanhaken sleepkabel'
-      status: 0
-      instructeur: 0
-      vervalt: 0
-    SIGNALEN-SLEEP:
-      naam: 'Signalen sleep'
-      status: 0
-      instructeur: 0
-      vervalt: 0
-    KABELRIJDEN:
-      naam: 'Kabelrijden'
-      status: 0
-      instructeur: 0
-      vervalt: 0
-    TIJDSCHRIJVEN:
-      naam: 'Tijd schrijven'
-      status: 0
-      instructeur: 0
-      vervalt: 0
     LIEREN:
       naam: 'Lieren'
       status: 0
@@ -190,3 +165,4 @@ vba:
     3: 'Zweefvliegbewijs'
     4: 'Instructeur'
     5: 'Examinator'
+    6: 'Medical'
