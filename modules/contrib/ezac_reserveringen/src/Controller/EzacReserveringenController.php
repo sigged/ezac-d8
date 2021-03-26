@@ -167,8 +167,8 @@ class EzacReserveringenController extends ControllerBase {
     $calculated_hash = hash('sha256', $data, FALSE);
     if ($calculated_hash <> $hash) {
       $messenger->addMessage("Onjuiste code voor reservering $id", 'error');
-      $messenger->addMessage("calculated - $calculated_hash", 'error');
-      $messenger->addMessage("received   - $hash", 'error');
+      //$messenger->addMessage("calculated - $calculated_hash", 'error');
+      //$messenger->addMessage("received   - $hash", 'error');
       return [];
     }
 
