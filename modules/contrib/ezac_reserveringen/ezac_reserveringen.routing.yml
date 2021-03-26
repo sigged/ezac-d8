@@ -2,7 +2,7 @@ ezac_reserveringen:
   path: '/ezac/reserveringen'
   defaults:
     _title: 'Reserveringen overzicht'
-    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::overzicht'
+    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::reserveringen'
   requirements:
     _permission: 'EZAC_read'
 
@@ -10,7 +10,7 @@ ezac_reserveringen_overzicht:
   path: '/ezac/reserveringen/overzicht/{datum}'
   defaults:
     _title: 'Reserveringen overzicht'
-    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::overzicht'
+    _controller: '\\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::reserveringen'
   requirements:
     _permission: 'EZAC_read'
 
@@ -28,7 +28,6 @@ ezac_reserveringen_annulering:
   defaults:
     _title: 'Reservering annuleren'
     _form: '\Drupal\ezac_reserveringen\Form\EzacReserveringenAnnuleringForm'
-    #controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::annulering'
   requirements:
     _permission: 'access content'
 
