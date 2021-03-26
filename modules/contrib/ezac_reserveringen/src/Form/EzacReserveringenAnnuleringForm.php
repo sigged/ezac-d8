@@ -6,6 +6,7 @@ use Drupal;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\ezac\Util\EzacMail;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_reserveringen\Model\EzacReservering;
 use Drupal\ezac_reserveringen\Controller\EzacReserveringenController;
@@ -177,16 +178,22 @@ class EzacReserveringenAnnuleringForm extends FormBase
         $messenger->addMessage("Reservering $id is verwijderd", 'status');
         //mail bevestiging van verwijdering
         $subject = "Reservering $doel bij EZAC op $datum is GEANNULEERD";
+        /*
         unset($body);
         $body  = "<html><body>";
-        $body .= "<p>De reservering voor $soort bij de EZAC voor $naam op $datum in de $periode periode is geannuleerd";
+        $body .= "<p>De reservering voor $soort $doel bij de EZAC voor $naam op $datum in de $periode periode is geannuleerd";
         $body .= "<br>";
         $body .= "<br>Voor verdere contact gegevens: zie de <a href=http://www.ezac.nl>EZAC website</a>";
         $body .= "<br>";
         $body .= "<br>Met vriendelijke groet,";
         $body .= "<br>Eerste Zeeuws Vlaamse Aero Club";
         $body .= "</body></html>";
-        mail($email, $subject, $body);
+        EzacMail::mail('ezac_reserveringen', 'annulering', $email,$subject, $body );
+        */
+
+        $body_plain = "De reservering voor $soort $doel bij de EZAC voor $naam op $datum in de $periode periode is geannuleerd\r\n"
+          ."\r\n-- EZAC reservering systeem";
+        mail($email, $subject, $body_plain);
       }
       else $messenger->addMessage("Reservering $id is NIET verwijderd", 'error');
 

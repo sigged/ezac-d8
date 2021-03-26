@@ -143,7 +143,7 @@ class EzacUtil {
 
   public static function showDate($datum) {
     /* Set locale to Dutch */
-    setlocale(LC_ALL, 'nl_NL');
+    setlocale(LC_TIME, 'nl_NL');
     // dd maand jaar
     return strftime('%e %B %Y', strtotime($datum));
   }
