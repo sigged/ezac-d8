@@ -1,5 +1,5 @@
 ezac_reserveringen:
-  path: '/ezac/reserveringen'
+  path: '/ezac/reserveringen/{datum}'
   defaults:
     _title: 'Reserveringen overzicht'
     _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::reserveringen'
@@ -11,7 +11,7 @@ ezac_reserveringen_overzicht:
   path: '/ezac/reserveringen/overzicht/{datum}'
   defaults:
     _title: 'Reserveringen overzicht'
-    _controller: '\\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::reserveringen'
+    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::reserveringen'
   requirements:
     _permission: 'EZAC_read'
 
