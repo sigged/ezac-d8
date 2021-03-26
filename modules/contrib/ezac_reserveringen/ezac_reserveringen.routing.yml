@@ -3,6 +3,7 @@ ezac_reserveringen:
   defaults:
     _title: 'Reserveringen overzicht'
     _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::reserveringen'
+    datum:
   requirements:
     _permission: 'EZAC_read'
 
