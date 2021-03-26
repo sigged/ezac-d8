@@ -1,17 +1,24 @@
 ezac_rooster.overzicht:
   title: 'Overzicht'
-  route_name: ezac_rooster_overzicht_jaar
-  base_route: ezac_rooster_overzicht_jaar
+  route_name: ezac_rooster_overzicht_datum
+  base_route: ezac_rooster_overzicht_datum
   weight: 01
+
+ezac_rooster.jaar:
+  title: 'Hele jaar'
+  route_name: ezac_rooster_overzicht_datum
+  route_parameters: { datum: 'jaar' }
+  base_route: ezac_rooster_overzicht_datum
+  weight: 02
 
 ezac_rooster.invoer:
   title: 'Rooster invoer'
   route_name: ezac_rooster_table
-  base_route: ezac_rooster_overzicht_jaar
-  weight: 02
+  base_route: ezac_rooster_overzicht_datum
+  weight: 03
 
 ezac_rooster.administratie:
   title: 'Rooster administratie'
   route_name: ezac_rooster
-  base_route: ezac_rooster_overzicht_jaar
-  weight: 03
+  base_route: ezac_rooster_overzicht_datum
+  weight: 04

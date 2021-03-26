@@ -1,11 +1,11 @@
 ezac_rooster:
   title: 'EZAC Rooster overzicht'
-  route_name: ezac_rooster_overzicht_jaar
+  route_name: ezac_rooster_overzicht_datum
   description: 'EZAC dienstenrooster'
   weight: 04
 
 ezac_rooster.overzicht:
   title: 'Rooster overzicht'
-  route_name: ezac_rooster_overzicht_jaar
+  route_name: ezac_rooster_overzicht_datum
   description: 'EZAC dienstenrooster'
   parent: ezac_rooster
