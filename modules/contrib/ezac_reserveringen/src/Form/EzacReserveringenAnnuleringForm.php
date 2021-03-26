@@ -34,11 +34,12 @@ class EzacReserveringenAnnuleringForm extends FormBase
    *
    * @param array $form
    * @param FormStateInterface $form_state
-   * @param int $id te annuleren reservering
+   * @param int|null $id te annuleren reservering
+   * @param string|null $hash
    *
    * @return array
    */
-    public function buildForm(array $form, FormStateInterface $form_state, int $id = null) {
+    public function buildForm(array $form, FormStateInterface $form_state, int $id = null, string $hash = null) {
       $messenger = Drupal::messenger();
 
       if ($id == null) {
@@ -50,6 +51,30 @@ class EzacReserveringenAnnuleringForm extends FormBase
         // read failed
         $messenger->addMessage("reservering $id is niet gevonden", 'error');
         return[];
+      }
+
+      // if not logged in, hash must be present
+      if (Drupal::currentUser()->isAnonymous()) {
+        if (!isset($hash) or empty($hash)) {
+          // hash must be present
+          $messenger->addMessage("Annulering niet toegestaan", 'error');
+          return[];
+        }
+        // verify hash
+        $hash_fields = array(
+          'id' => $id,
+          'datum' => $reservering->datum,
+          'periode' => $reservering->periode,
+          'soort' => $reservering->soort,
+          'leden_id' => $reservering->leden_id,
+        );
+        $data = implode('/', $hash_fields);
+
+        $calculated_hash = hash('sha256', $data, FALSE);
+        if ($calculated_hash <> $hash) {
+          $messenger->addMessage("Annulering niet toegestaan: code onjuist", 'error');
+          return [];
+        }
       }
 
       // Wrap the form in a div.

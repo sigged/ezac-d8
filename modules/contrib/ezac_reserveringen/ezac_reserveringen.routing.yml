@@ -27,14 +27,16 @@ ezac_reserveringen_annulering:
   path: '/ezac/reserveringen/annulering/{id}/{hash}'
   defaults:
     _title: 'Reservering annuleren'
-    _controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::annulering'
+    _form: '\Drupal\ezac_reserveringen\Form\EzacReserveringenAnnuleringForm'
+    #controller: '\Drupal\ezac_reserveringen\Controller\EzacReserveringenController::annulering'
   requirements:
-    _permission: 'EZAC_update'
+    _permission: 'access content'
 
 ezac_reserveringen_annulering_form:
   path: '/ezac/reserveringen/annulering_form/{id}'
   defaults:
     _title: 'EZAC reservering annuleren'
     _form: '\Drupal\ezac_reserveringen\Form\EzacReserveringenAnnuleringForm'
+    hash:
   requirements:
     _permission: 'EZAC_update'
