@@ -36,6 +36,6 @@ ezac_leden_update:
 
 ezac_leden_nieuw:
   title: Nieuw
-  route_name: ezac_leden_update
+  route_name: ezac_leden_create
   base_route: ezac_leden_lijst
   weight: 07

@@ -17,12 +17,12 @@ ezac_rooster_overzicht:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+
 
-ezac_rooster_overzicht_jaar:
-  path: '/ezac/rooster/overzicht/jaar/{jaar}'
+ezac_rooster_overzicht_datum:
+  path: '/ezac/rooster/overzicht/datum/{datum}'
   defaults:
     _title: 'Rooster overzicht'
-    _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::overzichtJaar'
-    jaar:
+    _controller: '\Drupal\ezac_rooster\Controller\EzacRoosterController::overzichtDatum'
+    datum:
   requirements:
     _permission: 'EZAC_read'
     _user: ^[a-zA-Z0-9_]+

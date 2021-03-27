@@ -185,11 +185,12 @@ class EzacRoosterController extends ControllerBase {
 
   /**
    * Render a list of entries in the database.
-   * @param string
-   *  $jaar - categorie (optional)
+   * @param string $datum YYYY-MM-DD:YYYY-MM-DD or 'jaar'
    * @return array
    */
-  public function overzichtJaar($jaar) {
+  public function overzichtDatum($datum) {
+    $messenger = Drupal::messenger();
+
     // read settings
     $settings = Drupal::config('ezac_rooster.settings');
     //set up diensten
@@ -201,8 +202,17 @@ class EzacRoosterController extends ControllerBase {
       '#value' => $diensten,
     );
 
-    // if jaar not given, set to current year
-    if (!isset($jaar) or !is_numeric($jaar)) $jaar = date('Y');
+    // if datum not given, set to rest of current year
+    if (!isset($datum)) $datum = date('Y-m-d:Y-12-31');
+
+    if ($datum == 'jaar') $datum = date('Y');
+
+    // bepaal start en einddatum voor overzicht
+    $errmsg = EzacUtil::checkDatum($datum, $datumStart, $datumEnd);
+    if ($errmsg != '') {
+      $messenger->addMessage("Ongeldige datum $datum",'error');
+      return [];
+    }
 
     //set up periode
     $periodes = $settings->get('rooster.periodes');
@@ -239,27 +249,6 @@ class EzacRoosterController extends ControllerBase {
     $content = array();
     $rows = [];
 
-    /*
-    //set up ajax selection
-    //@todo build java buttons voor eigen diensten en diensten vanaf vandaag
-    $content['select'] = [
-      '#type' => 'select',
-      '#options' => [
-        'E' => 'Eigen diensten',
-        'A' => 'Alle diensten',
-        'V' => 'Vanaf vandaag',
-      ],
-      '#default_value' => 'V',
-      '#weight' => 0, // top
-      '#ajax' => [
-        'callback' => '::datumCallback',
-        'wrapper' => 'table-div',
-        'effect' => 'fade',
-        'progress' => ['type' => 'throbber'],
-      ],
-    ];
-    */
-
     //prepare header
     $header = array(t('Datum'));
     // voeg een kolom per periode toe
@@ -271,7 +260,7 @@ class EzacRoosterController extends ControllerBase {
     // @todo ombouwen voor datum range met checkDate
     $condition = [
       'datum' => [
-        'value' => ["$jaar-01-01", "$jaar-12-31"],
+        'value' => [$datumStart, $datumEnd],
         'operator' => 'BETWEEN'
       ],
     ];
@@ -352,7 +341,7 @@ class EzacRoosterController extends ControllerBase {
       }
       $rows[] = $row;
     }
-    $caption = "Overzicht EZAC rooster voor $jaar";
+    $caption = "Overzicht EZAC rooster";
     $content['table'] = [
       '#type' => 'table',
       '#caption' => $caption,

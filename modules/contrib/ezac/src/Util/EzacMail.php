@@ -4,11 +4,6 @@
 namespace Drupal\ezac\Util;
 
 use Drupal;
-use Drupal\Component\Utility\EmailValidatorInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Mail\MailManager;
-use Drupal\Core\Mail\MailManagerInterface;
-use Drupal\mimemail\Utility\MimeMailFormatHelper;
 
 class EzacMail {
 
@@ -49,23 +44,26 @@ class EzacMail {
     $from = 'webmaster@ezac.nl';
     //$from = \Drupal::state()->get('system_mail', $my_email);
     $langcode = 'nl';
-    $params = array(
-      'From' => $from,
-      'Sender' => $from,
-      'Bcc' => $from, // for mail logging
-      'Reply-to' => $from,
-      'Subject' => $message_subject,
+    $params = [
+      'headers' => [
+        'Bcc' => $from, // for mail logging
+        'Reply-to' => $from,
+        'MIME-Version' => '1.0',
+        'Content-Type' => 'text/html; charset=UTF-8; format=flowed; delsp=yes',
+        'Content-Transfer-Encoding' => '8Bit',
+        'X-Mailer' => 'Drupal',
+      ],
+      'from' => $from,
+      'sender' => $from,
+      'subject' => $message_subject,
       'body' => $message_body,
-      'MIME-Version' => '1.0',
-      'Content-Type' => 'text/html; charset=UTF-8; format=flowed; delsp=yes',
-      'Content-Transfer-Encoding' => '8Bit',
-      'X-Mailer' => 'Drupal',
-    );
+    ];
     $reply = $from;
     $send = TRUE;
 
     // Finally, call MailManager::mail() to send the mail.
-    $result = \Drupal::service('plugin.manager.mail')->mail($module, $key, $to, $langcode, $params, $reply, $send);
+    $result = \Drupal::service('plugin.manager.mail')
+      ->mail($module, $key, $to, $langcode, $params, $reply, $send);
     if ($result['result'] == TRUE) {
       $messenger->addMessage('Bericht is verzonden');
     }

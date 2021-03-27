@@ -6,6 +6,7 @@ use Drupal;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\ezac\Util\EzacMail;
 use Drupal\ezac_leden\Model\EzacLid;
 use Drupal\ezac_reserveringen\Model\EzacReservering;
 use Drupal\ezac_reserveringen\Controller\EzacReserveringenController;
@@ -144,6 +145,7 @@ class EzacReserveringenForm extends FormBase
         $reserveringen[$id] = new EzacReservering($id);
       }
 
+      $res_tabel = [];
       // maak tabel met per dag | periode | reservering gegevens
       foreach ($reserveringen as $id => $res) {
         $res_tabel[$res->datum][$res->periode][$res->id] = [
@@ -202,15 +204,17 @@ class EzacReserveringenForm extends FormBase
       );
 
       // verwerk reserveringen in beschikbare capaciteit
-      foreach ($res_tabel as $datum => $periode_reserveringen) {
-        foreach ($periode_reserveringen as $periode => $reserveringen) {
-          foreach ($reserveringen as $id => $reservering) {// soort | naam | doel | reserve
-            $soort = $reservering['soort'];
-            if (isset($rsc_tabel[$datum][$periode][$soort])) {
-              // de reservering is voor een bestaande resource soort
-              // muteer aantal per boeking in aantal gereserveerd en aantal vrij
-              $rsc_tabel[$datum][$periode][$soort]['gereserveerd'] += $resources[$soort]['aantal'];
-              $rsc_tabel[$datum][$periode][$soort]['vrij'] -= $resources[$soort]['aantal'];
+      if (isset($res_tabel)) {
+        foreach ($res_tabel as $datum => $periode_reserveringen) {
+          foreach ($periode_reserveringen as $periode => $reserveringen) {
+            foreach ($reserveringen as $id => $reservering) { //  soort | naam | doel | reserve
+              $soort = $reservering['soort'];
+              if (isset($rsc_tabel[$datum][$periode][$soort])) {
+                // de reservering is voor een bestaande resource soort
+                // muteer aantal per boeking in aantal gereserveerd en aantal vrij
+                $rsc_tabel[$datum][$periode][$soort]['gereserveerd'] += $resources[$soort]['aantal'];
+                $rsc_tabel[$datum][$periode][$soort]['vrij'] -= $resources[$soort]['aantal'];
+              }
             }
           }
         }
@@ -355,7 +359,7 @@ class EzacReserveringenForm extends FormBase
       $id = $reservering->create();
       if ($id) {
         $show_datum = EzacUtil::showDate($datum);
-        $messenger->addMessage("$soort gereserveerd voor periode $periode op $show_datum [$id]",'message');
+        $messenger->addMessage("$soort gereserveerd voor periode $periode op $show_datum [$id]",'status');
       }
       else {
         $messenger->addMessage("Reservering niet mogelijk",'error');
@@ -386,12 +390,13 @@ class EzacReserveringenForm extends FormBase
         ]
       )->toString();
 
-      //$url_verwijderen = $base_url ."/reservering/delete/$id/$hash"; //
       $show_datum = EzacUtil::showDate($datum);
-      $subject = "Reservering $soort instructie EZAC op $show_datum in de $periode periode";
+      $subject = "Reservering $soort EZAC op $show_datum in de $periode periode";
+
+      /*
       unset($body);
       $body  = '<html lang="nl"><body>';
-      $body .= "<p>Er is voor $naam een reservering voor $soort instructie bij de EZAC aangemaakt";
+      $body .= "<p>Er is voor $naam een reservering voor $soort bij de EZAC aangemaakt";
       $body .= "<br>";
       $body .= "<br>De reservering is voor $show_datum in de $periode periode";
       $body .= "<br>";
@@ -401,12 +406,16 @@ class EzacReserveringenForm extends FormBase
       $body .= "<br>Met vriendelijke groet,";
       $body .= "<br>Eerste Zeeuws Vlaamse Aero Club";
       $body .= "</body></html>";
-      //   Genereren PDF
-      //   Mailen PDF als attachment of download via button
-      //_ezacreserveer_mail($email, $subject, $body);
-      mail($email, $subject, $body);
+      EzacMail::mail('reserveer', 'reserveer', $email,$subject, $body );
+      */
 
-      //$messenger->addMessage("Reservering $id aangemaakt met code $hash", 'status');
+      //_ezacreserveer_mail($email, $subject, $body);
+      $body_plain = "Er is voor $naam een reservering voor $soort $doel bij de EZAC aangemaakt\r\n"
+        ."\r\nDe reservering is voor $show_datum in de $periode periode.\r\n"
+        ."\r\nMocht het noet mogelijk zijn hiervan gebruik te maken, dan kan deze reservering \r\n"
+        ."via https://www.ezac.nl$urlAnnuleringString worden geannuleerd. \r\n"
+        ."\r\n -- EZAC reservering systeem";
+      mail($email, $subject, $body_plain);
 
       // toon bevestiging
       //$form_state['redirect'] = "reservering";
